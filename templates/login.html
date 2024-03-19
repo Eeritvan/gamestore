@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+
+{% if session.user_id %}
+<p>Olet jo kirjautunut ({{ session.user_id }})</p>
+
+<a href="/logout">logout</a>
+
+{% else %}
+<form action="/login" method="POST">
+    username: <input type="text" name="username" size="20" required> <br>
+    password: <input type="password" name="password" size="20" required> <br>
+<input type="submit" value="Login">
+</form>
+
+{% endif %}
