@@ -2,6 +2,7 @@ from db import db
 from flask import session
 from werkzeug.security import check_password_hash, generate_password_hash
 from sqlalchemy import text
+import balance
 
 def login(username, password):
     sql = "SELECT id, password FROM users WHERE username=:username"
@@ -27,7 +28,25 @@ def register(username, password):
         db.session.commit()
     except:
         return False
+    balance.add_initialbalance(username, 0.0)
     return login(username, password)
 
 def user_id():
-    return session.get("user_id",0)
+    return session.get("user_id", 0)
+
+def get_username():
+    if user_id() != 0:
+        sql = "SELECT username FROM users WHERE id=:id"
+        return db.session.execute(text(sql), {"id":user_id()}).fetchone()[0]
+
+def is_seller():
+    if user_id() != 0:
+        sql = "SELECT R.role FROM users U , roles R WHERE U.id=:id AND U.role=R.id"
+        user_role = db.session.execute(text(sql), {"id":user_id()}).fetchone()[0]
+        return user_role == "seller"
+
+def is_moderator():
+    if user_id() != 0:
+        sql = "SELECT R.role FROM users U , roles R WHERE U.id=:id AND U.role=R.id"
+        user_role = db.session.execute(text(sql), {"id":user_id()}).fetchone()[0]
+        return user_role == "moderator"
