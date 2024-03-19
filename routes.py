@@ -1,10 +1,16 @@
 from app import app
 from flask import redirect, render_template, request
 import users
+import balance
 
 @app.route("/")
 def frontpage():
-    return render_template("frontpage.html")
+    return render_template("frontpage.html", credits=balance.get_balance(),
+                                             user = users.get_username(),
+                                             user_id = users.user_id(),
+                                             seller = users.is_seller(),
+                                             moderator = users.is_moderator())
+    
 
 @app.route("/login", methods=["GET", "POST"])
 def login():
@@ -36,3 +42,23 @@ def register():
             return redirect("/")
         else:
             return render_template("register.html")
+
+@app.route("/ratings", methods=["GET"])
+def ratings(): # todo
+    pass
+
+@app.route("/library", methods=["GET"])
+def library(): # todo
+    pass
+
+@app.route("/wishlist", methods=["GET"])
+def wishlist(): # todo
+    pass
+
+@app.route("/cart", methods=["GET"])
+def cart(): # todo
+    pass
+
+@app.route("/allgames", methods=["GET"])
+def allgames(): # todo
+    pass
