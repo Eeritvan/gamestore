@@ -25,7 +25,7 @@ def login():
             return redirect("/")
         return render_template("login.html")
 
-@app.route("/logout")
+@app.route("/logout", methods=["GET"])
 def logout():
     users.logout()
     return redirect("/")
@@ -78,8 +78,8 @@ def cart(): # todo shopping cart
     pass
 
 @app.route("/allgames", methods=["GET"])
-def allgames(): # todo
-    pass
+def allgames():
+    return render_template("allgames.html", games = games.all_games())
 
 @app.route("/newgame", methods=["GET", "POST"])
 def newgame():

@@ -27,3 +27,15 @@ def get_game(id):
           """
     result = db.session.execute(text(sql), {"id":id})
     return result.fetchone()
+
+def all_games():
+    sql = """
+            SELECT
+              G.title, G.description, G.price, G.release_date, U.username
+            FROM
+              games G, users U
+            WHERE 
+              G.creator_id=U.id
+          """
+    result = db.session.execute(text(sql))
+    return result.fetchall()

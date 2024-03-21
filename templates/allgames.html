@@ -1,0 +1,12 @@
+<!DOCTYPE html>
+
+{% for game in games %}
+
+Title: {{ game.title }} <br>
+Description: {{ game.description }} <br>
+Price: {{ game.price }} <br>
+Release Date: {{ game.release_date }} <br>
+Creator: {{ game.username }} <br>
+<hr>
+
+{% endfor %}
