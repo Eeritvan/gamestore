@@ -2,11 +2,33 @@
 
 {% if session.user_id %}
 <a href="/logout">logout</a>
-
 {% else %}
+<a href="/login">login</a>  <a href="/register">register</a>
+{% endif %}
 
-<a href="/login">login</a>
-<p>
-<a href="/register">register</a>
+<hr>
 
+<h1>Welcome to the store</h1>
+
+{% if session.user_id %}
+<p> Logged in as: {{ user }} (id: {{ user_id }})</p>
+<p> Your balance: {{ credits }} </p>
+{% endif %}
+
+<a href="/allgames">view all games</a> <br>
+<a href="/ratings">view best rated games</a> <br>
+<a href="/library">library</a> <br>
+<a href="/wishlist">wishlist</a> <br>
+<a href="/cart">cart</a> <br>
+<br>
+<a href="/newgame">new game</a> <br>
+
+{% if seller or moderator %}
+<hr>
+Olet myyjä
+{% endif %}
+
+{% if moderator %}
+<hr>
+Olet modetaattori
 {% endif %}
