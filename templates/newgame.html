@@ -1,0 +1,31 @@
+{% if permission %}
+    {% if preview %}
+        Title: {{ title }} <br>
+        description: {{ description }} <br>
+        Price: {{ price }} € <br>
+        Release date: {{ date }} <br>
+        Time: {{ time }} <br>
+
+        <form action="/newgame/publish" method="POST">
+            <input type="hidden" name="title" value="{{ title }}">
+            <input type="hidden" name="description" value="{{ description }}">
+            <input type="hidden" name="price" value="{{ price }}">
+            <input type="hidden" name="date" value="{{ date }}">
+            <input type="hidden" name="time" value="{{ time }}">
+            <input type="submit" value="publish">
+        </form>
+
+    {% else %}
+        <form action="/newgame" method="POST">
+            Title of the game: <input type="text" name="title" size="20" required> <br>
+            Write a description for the game: <textarea name="description" rows="5" cols="40"> </textarea> <br>
+            <label for="price">Price:</label> <input type="number" id="euros" name="euros" min="0" step="1" placeholder="0">.<input type="number" id="cents" name="cents" min="0" max="99" step="1" placeholder="00"> € <br>
+            Release date: <input type="date" name="release_date" value="{{current_date}}" required> <br>
+            Release time: <input type="time" name="time" value="{{current_time}}"> <br>
+            File: <input type="file" name="image" multiple> <br>
+            <input type="submit" value="preview store page"> <br>
+        </form>
+    {% endif %}
+{% else %}
+    You do not have permission to view the page
+{% endif %}
