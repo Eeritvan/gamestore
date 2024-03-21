@@ -19,9 +19,11 @@ CREATE TABLE users (
 CREATE TABLE games (
     id SERIAL PRIMARY KEY,
     title TEXT UNIQUE NOT NULL,
-    price DECIMAL NOT NULL,
     description TEXT NOT NULL,
-    release DATE NOT NULL,
+    price DECIMAL NOT NULL,
+    release_date DATE NOT NULL,
+    /* release time? clock?? 
+       image              */
     creator_id INTEGER REFERENCES users(id),
     visible BOOLEAN NOT NULL DEFAULT TRUE
     CHECK (price >= 0)
