@@ -13,7 +13,10 @@
 {% if session.user_id %}
 <p> Logged in as: {{ user }} (id: {{ user_id }})</p>
 <p> Your balance: {{ credits }} </p>
+<p> <a href="/balance">add balance</a> </p>
 {% endif %}
+
+<hr>
 
 <a href="/allgames">view all games</a> <br>
 <a href="/ratings">view best rated games</a> <br>

@@ -48,6 +48,19 @@ def register():
             # todo error: username already in use
             return render_template("register.html")
 
+@app.route("/balance", methods=["GET", "POST"])
+def balance_page():
+    if request.method == "GET":
+        return render_template("balance.html", balance = balance.get_balance())
+    if request.method == "POST": # todo: validate amount
+        amount = request.form.get("button")
+        if amount == "own_value":
+            amount = request.form.get("amount")
+        if balance.update_balance(amount): # todo: success message
+            return redirect("/")
+        else: # todo: error message
+            return redirect("/")
+
 @app.route("/ratings", methods=["GET"])
 def ratings(): # todo rating system
     pass

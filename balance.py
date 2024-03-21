@@ -9,11 +9,14 @@ def add_initialbalance(username, amount):
     db.session.execute(text(sql), {"user_id":id, "amount":amount})
     db.session.commit()
 
-def add_balance(amounth): # todo
-    pass
-
-def remove_balance(amounth): # todo
-    pass
+def update_balance(amount): # todo
+    try:
+        sql = "UPDATE balance SET amount = amount + :amount WHERE user_id=:id"
+        db.session.execute(text(sql), {"amount":amount, "id":users.user_id()})
+        db.session.commit()
+        return True
+    except:
+        return False
 
 def get_balance():
     if users.user_id() != 0:
