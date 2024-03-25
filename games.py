@@ -6,16 +6,28 @@ def add_newgame(title, description, price, date, time): # todo: add image, add g
     try:
         sql = """
                 INSERT INTO
-                  games(title, description, price, release_date, creator_id)
+                  games(title, description, price, release_date, release_time, creator_id)
                 VALUES
-                  (:title, :description, :price, :release_date, :creator_id)
+                  (:title, :description, :price, :release_date, :release_time, :creator_id)
               """
-        db.session.execute(text(sql), {"title":title, "description":description, "price":price, "release_date":date, "creator_id":users.user_id()})
+        db.session.execute(text(sql), {"title":title, "description":description, "price":price, "release_date":date, "release_time":time, "creator_id":users.user_id()})
         db.session.commit()
         return True
     except:
         return False
-    
+
+def get_game_id(title):
+    sql = """
+            SELECT
+              id
+            FROM
+              games
+            WHERE
+              title=:title
+          """
+    result = db.session.execute(text(sql), {"title":title})
+    return result.fetchone()[0]
+
 def get_game(id):
     sql = """
             SELECT

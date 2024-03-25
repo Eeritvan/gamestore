@@ -22,11 +22,16 @@ CREATE TABLE games (
     description TEXT NOT NULL,
     price DECIMAL NOT NULL,
     release_date DATE NOT NULL,
-    /* release time? clock?? 
-       image              */
+    release_time TIME NOT NULL,
     creator_id INTEGER REFERENCES users(id),
     visible BOOLEAN NOT NULL DEFAULT TRUE
     CHECK (price >= 0)
+);
+
+CREATE TABLE images (
+    game_id INTEGER REFERENCES games(id),
+    imagename TEXT,
+    imagedata BYTEA
 );
 
 CREATE TABLE galleries (

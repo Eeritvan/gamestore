@@ -1,9 +1,12 @@
 from app import app
-from flask import redirect, render_template, request
+from flask import redirect, render_template, request, make_response
 from datetime import datetime
+from werkzeug.utils import secure_filename
 import users
 import balance
 import games
+import images
+import base64
 
 @app.route("/")
 def frontpage():
@@ -94,12 +97,12 @@ def newgame():
                                                current_date = current_date,
                                                current_time = current_time)
     if request.method == "POST": # todo: validate given information
-        title = request.form["title"] # title must be unique
-        description = request.form["description"] # max length 1000
-        date = request.form["release_date"] # possible upcoming release date
+        title = request.form["title"]
+        description = request.form["description"]
+        date = request.form["release_date"]
         time = request.form["time"]
 
-        euros = request.form["euros"]
+        euros = request.form["euros"] # price / broken atm
         if int(euros) == 0:
             euros = "0"
         cents = request.form["cents"]
@@ -108,14 +111,23 @@ def newgame():
         if int(cents) == 0:
             cents = "00"
         price = str(int(euros)) + "." + str(cents)
-
+            
+        global imagelist
+        imagelist = []
+        images = request.files.getlist("image")
+        for image in images:
+            imagename = secure_filename(image.filename)
+            imagedata = base64.b64encode(image.read()).decode("utf-8")
+            imagelist.append((imagename, imagedata))
+        
         return render_template("newgame.html", permission = permission,
                                                preview = True,
                                                title = title,
                                                description = description,
                                                price = price,
                                                date = date,
-                                               time = time)
+                                               time = time,
+                                               imagelist = imagelist)
     
 @app.route("/newgame/publish", methods=["POST"])
 def publish(): # todo: validate given information
@@ -126,17 +138,29 @@ def publish(): # todo: validate given information
     time = request.form["time"]
 
     if games.add_newgame(title, description, price, date, time):
+        print("game added successfully")
+        if len(imagelist) > 0:
+            game_id = games.get_game_id(title)
+            for image in imagelist:
+                images.add_gameimage(game_id, image[0], base64.b64decode(image[1]))
         return redirect("/") # todo: success message / redirect to the game's page
     else: 
+        print("adding game failed")
         return redirect("/") # todo: error message
-    
+
 @app.route("/game/<int:id>", methods=["GET"])
 def game(id):
     game = games.get_game(id)
     if game == None: # error: game not found
         return redirect("/")
+    imagelist = []
+    for image in images.get_gameimages(id):
+        imagename = secure_filename(image[0])
+        imagedata = base64.b64encode(image[1]).decode("utf-8")
+        imagelist.append((imagename, imagedata))
     return render_template("game.html", title = game[0],
                                         description = game[1],
                                         price = game[2],
                                         release_date = game[3],
-                                        creator = game[4])
+                                        creator = game[4],
+                                        imagelist = imagelist)

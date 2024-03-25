@@ -4,4 +4,8 @@ Title: {{ title }} <br>
 description: {{ description }} <br>
 Price: {{ price }} <br>
 Release date:  {{ release_date }} <br>
-Creator: {{ creator }}
+Creator: {{ creator }} <br>
+<hr>
+{% for name, data in imagelist %}
+    <img src="data:image/png;base64,{{ data }}" alt="{{ name }}" height="500">
+{% endfor %}
