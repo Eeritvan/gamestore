@@ -2,7 +2,7 @@ from db import db
 from sqlalchemy import text
 
 def add_gameimage(game_id, imagename, imagedata):
-    #try:
+    try:
         sql = """
                 INSERT INTO
                   images(game_id, imagename, imagedata)
@@ -11,10 +11,9 @@ def add_gameimage(game_id, imagename, imagedata):
               """
         db.session.execute(text(sql), {"game_id":game_id, "name":imagename, "data":imagedata})
         db.session.commit()
-        print("psql success")
         return True
-    #except:
-    #    return False
+    except:
+        return False
     
 def get_gameimages(game_id):
     try:
