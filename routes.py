@@ -1,12 +1,13 @@
 from app import app
-from flask import redirect, render_template, request, make_response
+from flask import redirect, render_template, request
 from datetime import datetime
 from werkzeug.utils import secure_filename
+from base64 import b64encode, b64decode
 import users
 import balance
 import games
 import images
-import base64
+import validation
 
 @app.route("/")
 def frontpage():
@@ -43,7 +44,7 @@ def register():
         password1 = request.form["password1"]
         password2 = request.form["password2"]
         if password1 != password2:
-            # todo: error
+            # todo error: password mismatch
             return render_template("register.html")
         if users.register(username, password1):
             return redirect("/")
@@ -55,13 +56,14 @@ def register():
 def balance_page():
     if request.method == "GET":
         return render_template("balance.html", balance = balance.get_balance())
-    if request.method == "POST": # todo: validate amount
+    if request.method == "POST":
         amount = request.form.get("button")
         if amount == "own_value":
             amount = request.form.get("amount")
+        amount = amount.split(".")[0]
         if balance.update_balance(amount): # todo: success message
             return redirect("/")
-        else: # todo: error message
+        else: # todo error: adding balance failed
             return redirect("/")
 
 @app.route("/ratings", methods=["GET"])
@@ -96,16 +98,20 @@ def newgame():
                                                preview = False,
                                                current_date = current_date,
                                                current_time = current_time)
-    if request.method == "POST": # todo: validate given information
+    if request.method == "POST":
         title = request.form["title"]
         description = request.form["description"]
         date = request.form["release_date"]
         time = request.form["time"]
 
-        euros = request.form["euros"] # price / broken atm
+        euros = request.form["euros"]
+        if euros == "":
+            euros = "0"
         if int(euros) == 0:
             euros = "0"
         cents = request.form["cents"]
+        if cents == "":
+            cents = "00"
         if len(cents) > 2:
             cents = cents[:2]
         if int(cents) == 0:
@@ -117,7 +123,7 @@ def newgame():
         images = request.files.getlist("image")
         for image in images:
             imagename = secure_filename(image.filename)
-            imagedata = base64.b64encode(image.read()).decode("utf-8")
+            imagedata = b64encode(image.read()).decode("utf-8")
             imagelist.append((imagename, imagedata))
         
         return render_template("newgame.html", permission = permission,
@@ -130,33 +136,33 @@ def newgame():
                                                imagelist = imagelist)
     
 @app.route("/newgame/publish", methods=["POST"])
-def publish(): # todo: validate given information
-    title = request.form["title"]
-    description = request.form["description"]
-    price = request.form["price"]
-    date = request.form["date"]
-    time = request.form["time"]
-
+def publish():
+    try:
+        title, description, price, date, time = validation.validate_gameinfo(request.form["title"],
+                                                                         request.form["description"],
+                                                                         request.form["price"],
+                                                                         request.form["date"],
+                                                                         request.form["time"])
+    except: # todo error: invalid input
+        return redirect("/")
     if games.add_newgame(title, description, price, date, time):
-        print("game added successfully")
         if len(imagelist) > 0:
             game_id = games.get_game_id(title)
             for image in imagelist:
-                images.add_gameimage(game_id, image[0], base64.b64decode(image[1]))
-        return redirect("/") # todo: success message / redirect to the game's page
+                images.add_gameimage(game_id, image[0], b64decode(image[1]))
+        return redirect("/") # success message: game added successfully / redirect to the game's page
     else: 
-        print("adding game failed")
-        return redirect("/") # todo: error message
+        return redirect("/") # todo error: adding game failed
 
 @app.route("/game/<int:id>", methods=["GET"])
 def game(id):
     game = games.get_game(id)
-    if game == None: # error: game not found
+    if game == None: # todo error: game not found
         return redirect("/")
     imagelist = []
     for image in images.get_gameimages(id):
         imagename = secure_filename(image[0])
-        imagedata = base64.b64encode(image[1]).decode("utf-8")
+        imagedata = b64encode(image[1]).decode("utf-8")
         imagelist.append((imagename, imagedata))
     return render_template("game.html", title = game[0],
                                         description = game[1],

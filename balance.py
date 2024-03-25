@@ -2,14 +2,14 @@ from db import db
 from sqlalchemy import text
 import users
 
-def add_initialbalance(username, amount):
-    testi = "SELECT id FROM users WHERE username=:username"
-    id  = db.session.execute(text(testi), {"username":username}).fetchone()[0]
+def add_initialbalance(username, amount): # todo: possible error???
+    sql = "SELECT id FROM users WHERE username=:username"
+    id  = db.session.execute(text(sql), {"username":username}).fetchone()[0]
     sql = "INSERT INTO balance (user_id, amount) VALUES (:user_id, :amount)"
     db.session.execute(text(sql), {"user_id":id, "amount":amount})
     db.session.commit()
 
-def update_balance(amount): # todo
+def update_balance(amount):
     try:
         sql = "UPDATE balance SET amount = amount + :amount WHERE user_id=:id"
         db.session.execute(text(sql), {"amount":amount, "id":users.user_id()})
