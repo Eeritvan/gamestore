@@ -52,9 +52,9 @@ CREATE TABLE shoppingcarts (
 CREATE TABLE reviews (
     user_id INTEGER REFERENCES users(id),
     game_id INTEGER REFERENCES games(id),
-    rating INTEGER NOT NULL,
+    date DATE NOT NULL,
+    rating TEXT NOT NULL,
     review TEXT NOT NULL
-    CHECK (rating >= 0)
 );
 
 CREATE TABLE histories (
@@ -67,6 +67,6 @@ CREATE TABLE histories (
 
 CREATE TABLE balance (
     user_id INTEGER REFERENCES users(id),
-    amount DECIMAL NOT NULL DEFAULT 0
+    amount DECIMAL NOT NULL DEFAULT 0.00
     CHECK (amount >= 0)
 );

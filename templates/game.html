@@ -2,10 +2,31 @@
 
 Title: {{ title }} <br>
 description: {{ description }} <br>
-Price: {{ price }} <br>
+Price: {{ price }} € <br>
 Release date:  {{ release_date }} <br>
 Creator: {{ creator }} <br>
 <hr>
 {% for name, data in imagelist %}
     <img src="data:image/png;base64,{{ data }}" alt="{{ name }}" height="500">
+{% endfor %}
+<hr>
+{% if session.user_id %} <!-- todo: check if already reviewed -->
+    {% if already_reviewed %}
+        you already reviewed this game
+    {% else %}
+        write a new review: <form action="/game/{{ game_id }}" method="POST">
+                            <input type="radio" name="rating" value="positive" checked> Positive <br>
+                            <input type="radio" name="rating" value="negative"> Negative <br>
+                            <textarea name="review" rows="5" cols="40" maxlength="1000" placeholder="Write your review here"></textarea> <br>
+                            <input type="submit" value="submit">
+                        </form>
+    {% endif %}
+{% else %}
+    please log in to write a review
+{% endif %}
+
+<hr>
+
+{% for review in reviews %}
+    {{ review.username }} {{ review.date }} {{ review.rating }} {{ review.review }} <br>
 {% endfor %}

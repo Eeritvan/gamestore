@@ -28,7 +28,7 @@ def register(username, password):
         db.session.commit()
     except:
         return False
-    balance.add_initialbalance(username, 0.0)
+    balance.add_initialbalance(username, 0.00)
     return login(username, password)
 
 def user_id():

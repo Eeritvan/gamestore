@@ -8,6 +8,7 @@ import balance
 import games
 import images
 import validation
+import reviews
 
 @app.route("/")
 def frontpage():
@@ -124,6 +125,8 @@ def newgame():
         for image in images:
             imagename = secure_filename(image.filename)
             imagedata = b64encode(image.read()).decode("utf-8")
+            if validation.validate_imagesize(b64decode(imagedata)) == False: # todo error: image too large
+                return redirect("/")
             imagelist.append((imagename, imagedata))
         
         return render_template("newgame.html", permission = permission,
@@ -151,22 +154,40 @@ def publish():
             for image in imagelist:
                 images.add_gameimage(game_id, image[0], b64decode(image[1]))
         return redirect("/") # success message: game added successfully / redirect to the game's page
-    else: 
+    else:
         return redirect("/") # todo error: adding game failed
 
-@app.route("/game/<int:id>", methods=["GET"])
+@app.route("/game/<int:id>", methods=["GET", "POST"])
 def game(id):
     game = games.get_game(id)
     if game == None: # todo error: game not found
         return redirect("/")
-    imagelist = []
-    for image in images.get_gameimages(id):
-        imagename = secure_filename(image[0])
-        imagedata = b64encode(image[1]).decode("utf-8")
-        imagelist.append((imagename, imagedata))
-    return render_template("game.html", title = game[0],
-                                        description = game[1],
-                                        price = game[2],
-                                        release_date = game[3],
-                                        creator = game[4],
-                                        imagelist = imagelist)
+    
+    if request.method == "GET":
+        
+        imagelist = []
+        for image in images.get_gameimages(id):
+            imagename = secure_filename(image[0])
+            imagedata = b64encode(image[1]).decode("utf-8")
+            imagelist.append((imagename, imagedata))
+        
+        allreviews = reviews.show_reviews(id)
+        already_reviewed = reviews.already_reviewed(users.user_id(), id)
+
+        return render_template("game.html", game_id = id,
+                                            title = game[0],
+                                            description = game[1],
+                                            price = game[2],
+                                            release_date = game[3],
+                                            creator = game[4],
+                                            imagelist = imagelist,
+                                            reviews = allreviews,
+                                            already_reviewed = already_reviewed)
+    if request.method == "POST":
+        user_id = users.user_id()
+        game_id = id
+        date = datetime.now().strftime("%Y-%m-%d")
+        rating = request.form["rating"]
+        review = request.form["review"]
+        reviews.add_review(user_id, game_id, date, rating, review)
+        return redirect(str(id))

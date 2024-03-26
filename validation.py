@@ -19,8 +19,7 @@ def validate_gameinfo(title, description, price, date, time):
         except ValueError:
             return False
     def checktime(time):
-        split = time.split(".")
-        print(split)
+        split = time.split(":")
         if len(split) != 2:
             return False
         if len(split[0]) != 2 or len(split[1]) != 2:
@@ -45,8 +44,10 @@ def validate_gameinfo(title, description, price, date, time):
 
     return title, description, price, date, time
 
-def validate_imagesize(): # todo: check image size
-    pass
+def validate_imagesize(imagedata): # todo: check image size
+    if len(imagedata) > 3*1024*1024:
+        return False
+    return True
 
 def validate_balance(): # validate balance
     pass
