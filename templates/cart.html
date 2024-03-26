@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 
-Cart
+Cart <br>
+Balance: {{ balance }} € <br>
 
 {% for game in cartgames %}
     <hr>
@@ -13,9 +14,10 @@ Cart
 {% endfor %}
 
 {% if cartgames|length > 0 %}
-<hr>
-Total: {{ total }} €
-<hr>
-<form action="/checkout" method="POST">
-    <input type="submit" value="Checkout">
+    <hr>
+    Total: {{ total }} €
+    <hr>
+    <form action="/cart/checkout" method="POST" >
+        <input type="submit" value="Checkout" {% if not enough_balance %}disabled{% endif %}>
+    </form>
 {% endif %}

@@ -70,21 +70,34 @@ def balance_page():
 
 @app.route("/library", methods=["GET"])
 def library(): # todo user's library
-    pass
+    ownedgames = users.get_library(users.user_id())
+    return render_template("library.html", ownedgames = ownedgames)
 
-@app.route("/wishlist", methods=["GET"])
-def wishlist(): # todo wishlisting games
-    pass
+@app.route("/wishlist", methods=["GET", "POST"])
+def wishlist():
+    user_id = users.user_id()
+    if request.method == "POST":
+        game_id = request.form["game_id"]
+        if request.form["remove"] == "remove":
+            users.remove_from_wishlist(user_id, game_id)
+        else:
+            date = datetime.now().strftime("%Y-%m-%d")
+            if users.already_in_wishlist(user_id, game_id) != None:
+                return redirect("/wishlist") # todo error: game already in wishlist
+            elif not users.add_to_wishlist(user_id, game_id, date):
+                return redirect("/wishlist") # todo error: adding to wishlist failed
+
+    wishlistgames = users.get_wishlist(user_id)
+    return render_template("wishlist.html", wishlistgames = wishlistgames)
 
 @app.route("/cart", methods=["GET", "POST"])
 def cart():
     user_id = users.user_id()
     if request.method == "POST":
+        game_id = request.form["game_id"]
         if request.form["remove"] == "remove":
-            game_id = request.form["game_id"]
             users.remove_from_cart(user_id, game_id)
         else:
-            game_id = request.form["game_id"]
             if users.game_in_cart(user_id, game_id) != None:
                 return redirect("/cart") # todo error: game already in cart
             elif not users.add_to_cart(user_id, game_id):
@@ -92,7 +105,24 @@ def cart():
 
     cartgames = users.get_cart(user_id)
     total = users.get_cart_total(user_id)
-    return render_template("cart.html", cartgames = cartgames, total = total)
+    userbalance = balance.get_balance()
+    enough_balance = False
+    try:
+        if total <= userbalance:
+            enough_balance = True
+    except:
+        pass
+    return render_template("cart.html", cartgames = cartgames, total = total, balance = userbalance, enough_balance = enough_balance)
+
+@app.route("/cart/checkout", methods=["POST"])
+def checkout():
+    user_id = users.user_id()
+    balance.update_balance(-users.get_cart_total(user_id))
+    for game in users.get_cart(user_id):
+        game_id = game[2]
+        users.add_to_library(user_id, game_id)
+        users.remove_from_cart(user_id, game_id)
+    return redirect("/")
 
 @app.route("/allgames", methods=["GET"])
 def allgames():
@@ -187,6 +217,7 @@ def game(id):
         your_review = reviews.already_reviewed(users.user_id(), id)
         if your_review != None:
             allreviews.remove(your_review)
+        owned = users.already_in_library(users.user_id(), id)
         return render_template("game.html", game_id = id,
                                             title = game[0],
                                             description = game[1],
@@ -195,7 +226,8 @@ def game(id):
                                             creator = game[4],
                                             imagelist = imagelist,
                                             reviews = allreviews,
-                                            your_review = your_review)
+                                            your_review = your_review,
+                                            owned = owned)
     if request.method == "POST":
         user_id = users.user_id()
         game_id = id

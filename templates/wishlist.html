@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+
+Wishlist <br>
+
+{% for game in wishlistgames %}
+    <hr>
+    {{ game.title }} {{ game.price }} € id:{{ game.id }}
+    <form action="/wishlist" method="POST">
+        <input type=hidden name="game_id" value="{{ game.id }}">
+        <input type=hidden name="remove" value="remove">
+        <input type="submit" value="Remove from wishlist">
+    </form>
+{% endfor %}
