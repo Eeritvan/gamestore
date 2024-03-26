@@ -50,3 +50,32 @@ def is_moderator():
         sql = "SELECT R.role FROM users U , roles R WHERE U.id=:id AND U.role=R.id"
         user_role = db.session.execute(text(sql), {"id":user_id()}).fetchone()[0]
         return user_role == "moderator"
+    
+def add_to_cart(user_id, game_id):
+    try:
+        sql = "INSERT INTO cart (user_id, game_id) VALUES (:user_id, :game_id)"
+        db.session.execute(text(sql), {"user_id":user_id, "game_id":game_id})
+        db.session.commit()
+        return True
+    except:
+        return False
+
+def get_cart(user_id):
+    sql = "SELECT G.title, G.price, G.id FROM games G, cart C WHERE C.user_id=:user_id AND C.game_id=G.id"
+    result = db.session.execute(text(sql), {"user_id":user_id})
+    return result.fetchall()
+
+def get_cart_total(user_id):
+    sql = "SELECT SUM(G.price) FROM games G, cart C WHERE C.user_id=:user_id AND C.game_id=G.id"
+    result = db.session.execute(text(sql), {"user_id":user_id})
+    return result.fetchone()[0]
+
+def game_in_cart(user_id, game_id):
+    sql = "SELECT game_id FROM cart WHERE user_id=:user_id AND game_id=:game_id"
+    result = db.session.execute(text(sql), {"user_id":user_id, "game_id":game_id})
+    return result.fetchone()
+
+def remove_from_cart(user_id, game_id):
+    sql = "DELETE FROM cart WHERE user_id=:user_id and game_id=:game_id"
+    db.session.execute(text(sql), {"user_id":user_id, "game_id":game_id})
+    db.session.commit()

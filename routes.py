@@ -68,10 +68,6 @@ def balance_page():
         else: # todo error: adding balance failed
             return redirect("/")
 
-@app.route("/ratings", methods=["GET"])
-def ratings(): # todo rating system
-    pass
-
 @app.route("/library", methods=["GET"])
 def library(): # todo user's library
     pass
@@ -80,9 +76,23 @@ def library(): # todo user's library
 def wishlist(): # todo wishlisting games
     pass
 
-@app.route("/cart", methods=["GET"])
-def cart(): # todo shopping cart
-    pass
+@app.route("/cart", methods=["GET", "POST"])
+def cart():
+    user_id = users.user_id()
+    if request.method == "POST":
+        if request.form["remove"] == "remove":
+            game_id = request.form["game_id"]
+            users.remove_from_cart(user_id, game_id)
+        else:
+            game_id = request.form["game_id"]
+            if users.game_in_cart(user_id, game_id) != None:
+                return redirect("/cart") # todo error: game already in cart
+            elif not users.add_to_cart(user_id, game_id):
+                return redirect("/cart") # todo error: adding to cart failed
+
+    cartgames = users.get_cart(user_id)
+    total = users.get_cart_total(user_id)
+    return render_template("cart.html", cartgames = cartgames, total = total)
 
 @app.route("/allgames", methods=["GET"])
 def allgames():

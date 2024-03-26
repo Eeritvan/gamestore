@@ -34,17 +34,18 @@ CREATE TABLE images (
     imagedata BYTEA
 );
 
-CREATE TABLE galleries (
+CREATE TABLE library (
     user_id INTEGER REFERENCES users(id),
     game_id INTEGER REFERENCES games(id)
 );
 
-CREATE TABLE wishlists (
+CREATE TABLE wishlist (
     user_id INTEGER REFERENCES users(id),
+    date DATE NOT NULL,
     game_id INTEGER REFERENCES games(id)
 );
 
-CREATE TABLE shoppingcarts (
+CREATE TABLE cart (
     user_id INTEGER REFERENCES users(id),
     game_id INTEGER REFERENCES games(id)
 );

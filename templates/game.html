@@ -4,7 +4,13 @@ Title: {{ title }} <br>
 description: {{ description }} <br>
 Price: {{ price }} € <br>
 Release date:  {{ release_date }} <br>
-Creator: {{ creator }} <br>
+Creator: {{ creator }} <br> <br>
+Buy game: <form action="/cart" method="POST"> 
+             <input type=hidden name="game_id" value="{{ game_id }}"> 
+             <input type=hidden name="remove" value=""> 
+             <input type="submit" value="Add to cart">
+          </form> <br>
+Wishlist game: 
 <hr>
 {% for name, data in imagelist %}
     <img src="data:image/png;base64,{{ data }}" alt="{{ name }}" height="500">
@@ -18,7 +24,7 @@ Creator: {{ creator }} <br>
             <input type="hidden" name="edited" value="True">
             <input type="radio" name="rating" value="positive" {% if your_review.rating == 'positive' %}checked{% endif %}> Positive <br>
             <input type="radio" name="rating" value="negative" {% if your_review.rating == 'negative' %}checked{% endif %}> Negative <br>
-            <textarea name="review" rows="5" cols="40" maxlength="1000">{{ your_review.review }}</textarea> <br>
+            <textarea name="review" rows="5" cols="40" maxlength="200">{{ your_review.review }}</textarea> <br>
             <input type="submit" value="submit">
         </form>
 
@@ -27,7 +33,7 @@ Creator: {{ creator }} <br>
                                 <input type="hidden" name="edited" value="False">
                                 <input type="radio" name="rating" value="positive" checked> Positive <br>
                                 <input type="radio" name="rating" value="negative"> Negative <br>
-                                <textarea name="review" rows="5" cols="40" maxlength="1000" placeholder="Write your review here"></textarea> <br>
+                                <textarea name="review" rows="5" cols="40" maxlength="200" placeholder="Write your review here"></textarea> <br>
                                 <input type="submit" value="submit">
                             </form>
     {% endif %}

@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+
+Cart
+
+{% for game in cartgames %}
+    <hr>
+    {{ game.title }} {{ game.price }} € id:{{ game.id }}
+    <form action="/cart" method="POST">
+        <input type=hidden name="game_id" value="{{ game.id }}">
+        <input type=hidden name="remove" value="remove">
+        <input type="submit" value="Remove from cart">
+    </form>
+{% endfor %}
+
+{% if cartgames|length > 0 %}
+<hr>
+Total: {{ total }} €
+<hr>
+<form action="/checkout" method="POST">
+    <input type="submit" value="Checkout">
+{% endif %}
