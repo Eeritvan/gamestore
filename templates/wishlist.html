@@ -10,4 +10,11 @@ Wishlist <br>
         <input type=hidden name="remove" value="remove">
         <input type="submit" value="Remove from wishlist">
     </form>
+    <form action="/cart" method="POST"> 
+        <input type=hidden name="game_id" value="{{ game.id }}"> 
+        <input type=hidden name="remove" value=""> 
+        <input type="submit" value="Add to cart">
+     </form>
+    <a href="/game/{{ game.id }}"> visit store page </a> <br>
+    added to wishlist on: {{ game.date }}
 {% endfor %}

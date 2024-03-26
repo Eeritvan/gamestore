@@ -49,5 +49,18 @@ def validate_imagesize(imagedata): # todo: check image size
         return False
     return True
 
-def validate_balance(): # validate balance
-    pass
+def fix_price(euros, cents):
+    if euros == "":
+        euros = "0"
+    if int(euros) == 0:
+        euros = "0"
+
+    if cents == "":
+        cents = "00"
+    if len(cents) > 2:
+        cents = cents[:2]
+    if int(cents) == 0:
+        cents = "00"
+
+    price = str(int(euros)) + "." + str(cents)
+    return price

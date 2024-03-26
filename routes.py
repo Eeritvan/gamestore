@@ -10,10 +10,14 @@ import games
 import images
 import validation
 import reviews
+import library
+import wishlist
+import cart
+import history
 
 @app.route("/")
 def frontpage():
-    return render_template("frontpage.html", credits=balance.get_balance(),
+    return render_template("frontpage.html", credits=balance.get_balance(users.user_id()),
                                              user = users.get_username(),
                                              user_id = users.user_id(),
                                              seller = users.is_seller(),
@@ -56,56 +60,58 @@ def register():
 
 @app.route("/balance", methods=["GET", "POST"])
 def balance_page():
+    user_id = users.user_id()
     if request.method == "GET":
-        return render_template("balance.html", balance = balance.get_balance())
+        return render_template("balance.html", balance = balance.get_balance(user_id))
     if request.method == "POST":
         amount = request.form.get("button")
         if amount == "own_value":
             amount = request.form.get("amount")
         amount = amount.split(".")[0]
-        if balance.update_balance(amount): # todo: success message
+
+        if balance.update_balance(user_id, amount): # todo: success message
             return redirect("/")
         else: # todo error: adding balance failed
             return redirect("/")
 
 @app.route("/library", methods=["GET"])
-def library(): # todo user's library
-    ownedgames = users.get_library(users.user_id())
+def getlibrary():
+    ownedgames = library.get_library(users.user_id())
     return render_template("library.html", ownedgames = ownedgames)
 
 @app.route("/wishlist", methods=["GET", "POST"])
-def wishlist():
+def getwishlist():
     user_id = users.user_id()
     if request.method == "POST":
         game_id = request.form["game_id"]
         if request.form["remove"] == "remove":
-            users.remove_from_wishlist(user_id, game_id)
+            wishlist.remove_from_wishlist(user_id, game_id)
         else:
             date = datetime.now().strftime("%Y-%m-%d")
-            if users.already_in_wishlist(user_id, game_id) != None:
+            if wishlist.already_in_wishlist(user_id, game_id) != None:
                 return redirect("/wishlist") # todo error: game already in wishlist
-            elif not users.add_to_wishlist(user_id, game_id, date):
+            elif not wishlist.add_to_wishlist(user_id, game_id, date):
                 return redirect("/wishlist") # todo error: adding to wishlist failed
 
-    wishlistgames = users.get_wishlist(user_id)
+    wishlistgames = wishlist.get_wishlist(user_id)
     return render_template("wishlist.html", wishlistgames = wishlistgames)
 
 @app.route("/cart", methods=["GET", "POST"])
-def cart():
+def getcart():
     user_id = users.user_id()
     if request.method == "POST":
         game_id = request.form["game_id"]
         if request.form["remove"] == "remove":
-            users.remove_from_cart(user_id, game_id)
+            cart.remove_from_cart(user_id, game_id)
         else:
-            if users.game_in_cart(user_id, game_id) != None:
+            if cart.game_in_cart(user_id, game_id) != None:
                 return redirect("/cart") # todo error: game already in cart
-            elif not users.add_to_cart(user_id, game_id):
+            elif not cart.add_to_cart(user_id, game_id):
                 return redirect("/cart") # todo error: adding to cart failed
 
-    cartgames = users.get_cart(user_id)
-    total = users.get_cart_total(user_id)
-    userbalance = balance.get_balance()
+    cartgames = cart.get_cart(user_id)
+    total = cart.get_cart_total(user_id)
+    userbalance = balance.get_balance(user_id)
     enough_balance = False
     try:
         if total <= userbalance:
@@ -117,11 +123,18 @@ def cart():
 @app.route("/cart/checkout", methods=["POST"])
 def checkout():
     user_id = users.user_id()
-    balance.update_balance(-users.get_cart_total(user_id))
-    for game in users.get_cart(user_id):
+
+    for game in cart.get_cart(user_id):
+        price = float(game[1])
         game_id = game[2]
-        users.add_to_library(user_id, game_id)
-        users.remove_from_cart(user_id, game_id)
+        date = datetime.now().strftime("%Y-%m-%d")
+
+        library.add_to_library(user_id, game_id)
+        cart.remove_from_cart(user_id, game_id)
+        balance.update_balance(user_id, -price)
+        wishlist.remove_from_wishlist(user_id, game_id)
+        history.add_game_to_history(user_id, game_id, date, price)
+
     return redirect("/")
 
 @app.route("/allgames", methods=["GET"])
@@ -136,6 +149,7 @@ def newgame():
     if request.method == "GET":
         current_date = datetime.now().strftime("%Y-%m-%d")
         current_time = datetime.now().strftime("%H:%M")
+
         return render_template("newgame.html", permission = permission,
                                                preview = False,
                                                current_date = current_date,
@@ -145,20 +159,7 @@ def newgame():
         description = request.form["description"]
         date = request.form["release_date"]
         time = request.form["time"]
-
-        euros = request.form["euros"]
-        if euros == "":
-            euros = "0"
-        if int(euros) == 0:
-            euros = "0"
-        cents = request.form["cents"]
-        if cents == "":
-            cents = "00"
-        if len(cents) > 2:
-            cents = cents[:2]
-        if int(cents) == 0:
-            cents = "00"
-        price = str(int(euros)) + "." + str(cents)
+        price = validation.fix_price(request.form["euros"], request.form["cents"])
             
         global imagelist
         imagelist = []
@@ -200,6 +201,7 @@ def publish():
 
 @app.route("/game/<int:id>", methods=["GET", "POST"])
 def game(id):
+    user_id = users.user_id()
     game = games.get_game(id)
     if game == None: # todo error: game not found
         return redirect("/")
@@ -214,10 +216,11 @@ def game(id):
         
         allreviews = reviews.show_reviews(id)
         shuffle(allreviews)
-        your_review = reviews.already_reviewed(users.user_id(), id)
+        your_review = reviews.already_reviewed(user_id, id)
         if your_review != None:
             allreviews.remove(your_review)
-        owned = users.already_in_library(users.user_id(), id)
+        owned = library.already_in_library(user_id, id)
+
         return render_template("game.html", game_id = id,
                                             title = game[0],
                                             description = game[1],
@@ -229,13 +232,14 @@ def game(id):
                                             your_review = your_review,
                                             owned = owned)
     if request.method == "POST":
-        user_id = users.user_id()
         game_id = id
         date = datetime.now().strftime("%Y-%m-%d")
         rating = request.form["rating"]
         review = request.form["review"]
+
         if request.form["edited"] == "False":
             reviews.add_review(user_id, game_id, date, rating, review)
         if request.form["edited"] == "True":
             reviews.edit_review(user_id, game_id, date, rating, review)
+        
         return redirect(str(id))

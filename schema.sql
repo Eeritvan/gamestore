@@ -59,7 +59,7 @@ CREATE TABLE reviews (
     review TEXT NOT NULL
 );
 
-CREATE TABLE histories (
+CREATE TABLE history (
     user_id INTEGER REFERENCES users(id),
     game_id INTEGER REFERENCES games(id),
     date DATE NOT NULL,

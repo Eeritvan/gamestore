@@ -40,10 +40,22 @@ def get_game(id):
     result = db.session.execute(text(sql), {"id":id})
     return result.fetchone()
 
+def get_game_price(id):
+    sql = """
+            SELECT
+              price
+            FROM
+              games
+            WHERE
+              id=:id
+          """
+    result = db.session.execute(text(sql), {"id":id})
+    return result.fetchone()
+
 def all_games():
     sql = """
             SELECT
-              G.title, G.description, G.price, G.release_date, U.username
+              G.title, G.description, G.price, G.release_date, U.username, G.id
             FROM
               games G, users U
             WHERE 
