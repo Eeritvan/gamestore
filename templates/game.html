@@ -10,16 +10,26 @@ Creator: {{ creator }} <br>
     <img src="data:image/png;base64,{{ data }}" alt="{{ name }}" height="500">
 {% endfor %}
 <hr>
-{% if session.user_id %} <!-- todo: check if already reviewed -->
-    {% if already_reviewed %}
-        you already reviewed this game
+{% if session.user_id %}
+    {% if your_review != None %}
+        your review: {{ your_review.username }} {{ your_review.date }} {{ your_review.rating }} {{ your_review.review }} {% if your_review.edited != None %} (edited on: {{ your_review.edited }}) {% endif %}<br>
+        <a href="" onclick="document.getElementById('edit').style.display = 'block'; return false;">edit your review</a>
+        <form id="edit" action="/game/{{ game_id }}" method="POST" style="display: none;">
+            <input type="hidden" name="edited" value="True">
+            <input type="radio" name="rating" value="positive" {% if your_review.rating == 'positive' %}checked{% endif %}> Positive <br>
+            <input type="radio" name="rating" value="negative" {% if your_review.rating == 'negative' %}checked{% endif %}> Negative <br>
+            <textarea name="review" rows="5" cols="40" maxlength="1000">{{ your_review.review }}</textarea> <br>
+            <input type="submit" value="submit">
+        </form>
+
     {% else %}
         write a new review: <form action="/game/{{ game_id }}" method="POST">
-                            <input type="radio" name="rating" value="positive" checked> Positive <br>
-                            <input type="radio" name="rating" value="negative"> Negative <br>
-                            <textarea name="review" rows="5" cols="40" maxlength="1000" placeholder="Write your review here"></textarea> <br>
-                            <input type="submit" value="submit">
-                        </form>
+                                <input type="hidden" name="edited" value="False">
+                                <input type="radio" name="rating" value="positive" checked> Positive <br>
+                                <input type="radio" name="rating" value="negative"> Negative <br>
+                                <textarea name="review" rows="5" cols="40" maxlength="1000" placeholder="Write your review here"></textarea> <br>
+                                <input type="submit" value="submit">
+                            </form>
     {% endif %}
 {% else %}
     please log in to write a review
@@ -28,5 +38,5 @@ Creator: {{ creator }} <br>
 <hr>
 
 {% for review in reviews %}
-    {{ review.username }} {{ review.date }} {{ review.rating }} {{ review.review }} <br>
+    {{ review.username }} {{ review.date }} {{ review.rating }} {{ review.review }} {% if review.edited != None %} (edited on: {{ review.edited }}) {% endif %} <br>
 {% endfor %}

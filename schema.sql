@@ -53,6 +53,7 @@ CREATE TABLE reviews (
     user_id INTEGER REFERENCES users(id),
     game_id INTEGER REFERENCES games(id),
     date DATE NOT NULL,
+    edited DATE,
     rating TEXT NOT NULL,
     review TEXT NOT NULL
 );

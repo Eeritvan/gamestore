@@ -3,6 +3,7 @@ from flask import redirect, render_template, request
 from datetime import datetime
 from werkzeug.utils import secure_filename
 from base64 import b64encode, b64decode
+from random import shuffle
 import users
 import balance
 import games
@@ -172,8 +173,10 @@ def game(id):
             imagelist.append((imagename, imagedata))
         
         allreviews = reviews.show_reviews(id)
-        already_reviewed = reviews.already_reviewed(users.user_id(), id)
-
+        shuffle(allreviews)
+        your_review = reviews.already_reviewed(users.user_id(), id)
+        if your_review != None:
+            allreviews.remove(your_review)
         return render_template("game.html", game_id = id,
                                             title = game[0],
                                             description = game[1],
@@ -182,12 +185,15 @@ def game(id):
                                             creator = game[4],
                                             imagelist = imagelist,
                                             reviews = allreviews,
-                                            already_reviewed = already_reviewed)
+                                            your_review = your_review)
     if request.method == "POST":
         user_id = users.user_id()
         game_id = id
         date = datetime.now().strftime("%Y-%m-%d")
         rating = request.form["rating"]
         review = request.form["review"]
-        reviews.add_review(user_id, game_id, date, rating, review)
+        if request.form["edited"] == "False":
+            reviews.add_review(user_id, game_id, date, rating, review)
+        if request.form["edited"] == "True":
+            reviews.edit_review(user_id, game_id, date, rating, review)
         return redirect(str(id))
