@@ -142,8 +142,17 @@ def checkout():
 
 @app.route("/allgames", methods=["GET"])
 def allgames():
-    allgames = games.all_games()
-    return render_template("allgames.html", games = allgames)
+    query = request.args.get("query")
+    categorieslist = request.args.getlist("categories")
+    gamelist = games.get_games(query, categorieslist)
+
+    searchtext = True
+    if query != None or query == "":
+        searchtext = query
+    return render_template("allgames.html", games = gamelist,
+                                            categories = categories.get_all_categories(),
+                                            searchtext = searchtext,
+                                            selectedcategories = [int(x) for x in categorieslist])
 
 @app.route("/newgame", methods=["GET"])
 def newgame():

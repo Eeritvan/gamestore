@@ -52,14 +52,34 @@ def get_game_price(id):
     result = db.session.execute(text(sql), {"id":id})
     return result.fetchone()
 
-def all_games():
-    sql = """
-            SELECT
-              G.title, G.description, G.price, G.release_date, U.username, G.id
-            FROM
-              games G, users U
-            WHERE 
-              G.creator_id=U.id
-          """
-    result = db.session.execute(text(sql))
-    return result.fetchall()
+def get_games(query=None, categorylist=None):
+  sql = """
+    SELECT DISTINCT
+      G.title, G.description, G.price, G.release_date, U.username, G.id
+    FROM
+      games G, users U
+    WHERE 
+      G.creator_id=U.id
+  """
+  settings = {}
+  if query:
+    sql += " AND (LOWER(G.title) LIKE LOWER(:query))"
+    settings["query"] = f"%{query}%"
+  if categorylist:
+    sql += """ AND G.id IN (
+                 SELECT
+                   game_id
+                 FROM
+                   game_categories
+                 WHERE
+                   category_id IN :categorylist
+                 GROUP BY
+                   game_id
+                 HAVING
+                   COUNT(DISTINCT category_id) = :category_count)
+           """
+    settings["categorylist"] = tuple(categorylist)
+    settings["category_count"] = len(categorylist)
+
+  result = db.session.execute(text(sql), settings)
+  return result.fetchall()
