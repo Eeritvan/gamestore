@@ -132,6 +132,9 @@ def checkout():
         game_id = game[2]
         date = datetime.now().strftime("%Y-%m-%d")
 
+        if price > balance.get_balance(user_id): # todo error: not enough balance
+            return redirect("/cart")
+
         library.add_to_library(user_id, game_id)
         cart.remove_from_cart(user_id, game_id)
         balance.update_balance(user_id, -price)
@@ -255,6 +258,7 @@ def game(id):
         if your_review != None:
             allreviews.remove(your_review)
         owned = library.already_in_library(user_id, id)
+        moderator = users.is_moderator()
 
         return render_template("game.html", game_id = id,
                                             title = game[0],
@@ -266,7 +270,8 @@ def game(id):
                                             reviews = allreviews,
                                             categories = categories.get_categories_by_gameid(id),
                                             your_review = your_review,
-                                            owned = owned)
+                                            owned = owned,
+                                            moderator = moderator)
     if request.method == "POST":
 
         game_id = id
@@ -280,3 +285,12 @@ def game(id):
             reviews.edit_review(user_id, game_id, date, rating, review)
         
         return redirect(str(id))
+    
+@app.route("/game/<int:id>/deletereview", methods=["GET"])
+def deletereview(id):
+    username = (request.args.get("username"))
+    if username != None:
+        reviews.delete_review(users.get_userid(username), id)
+    else: 
+        reviews.delete_review(users.user_id(), id)
+    return redirect(f"/game/{id}")

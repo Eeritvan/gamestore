@@ -31,8 +31,10 @@ def edit_review(user_id, game_id, edited, rating, review):
                                    "review":review})
     db.session.commit()
             
-def delete_review():
-    pass
+def delete_review(user_id, game_id): # todo error: database failure
+    sql = "DELETE FROM reviews WHERE user_id = :user_id AND game_id = :game_id"
+    db.session.execute(text(sql), {"user_id":user_id, "game_id":game_id})
+    db.session.commit()
 
 def show_reviews(game_id): # todo error: database failure
     sql = """
@@ -45,9 +47,6 @@ def show_reviews(game_id): # todo error: database failure
           """
     result = db.session.execute(text(sql), {"game_id":game_id})
     return result.fetchall()
-
-def review_ratio(): # return the ratio of positive and negative reviews
-    pass
 
 def already_reviewed(user_id, game_id): # todo error: database failure
     sql = """

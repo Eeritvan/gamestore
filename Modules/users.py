@@ -39,6 +39,10 @@ def get_username():
         sql = "SELECT username FROM users WHERE id=:id"
         return db.session.execute(text(sql), {"id":user_id()}).fetchone()[0]
 
+def get_userid(username):
+    sql = "SELECT id FROM users WHERE username=:username"
+    return db.session.execute(text(sql), {"username":username}).fetchone()[0]
+
 def is_seller():
     if user_id() != 0:
         sql = "SELECT R.role FROM users U , roles R WHERE U.id=:id AND U.role=R.id"
