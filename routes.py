@@ -15,6 +15,7 @@ import Modules.wishlist as wishlist
 import Modules.cart as cart
 import Modules.history as history
 import Modules.temporaryimages as tempimages
+import Modules.categories as categories
 
 @app.route("/")
 def frontpage():
@@ -141,7 +142,8 @@ def checkout():
 
 @app.route("/allgames", methods=["GET"])
 def allgames():
-    return render_template("allgames.html", games = games.all_games())
+    allgames = games.all_games()
+    return render_template("allgames.html", games = allgames)
 
 @app.route("/newgame", methods=["GET"])
 def newgame():
@@ -151,10 +153,12 @@ def newgame():
     if request.method == "GET":
         current_date = datetime.now().strftime("%Y-%m-%d")
         current_time = datetime.now().strftime("%H:%M")
+        categorieslist = categories.get_all_categories()
 
         return render_template("newgame.html", permission = permission,
                                                current_date = current_date,
-                                               current_time = current_time)
+                                               current_time = current_time,
+                                               categories = categorieslist)
     
 @app.route("/newgame/preview", methods=["POST"])
 def preview():
@@ -166,6 +170,7 @@ def preview():
         date = request.form["release_date"]
         time = request.form["time"]
         price = validation.fix_price(request.form["euros"], request.form["cents"])
+        selectedcategories = request.form.getlist("categories")
 
         imagelist = []
         images = request.files.getlist("image")
@@ -185,7 +190,8 @@ def preview():
                                                price = price,
                                                date = date,
                                                time = time,
-                                               imagelist = imagelist)
+                                               imagelist = imagelist,
+                                               categories = selectedcategories)
     
 @app.route("/newgame/publish", methods=["POST"])
 def publish():
@@ -197,13 +203,24 @@ def publish():
                                                                          request.form["time"])
     except: # todo error: invalid input
         return redirect("/")
+    
     if games.add_newgame(title, description, price, date, time):
+
         imagelist = tempimages.get_temporary_images(users.user_id())
         tempimages.empty_temporary_images(users.user_id())
+
+        game_id = games.get_game_id(title)
         if len(imagelist) > 0:
-            game_id = games.get_game_id(title)
             for image in imagelist:
                 images.add_gameimage(game_id, image[0], image[1])
+
+        for category in request.form.getlist("categories"):
+            category_id = categories.get_categoryid(category)
+            if category_id != None:
+                categories.add_game_to_category(game_id, category_id[0])
+            else: # todo error: category not found
+                pass
+
         return redirect("/") # success message: game added successfully / redirect to the game's page
     else:
         return redirect("/") # todo error: adding game failed
@@ -238,6 +255,7 @@ def game(id):
                                             creator = game[4],
                                             imagelist = imagelist,
                                             reviews = allreviews,
+                                            categories = categories.get_categories_by_gameid(id),
                                             your_review = your_review,
                                             owned = owned)
     if request.method == "POST":

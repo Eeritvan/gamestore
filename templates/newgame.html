@@ -8,7 +8,10 @@
         Release date: <input type="date" name="release_date" value="{{current_date}}" min="{{current_date}}" required> <br>
         Release time: <input type="time" name="time" value="{{current_time}}"> <br>
         File: <input type="file" name="image" multiple> <br>
-        <p>
+        Select categories: <br>
+        {% for category in categories %}
+            <input type="checkbox" name="categories" value="{{ category.category }}"> {{ category.category }}
+        {% endfor %}
         <input type="submit" value="preview store page"> <br>
     </form>
 {% else %}

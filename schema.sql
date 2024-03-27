@@ -3,9 +3,10 @@ CREATE TABLE roles (
     role TEXT NOT NULL
 );
 
-INSERT INTO roles (role) VALUES ('user');
-INSERT INTO roles (role) VALUES ('seller');
-INSERT INTO roles (role) VALUES ('moderator');
+INSERT INTO roles(role) VALUES 
+                            ('user'),
+                            ('seller'),
+                            ('moderator');
 
 CREATE TABLE users (
     id SERIAL PRIMARY KEY,
@@ -26,6 +27,31 @@ CREATE TABLE games (
     creator_id INTEGER REFERENCES users(id),
     visible BOOLEAN NOT NULL DEFAULT TRUE
     CHECK (price >= 0)
+);
+
+CREATE TABLE categories (
+    id SERIAL PRIMARY KEY,
+    category TEXT NOT NULL
+);
+
+INSERT INTO categories(category) VALUES 
+                                    ('Action'),
+                                    ('Adventure'),
+                                    ('Horror'),
+                                    ('Multiplayer'),
+                                    ('Open World'),
+                                    ('Platformer'),
+                                    ('Puzzle'),
+                                    ('Racing'),
+                                    ('Shooting'),
+                                    ('Sports'),
+                                    ('Strategy'),
+                                    ('Survival');
+
+CREATE TABLE game_categories (
+    game_id INTEGER REFERENCES games(id),
+    category_id INTEGER REFERENCES categories(id)
+    CHECK (category_id > 0)
 );
 
 CREATE TABLE images (

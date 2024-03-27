@@ -9,6 +9,7 @@
     {% for imagename, imagedata in imagelist %}
         <img src="data:image/png;base64,{{ imagedata }}" alt="{{ imagename }}" height="500">
     {% endfor %}
+    categories: {% for category in categories %} {{ category }} {% endfor %}
 
     <form action="/newgame/publish" method="POST">
         <input type="hidden" name="title" value="{{ title }}">
@@ -16,6 +17,7 @@
         <input type="hidden" name="price" value="{{ price }}">
         <input type="hidden" name="date" value="{{ date }}">
         <input type="hidden" name="time" value="{{ time }}">
+        {% for category in categories %} <input type="hidden" name="categories" value="{{ category }}"> {% endfor %}
         <input type="submit" value="publish">
     </form>
 {% else %}

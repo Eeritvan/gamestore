@@ -4,9 +4,15 @@ Title: {{ title }} <br>
 description: {{ description }} <br>
 Price: {{ price }} € <br>
 Release date:  {{ release_date }} <br>
-Creator: {{ creator }} <br> <br>
+Creator: {{ creator }} <br>
+Categories: 
+{% for category in categories %}
+    {{ category.category }} 
+{% endfor %} <br>
 
-{% if not owned %}
+<hr>
+
+{% if not owned %} 
 Buy game:
           <form action="/cart" method="POST"> 
              <input type=hidden name="game_id" value="{{ game_id }}"> 
@@ -18,7 +24,7 @@ Wishlist game:
               <input type=hidden name="game_id" value="{{ game_id }}"> 
               <input type=hidden name="remove" value=""> 
               <input type="submit" value="Add to wishlist">
-          </form> <br>
+          </form>
 {% else %}
             You already own this game <br>
 {% endif %}
@@ -29,7 +35,7 @@ Wishlist game:
 <hr>
 {% if session.user_id %}
     {% if not owned %}
-        You must own the game to write a review
+        You must buy the game to write a review
     {% else %}
         {% if your_review != None %}
             your review: {{ your_review.username }} {{ your_review.date }} {{ your_review.rating }} {{ your_review.review }} {% if your_review.edited != None %} (edited on: {{ your_review.edited }}) {% endif %}<br>
