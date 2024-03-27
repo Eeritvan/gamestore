@@ -1,6 +1,6 @@
 from db import db
 from sqlalchemy import text
-import users
+import Modules.users as users
 
 def add_newgame(title, description, price, date, time): # todo: add image, add genre, add timing
     try:

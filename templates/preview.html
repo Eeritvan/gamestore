@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+
+{% if permission %}
+    Title: {{ title }} <br>
+    description: {{ description }} <br>
+    Price: {{ price }} € <br>
+    Release date: {{ date }} <br>
+    Time: {{ time }} <br>
+    {% for imagename, imagedata in imagelist %}
+        <img src="data:image/png;base64,{{ imagedata }}" alt="{{ imagename }}" height="500">
+    {% endfor %}
+
+    <form action="/newgame/publish" method="POST">
+        <input type="hidden" name="title" value="{{ title }}">
+        <input type="hidden" name="description" value="{{ description }}">
+        <input type="hidden" name="price" value="{{ price }}">
+        <input type="hidden" name="date" value="{{ date }}">
+        <input type="hidden" name="time" value="{{ time }}">
+        <input type="submit" value="publish">
+    </form>
+{% else %}
+    You do not have permission to preview game.
+{% endif %}

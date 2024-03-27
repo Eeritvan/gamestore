@@ -34,6 +34,12 @@ CREATE TABLE images (
     imagedata BYTEA
 );
 
+CREATE TABLE temp_images (
+    user_id INTEGER REFERENCES users(id),
+    imagename TEXT,
+    imagedata BYTEA
+);
+
 CREATE TABLE library (
     user_id INTEGER REFERENCES users(id),
     game_id INTEGER REFERENCES games(id)
@@ -63,8 +69,7 @@ CREATE TABLE history (
     user_id INTEGER REFERENCES users(id),
     game_id INTEGER REFERENCES games(id),
     date DATE NOT NULL,
-    price DECIMAL NOT NULL
-    CHECK (price >= 0)
+    sum DECIMAL NOT NULL
 );
 
 CREATE TABLE balance (

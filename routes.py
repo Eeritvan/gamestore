@@ -4,16 +4,17 @@ from datetime import datetime
 from werkzeug.utils import secure_filename
 from base64 import b64encode, b64decode
 from random import shuffle
-import users
-import balance
-import games
-import images
-import validation
-import reviews
-import library
-import wishlist
-import cart
-import history
+import Modules.users as users
+import Modules.balance as balance
+import Modules.games as games
+import Modules.images as images
+import Modules.validation as validation
+import Modules.reviews as reviews
+import Modules.library as library
+import Modules.wishlist as wishlist
+import Modules.cart as cart
+import Modules.history as history
+import Modules.temporaryimages as tempimages
 
 @app.route("/")
 def frontpage():
@@ -70,17 +71,18 @@ def balance_page():
         amount = amount.split(".")[0]
 
         if balance.update_balance(user_id, amount): # todo: success message
+            history.add_balance_to_history(user_id, datetime.now().strftime("%Y-%m-%d"), amount)
             return redirect("/")
         else: # todo error: adding balance failed
             return redirect("/")
 
 @app.route("/library", methods=["GET"])
-def getlibrary():
+def library_page():
     ownedgames = library.get_library(users.user_id())
     return render_template("library.html", ownedgames = ownedgames)
 
 @app.route("/wishlist", methods=["GET", "POST"])
-def getwishlist():
+def wishlist_page():
     user_id = users.user_id()
     if request.method == "POST":
         game_id = request.form["game_id"]
@@ -97,7 +99,7 @@ def getwishlist():
     return render_template("wishlist.html", wishlistgames = wishlistgames)
 
 @app.route("/cart", methods=["GET", "POST"])
-def getcart():
+def cart_page():
     user_id = users.user_id()
     if request.method == "POST":
         game_id = request.form["game_id"]
@@ -141,7 +143,7 @@ def checkout():
 def allgames():
     return render_template("allgames.html", games = games.all_games())
 
-@app.route("/newgame", methods=["GET", "POST"])
+@app.route("/newgame", methods=["GET"])
 def newgame():
     permission = False
     if users.is_seller() or users.is_moderator():
@@ -151,28 +153,33 @@ def newgame():
         current_time = datetime.now().strftime("%H:%M")
 
         return render_template("newgame.html", permission = permission,
-                                               preview = False,
                                                current_date = current_date,
                                                current_time = current_time)
-    if request.method == "POST":
+    
+@app.route("/newgame/preview", methods=["POST"])
+def preview():
+        permission = False
+        if users.is_seller() or users.is_moderator():
+            permission = True
         title = request.form["title"]
         description = request.form["description"]
         date = request.form["release_date"]
         time = request.form["time"]
         price = validation.fix_price(request.form["euros"], request.form["cents"])
-            
-        global imagelist
+
         imagelist = []
         images = request.files.getlist("image")
+        tempimages.empty_temporary_images(users.user_id())
+
         for image in images:
             imagename = secure_filename(image.filename)
             imagedata = b64encode(image.read()).decode("utf-8")
             if validation.validate_imagesize(b64decode(imagedata)) == False: # todo error: image too large
                 return redirect("/")
             imagelist.append((imagename, imagedata))
+            tempimages.add_temporary_image(users.user_id(), imagename, b64decode(imagedata))
         
-        return render_template("newgame.html", permission = permission,
-                                               preview = True,
+        return render_template("preview.html", permission = permission,
                                                title = title,
                                                description = description,
                                                price = price,
@@ -191,10 +198,12 @@ def publish():
     except: # todo error: invalid input
         return redirect("/")
     if games.add_newgame(title, description, price, date, time):
+        imagelist = tempimages.get_temporary_images(users.user_id())
+        tempimages.empty_temporary_images(users.user_id())
         if len(imagelist) > 0:
             game_id = games.get_game_id(title)
             for image in imagelist:
-                images.add_gameimage(game_id, image[0], b64decode(image[1]))
+                images.add_gameimage(game_id, image[0], image[1])
         return redirect("/") # success message: game added successfully / redirect to the game's page
     else:
         return redirect("/") # todo error: adding game failed
@@ -232,6 +241,7 @@ def game(id):
                                             your_review = your_review,
                                             owned = owned)
     if request.method == "POST":
+
         game_id = id
         date = datetime.now().strftime("%Y-%m-%d")
         rating = request.form["rating"]
