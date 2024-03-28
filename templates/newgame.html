@@ -1,19 +1,16 @@
 <!DOCTYPE html>
 
-{% if permission %}
-    <form action="/newgame/preview" method="POST" enctype="multipart/form-data">
-        Title of the game: <input type="text" name="title" size="20" maxlength="50" required> <br>
-        Write a description for the game: <textarea name="description" rows="5" cols="40" maxlength="1000"> </textarea> <br>
-        <label for="price">Price:</label> <input type="number" id="euros" name="euros" min="0" step="1" placeholder="0">.<input type="number" id="cents" name="cents" min="0" max="99" step="1" placeholder="00"> € <br>
-        Release date: <input type="date" name="release_date" value="{{current_date}}" min="{{current_date}}" required> <br>
-        Release time: <input type="time" name="time" value="{{current_time}}"> <br>
-        File: <input type="file" name="image" multiple> <br>
-        Select categories: <br>
-        {% for category in categories %}
-            <input type="checkbox" name="categories" value="{{ category.category }}"> {{ category.category }}
-        {% endfor %}
-        <input type="submit" value="preview store page"> <br>
-    </form>
-{% else %}
-    You do not have permission to create a new game.
-{% endif %}
+<form action="/game/preview" method="POST" enctype="multipart/form-data">
+    Title of the game: <input type="text" name="title" size="20" maxlength="50" required> <br>
+    Write a description for the game: <textarea name="description" rows="5" cols="40" maxlength="1000"></textarea> <br>
+    Price: <input type="number" name="price" min="0" step="0.01" placeholder="0,00">€ <br>
+    Release date: <input type="date" name="date" value="{{current_date}}" min="{{current_date}}" required> <br>
+    Release time: <input type="time" name="time" value="{{current_time}}"> <br>
+    File: <input type="file" name="loadedimages" multiple> <br>
+    Select categories: <br>
+    {% for category in categories %}
+        <input type="checkbox" name="categories" value="{{ category.category }}"> {{ category.category }}
+    {% endfor %}
+    <input type="hidden" name="editing" value="False">
+    <input type="submit" value="preview store page"> <br>
+</form>

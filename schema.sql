@@ -55,6 +55,7 @@ CREATE TABLE game_categories (
 );
 
 CREATE TABLE images (
+    id SERIAL PRIMARY KEY,
     game_id INTEGER REFERENCES games(id),
     imagename TEXT,
     imagedata BYTEA

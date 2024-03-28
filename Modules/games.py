@@ -1,37 +1,25 @@
 from db import db
 from sqlalchemy import text
-import Modules.users as users
 
-def add_newgame(title, description, price, date, time): # todo: add image, add genre, add timing
+def add_newgame(title, description, price, date, time, creator):
     try:
         sql = """
                 INSERT INTO
                   games(title, description, price, release_date, release_time, creator_id)
                 VALUES
                   (:title, :description, :price, :release_date, :release_time, :creator_id)
+                RETURNING id
               """
-        db.session.execute(text(sql), {"title":title, "description":description, "price":price, "release_date":date, "release_time":time, "creator_id":users.user_id()})
+        result = db.session.execute(text(sql), {"title":title, "description":description, "price":price, "release_date":date, "release_time":time, "creator_id":creator})
         db.session.commit()
-        return True
+        return result.fetchone()[0]
     except:
         return False
-
-def get_game_id(title):
-    sql = """
-            SELECT
-              id
-            FROM
-              games
-            WHERE
-              title=:title
-          """
-    result = db.session.execute(text(sql), {"title":title})
-    return result.fetchone()[0]
 
 def get_game(id):
     sql = """
             SELECT
-              G.title, G.description, G.price, G.release_date, U.username
+              G.title, G.description, G.price, G.release_date, G.release_time, U.username, U.id
             FROM
               games G, users U
             WHERE
@@ -40,19 +28,7 @@ def get_game(id):
     result = db.session.execute(text(sql), {"id":id})
     return result.fetchone()
 
-def get_game_price(id):
-    sql = """
-            SELECT
-              price
-            FROM
-              games
-            WHERE
-              id=:id
-          """
-    result = db.session.execute(text(sql), {"id":id})
-    return result.fetchone()
-
-def get_games(query=None, categorylist=None):
+def search_games(query=None, categorylist=None):
   sql = """
     SELECT DISTINCT
       G.title, G.description, G.price, G.release_date, U.username, G.id
@@ -61,10 +37,10 @@ def get_games(query=None, categorylist=None):
     WHERE 
       G.creator_id=U.id
   """
-  settings = {}
+  parameters = {}
   if query:
     sql += " AND (LOWER(G.title) LIKE LOWER(:query))"
-    settings["query"] = f"%{query}%"
+    parameters["query"] = f"%{query}%"
   if categorylist:
     sql += """ AND G.id IN (
                  SELECT
@@ -78,8 +54,24 @@ def get_games(query=None, categorylist=None):
                  HAVING
                    COUNT(DISTINCT category_id) = :category_count)
            """
-    settings["categorylist"] = tuple(categorylist)
-    settings["category_count"] = len(categorylist)
+    parameters["categorylist"] = tuple(categorylist)
+    parameters["category_count"] = len(categorylist)
 
-  result = db.session.execute(text(sql), settings)
+  result = db.session.execute(text(sql), parameters)
   return result.fetchall()
+
+def update_game(gameid, title, description, price, date, time):
+    try:
+        sql = """
+              UPDATE 
+                games
+              SET
+                title=:title, description=:description, price=:price, release_date=:date, release_time=:time
+              WHERE
+                id=:gameid
+             """
+        db.session.execute(text(sql), {"title":title, "description":description, "price":price, "date":date, "time":time, "gameid":gameid})
+        db.session.commit()
+        return True
+    except:
+        return False

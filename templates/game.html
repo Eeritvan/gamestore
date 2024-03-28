@@ -1,5 +1,10 @@
 <!DOCTYPE html>
 
+{% if editpermission %}
+Edit game: <a href="/game/{{ game_id }}/edit">edit</a>
+<hr>
+{% endif %}
+
 Title: {{ title }} <br>
 description: {{ description }} <br>
 Price: {{ price }} € <br>
@@ -29,7 +34,7 @@ Wishlist game:
             You already own this game <br>
 {% endif %}
 <hr>
-{% for name, data in imagelist %}
+{% for id, name, data in imagelist %}
     <img src="data:image/png;base64,{{ data }}" alt="{{ name }}" height="500">
 {% endfor %}
 <hr>

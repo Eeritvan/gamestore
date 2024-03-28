@@ -1,25 +1,22 @@
 <!DOCTYPE html>
 
-{% if permission %}
-    Title: {{ title }} <br>
-    description: {{ description }} <br>
-    Price: {{ price }} € <br>
-    Release date: {{ date }} <br>
-    Time: {{ time }} <br>
-    {% for imagename, imagedata in imagelist %}
-        <img src="data:image/png;base64,{{ imagedata }}" alt="{{ imagename }}" height="500">
-    {% endfor %}
-    categories: {% for category in categories %} {{ category }} {% endfor %}
-
-    <form action="/newgame/publish" method="POST">
-        <input type="hidden" name="title" value="{{ title }}">
-        <input type="hidden" name="description" value="{{ description }}">
-        <input type="hidden" name="price" value="{{ price }}">
-        <input type="hidden" name="date" value="{{ date }}">
-        <input type="hidden" name="time" value="{{ time }}">
-        {% for category in categories %} <input type="hidden" name="categories" value="{{ category }}"> {% endfor %}
-        <input type="submit" value="publish">
-    </form>
-{% else %}
-    You do not have permission to preview game.
-{% endif %}
+Title: {{ title }} <br>
+description: {{ description }} <br>
+Price: {{ price }} € <br>
+Release date: {{ date }} <br>
+Time: {{ time }} <br>
+categories: {% for category in categories %} {{ category }} {% endfor %} <br>
+{% for imagename, imagedata in imagelist %}
+    <img src="data:image/png;base64,{{ imagedata }}" alt="{{ imagename }}" height="500">
+{% endfor %} <br>
+<form action="/game/publish" method="POST">
+    <input type="hidden" name="title" value="{{ title }}">
+    <input type="hidden" name="description" value="{{ description }}">
+    <input type="hidden" name="price" value="{{ price }}">
+    <input type="hidden" name="date" value="{{ date }}">
+    <input type="hidden" name="time" value="{{ time }}">
+    {% for category in categories %} <input type="hidden" name="categories" value="{{ category }}"> {% endfor %}
+    <input type="hidden" name="edit" value="{{ edit }}">
+    <input type="hidden" name="gameid" value="{{ gameid }}">
+    <input type="submit" value="publish">
+</form>

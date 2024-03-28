@@ -49,7 +49,15 @@ def validate_imagesize(imagedata): # todo: check image size
         return False
     return True
 
-def fix_price(euros, cents):
+def fix_price(price):
+    if price == "":
+        price = "{:.2f}".format(0)
+    else:
+        price = "{:.2f}".format(float(price))
+    split = price.split(".")
+    euros = split[0]
+    cents = split[1]
+
     if euros == "":
         euros = "0"
     if int(euros) == 0:
@@ -64,3 +72,8 @@ def fix_price(euros, cents):
 
     price = str(int(euros)) + "." + str(cents)
     return price
+
+def is_released(game_date, game_time):
+    current_date = datetime.now().date()
+    current_time = datetime.now().time()
+    return current_date >= game_date and current_time >= game_time

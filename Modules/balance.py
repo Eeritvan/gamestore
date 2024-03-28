@@ -1,7 +1,7 @@
 from db import db
 from sqlalchemy import text
 
-def add_initialbalance(username, amount): # todo: possible error???
+def add_initialbalance(username, amount): # todo error: database failure
     amount = "{:.2f}".format(amount)
     sql = "SELECT id FROM users WHERE username=:username"
     id  = db.session.execute(text(sql), {"username":username}).fetchone()[0]

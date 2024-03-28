@@ -1,8 +1,6 @@
 from app import app
 from flask import redirect, render_template, request
 from datetime import datetime
-from werkzeug.utils import secure_filename
-from base64 import b64encode, b64decode
 from random import shuffle
 import Modules.users as users
 import Modules.balance as balance
@@ -17,18 +15,17 @@ import Modules.history as history
 import Modules.temporaryimages as tempimages
 import Modules.categories as categories
 
-@app.route("/")
+@app.route("/", methods=["GET"])
 def frontpage():
     return render_template("frontpage.html", credits=balance.get_balance(users.user_id()),
                                              user = users.get_username(),
                                              user_id = users.user_id(),
                                              seller = users.is_seller(),
                                              moderator = users.is_moderator())
-    
+
 @app.route("/login", methods=["GET", "POST"])
 def login():
-    if request.method == "GET":
-        # todo error: already logged in
+    if request.method == "GET": # todo error: already logged in
         return render_template("login.html")
     if request.method == "POST":
         username = request.form["username"]
@@ -44,20 +41,17 @@ def logout():
 
 @app.route("/register", methods=["GET", "POST"])
 def register():
-    if request.method == "GET":
-        # todo error: already logged in
+    if request.method == "GET": # todo error: already logged in
         return render_template("register.html")
     if request.method == "POST":
         username = request.form["username"]
         password1 = request.form["password1"]
         password2 = request.form["password2"]
-        if password1 != password2:
-            # todo error: password mismatch
+        if password1 != password2: # todo error: password mismatch
             return render_template("register.html")
         if users.register(username, password1):
             return redirect("/")
-        else:
-            # todo error: username already in use
+        else: # todo error: username already in use
             return render_template("register.html")
 
 @app.route("/balance", methods=["GET", "POST"])
@@ -147,95 +141,105 @@ def checkout():
 def allgames():
     query = request.args.get("query")
     categorieslist = request.args.getlist("categories")
-    gamelist = games.get_games(query, categorieslist)
+    gamelist = games.search_games(query, categorieslist)
 
     searchtext = True
     if query != None or query == "":
         searchtext = query
+
     return render_template("allgames.html", games = gamelist,
-                                            categories = categories.get_all_categories(),
+                                            categories = categories.get_categories(),
                                             searchtext = searchtext,
                                             selectedcategories = [int(x) for x in categorieslist])
 
 @app.route("/newgame", methods=["GET"])
 def newgame():
-    permission = False
-    if users.is_seller() or users.is_moderator():
-            permission = True
-    if request.method == "GET":
-        current_date = datetime.now().strftime("%Y-%m-%d")
-        current_time = datetime.now().strftime("%H:%M")
-        categorieslist = categories.get_all_categories()
+    if not users.is_seller() and not users.is_moderator(): # todo error: no permission to create games
+        return redirect("/") 
+    return render_template("newgame.html", current_date = datetime.now().strftime("%Y-%m-%d"),
+                                           current_time = datetime.now().strftime("%H:%M"),
+                                           categories = categories.get_categories())
 
-        return render_template("newgame.html", permission = permission,
-                                               current_date = current_date,
-                                               current_time = current_time,
-                                               categories = categorieslist)
-    
-@app.route("/newgame/preview", methods=["POST"])
+@app.route("/game/preview", methods=["POST"])
 def preview():
-        permission = False
-        if users.is_seller() or users.is_moderator():
-            permission = True
-        title = request.form["title"]
-        description = request.form["description"]
-        date = request.form["release_date"]
-        time = request.form["time"]
-        price = validation.fix_price(request.form["euros"], request.form["cents"])
-        selectedcategories = request.form.getlist("categories")
-
-        imagelist = []
-        images = request.files.getlist("image")
-        tempimages.empty_temporary_images(users.user_id())
-
-        for image in images:
-            imagename = secure_filename(image.filename)
-            imagedata = b64encode(image.read()).decode("utf-8")
-            if validation.validate_imagesize(b64decode(imagedata)) == False: # todo error: image too large
-                return redirect("/")
-            imagelist.append((imagename, imagedata))
-            tempimages.add_temporary_image(users.user_id(), imagename, b64decode(imagedata))
-        
-        return render_template("preview.html", permission = permission,
-                                               title = title,
-                                               description = description,
-                                               price = price,
-                                               date = date,
-                                               time = time,
-                                               imagelist = imagelist,
-                                               categories = selectedcategories)
+    if not users.is_seller() and not users.is_moderator(): # todo error: no permission to create games
+        return redirect("/") 
     
-@app.route("/newgame/publish", methods=["POST"])
+    try:
+        selectedcategories = request.form.getlist("categories")
+        title, description, price, date, time = validation.validate_gameinfo(request.form["title"],
+                                                                             request.form["description"],
+                                                                             validation.fix_price(request.form["price"]),
+                                                                             request.form["date"],
+                                                                             request.form["time"])
+    except: # todo error: invalid input
+        return redirect("/")
+
+    edit = gameid = False
+    imagelist = []
+    tempimages.empty_temporary_images(users.user_id())
+
+    if request.form["editing"] == "True":
+        gameid = request.form["gameid"]
+        edit = True
+        selectedimages = request.form.getlist("image_ids")
+        if len(selectedimages) != 0:
+            imgs = images.load_images(selectedimages)
+            if not imgs: # todo error: some image was too large
+                return redirect("/")
+            imagelist += imgs
+
+    loadedimages = request.files.getlist("loadedimages")
+    imgs = images.load_images(loadedimages)
+    if not imgs: # todo error: some image was too large
+        return redirect("/")
+    imagelist += imgs
+    
+    return render_template("preview.html", gameid = gameid,
+                                           title = title,
+                                           description = description,
+                                           price = price,
+                                           date = date,
+                                           time = time,
+                                           imagelist = imagelist,
+                                           categories = selectedcategories,
+                                           edit = edit)
+
+@app.route("/game/publish", methods=["POST"])
 def publish():
     try:
         title, description, price, date, time = validation.validate_gameinfo(request.form["title"],
-                                                                         request.form["description"],
-                                                                         request.form["price"],
-                                                                         request.form["date"],
-                                                                         request.form["time"])
+                                                                             request.form["description"],
+                                                                             request.form["price"],
+                                                                             request.form["date"],
+                                                                             request.form["time"])
+        gamescategories = request.form.getlist("categories")
     except: # todo error: invalid input
         return redirect("/")
     
-    if games.add_newgame(title, description, price, date, time):
-
-        imagelist = tempimages.get_temporary_images(users.user_id())
-        tempimages.empty_temporary_images(users.user_id())
-
-        game_id = games.get_game_id(title)
-        if len(imagelist) > 0:
-            for image in imagelist:
-                images.add_gameimage(game_id, image[0], image[1])
-
-        for category in request.form.getlist("categories"):
-            category_id = categories.get_categoryid(category)
-            if category_id != None:
-                categories.add_game_to_category(game_id, category_id[0])
-            else: # todo error: category not found
-                pass
-
-        return redirect("/") # success message: game added successfully / redirect to the game's page
+    if request.form["edit"] == "True":
+        gameid = request.form["gameid"]
+        if not games.update_game(gameid, title, description, price, date, time): # todo error: something went wrong when adding games
+            return redirect ("/")
+        categories.del_gamecategories(gameid)
+        images.del_images(gameid)
     else:
-        return redirect("/") # todo error: adding game failed
+        gameid = games.add_newgame(title, description, price, date, time, users.user_id())
+
+    imagelist = tempimages.get_temporary_images(users.user_id())
+    tempimages.empty_temporary_images(users.user_id())
+    if len(imagelist) > 0:
+        for image in imagelist:
+            if not images.add_gameimage(gameid, image[0], image[1]):
+                pass # todo error: uploading image to db failed.
+
+    for category in gamescategories:
+        category_id = categories.get_categoryid(category)
+        if category_id != None:
+            categories.add_game_to_category(gameid, category_id)
+        else: # todo error: category not found
+            pass
+    return redirect ("/")
 
 @app.route("/game/<int:id>", methods=["GET", "POST"])
 def game(id):
@@ -246,50 +250,63 @@ def game(id):
     
     if request.method == "GET":
         
-        imagelist = []
-        for image in images.get_gameimages(id):
-            imagename = secure_filename(image[0])
-            imagedata = b64encode(image[1]).decode("utf-8")
-            imagelist.append((imagename, imagedata))
+        imagelist = images.load_images_to_display(id)
         
         allreviews = reviews.show_reviews(id)
         shuffle(allreviews)
         your_review = reviews.already_reviewed(user_id, id)
         if your_review != None:
             allreviews.remove(your_review)
-        owned = library.already_in_library(user_id, id)
-        moderator = users.is_moderator()
 
         return render_template("game.html", game_id = id,
                                             title = game[0],
                                             description = game[1],
                                             price = game[2],
                                             release_date = game[3],
-                                            creator = game[4],
+                                            creator = game[5],
+                                            editpermission = (game[6] == user_id) or users.is_moderator(),
                                             imagelist = imagelist,
                                             reviews = allreviews,
-                                            categories = categories.get_categories_by_gameid(id),
+                                            categories = categories.get_categories(id),
                                             your_review = your_review,
-                                            owned = owned,
-                                            moderator = moderator)
+                                            owned = library.already_in_library(user_id, id))
     if request.method == "POST":
 
-        game_id = id
         date = datetime.now().strftime("%Y-%m-%d")
         rating = request.form["rating"]
         review = request.form["review"]
 
         if request.form["edited"] == "False":
-            reviews.add_review(user_id, game_id, date, rating, review)
-        if request.form["edited"] == "True":
-            reviews.edit_review(user_id, game_id, date, rating, review)
+            reviews.add_review(user_id, id, date, rating, review)
+        elif request.form["edited"] == "True":
+            reviews.edit_review(user_id, id, date, rating, review)
         
         return redirect(str(id))
-    
+        
+@app.route("/game/<int:id>/edit", methods=["GET"])
+def editgame(id):
+    gameinfo = games.get_game(id)
+    if not (users.is_moderator() or users.user_id() == gameinfo[6]): # todo error: not permission
+        return redirect("/") 
+
+    imagelist = images.load_images_to_display(id)
+
+    return render_template("edit.html", current_date = datetime.now().date(),
+                                        title = gameinfo[0],
+                                        description = gameinfo[1],
+                                        price = gameinfo[2],
+                                        release_date = gameinfo[3],
+                                        release_time = str(gameinfo[4])[:-3],
+                                        released = validation.is_released(gameinfo[3], gameinfo[4]),
+                                        categorieslist = categories.get_categories(),
+                                        selectedcategories = [x[1] for x in categories.get_categories(id)],
+                                        imagelist = imagelist,
+                                        gameid = id)
+
 @app.route("/game/<int:id>/deletereview", methods=["GET"])
 def deletereview(id):
     username = (request.args.get("username"))
-    if username != None:
+    if username != None and users.is_moderator():
         reviews.delete_review(users.get_userid(username), id)
     else: 
         reviews.delete_review(users.user_id(), id)

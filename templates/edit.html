@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+
+<form action="/game/preview" method="POST" enctype="multipart/form-data">
+    Title of the game: <input type="text" name="title" size="20" maxlength="50" value="{{title}}" required> <br>
+    Write a description for the game: <textarea name="description" rows="5" cols="40" maxlength="1000">{{description}}</textarea> <br>
+    Price: <input type="number" name="price" min="0" step="0.01" placeholder="0" value="{{price}}">€ <br>
+    {% if not released %}
+        Release date: <input type="date" name="date" value="{{current_date}}" min="{{current_date}}" required> <br>
+        Release time: <input type="time" name="time" value="{{release_time}}"> <br>
+    {% else %}
+        Game was already released on: <br> 
+        Release date: <input type="date" value="{{current_date}}" disabled> <br>
+        Release time: <input type="time" value="{{release_time}}" disabled> <br>
+        <input type="hidden" name="date" value="{{current_date}}">
+        <input type="hidden" name="time" value="{{release_time}}">
+    {% endif %}
+    File: <input type="file" name="loadedimages" multiple> <br>
+    Select categories: <br>
+    {% for category in categorieslist %}
+        <input type="checkbox" name="categories" value="{{ category.category }}" {% if category.category in selectedcategories %} checked {% endif %}> {{ category.category }}
+    {% endfor %}
+    <p>Unselect images to delete:</p>
+    {% for id, name, data in imagelist %}
+        <input type="checkbox" name="image_ids" value="{{ id }}" checked> <img src="data:image/png;base64,{{ data }}" alt="{{ name }}" height="150"> <br>
+    {% endfor %} <br>
+    <input type="hidden" name="editing" value="True">
+    <input type="hidden" name="gameid" value="{{ gameid }}">
+    <input type="submit" value="preview edited store page"> <br>
+</form>
