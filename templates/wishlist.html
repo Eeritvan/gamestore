@@ -5,18 +5,19 @@ Wishlist <br>
 
 <form action="/wishlist" method="GET">
     Search wishlist: <input type="search" name="query", value="{% if searchtext != True %}{{ searchtext }}{% endif %}">
+    <input type="checkbox" name="onsale" value="True" {% if pressed == "True" %} checked {% endif %}> Games on sale
     <input type="submit" value="Search">
 </form>
 <hr>
 
 {% for game in games %}
-    {{ game.title }} {{ game.price }} € id:{{ game.id }}
+    <a href="/game/{{ game.id }}"> {{ game.title }} </a> (id:{{ game.id }}) <br>
+     {{ game.price }}€ {% if game.percentage != 0 %} {{ game.percentage }}% {{ game.discountprice }}€ {% endif %} 
     <form action="/wishlist" method="POST">
         <input type=hidden name="game_id" value="{{ game.id }}">
         <input type=hidden name="remove" value="remove">
         <input type="submit" value="Remove from wishlist">
     </form>
-    <!--# todo released or not -->
     {% if game in released %}
         <form action="/cart" method="POST"> 
             <input type=hidden name="game_id" value="{{ game.id }}"> 
@@ -24,9 +25,8 @@ Wishlist <br>
             <input type="submit" value="Add to cart">
          </form>
     {% else %}
-         This game releases in  <br>
+         This game isnt released yet <br>
     {% endif %}
-    <a href="/game/{{ game.id }}"> visit store page </a> <br>
     added to wishlist on: {{ game.date }}
     <hr>
 {% endfor %}

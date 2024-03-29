@@ -7,6 +7,6 @@
 <hr>
 
 {% for game in ownedgames %}
-    {{ game.id }} {{ game.title }}
+    {{ game.id }} <a href="/game/{{ game.id }}"> {{ game.title }} </a>
     <hr>
 {% endfor %}

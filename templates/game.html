@@ -7,7 +7,9 @@ Edit game: <a href="/game/{{ game_id }}/edit">edit</a>
 
 Title: {{ title }} <br>
 description: {{ description }} <br>
-Price: {{ price }} € <br>
+Price: {{ price }}€ {{ priceoff if priceoff != "False" else "" }} {{ saleprice if priceoff != "False" else "" }}  <br>
+{% if editpermission %} <form action="/game/{{ game_id }}" method="POST"> Discount game: <input type="number" name="discount" min="0" max="100" step="1" placeholder="0"> % Off
+                                             <input type="submit" value="Submit"> </form> {% endif %}
 Release date:  {{ release_date }} <br>
 Creator: {{ creator }} <br>
 Categories: 

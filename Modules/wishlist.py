@@ -15,9 +15,17 @@ def remove_from_wishlist(user_id, game_id):
     db.session.execute(text(sql), {"user_id":user_id, "game_id":game_id})
     db.session.commit()
 
-def get_wishlist(user_id, query = None):
-    sql = "SELECT G.title, G.id, W.date, G.price FROM games G, wishlist W WHERE W.user_id=:user_id AND W.game_id=G.id"
+def get_wishlist(user_id, onsale = None, query = None):
+    sql = """SELECT
+               G.title, G.id, W.date, G.price, -ROUND((1-G.discount)*100) as percentage, ROUND(FLOOR(G.price * G.discount * 100) / 100, 2) AS discountprice
+             FROM 
+               games G, wishlist W 
+             WHERE
+               W.user_id=:user_id AND W.game_id=G.id
+          """
     parameters = {"user_id":user_id}
+    if onsale:
+        sql += " AND G.discount != 1.0"
     if query:
         sql += " AND (LOWER(G.title) LIKE LOWER(:query))"
         parameters["query"] = f"%{query}%"
@@ -27,4 +35,4 @@ def get_wishlist(user_id, query = None):
 def already_in_wishlist(user_id, game_id):
     sql = "SELECT game_id FROM wishlist WHERE user_id=:user_id AND game_id=:game_id"
     result = db.session.execute(text(sql), {"user_id":user_id, "game_id":game_id})
-    return result.fetchone()
+    return result.fetchone() != None

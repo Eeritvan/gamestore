@@ -11,12 +11,18 @@ def add_to_cart(user_id, game_id):
         return False
 
 def get_cart(user_id):
-    sql = "SELECT G.title, G.price, G.id FROM games G, cart C WHERE C.user_id=:user_id AND C.game_id=G.id"
+    sql = """SELECT
+               G.title, G.price, G.id, -ROUND((1-G.discount)*100) as percentage, ROUND(FLOOR(G.price * G.discount * 100) / 100, 2) AS discountprice
+             FROM
+               games G, cart C 
+             WHERE
+               C.user_id=:user_id AND C.game_id=G.id
+          """
     result = db.session.execute(text(sql), {"user_id":user_id})
     return result.fetchall()
 
 def get_cart_total(user_id):
-    sql = "SELECT SUM(G.price) FROM games G, cart C WHERE C.user_id=:user_id AND C.game_id=G.id"
+    sql = "SELECT SUM(ROUND(FLOOR(G.price * G.discount * 100) / 100, 2)) FROM games G, cart C WHERE C.user_id=:user_id AND C.game_id=G.id"
     result = db.session.execute(text(sql), {"user_id":user_id})
     return result.fetchone()[0]
 

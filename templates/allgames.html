@@ -5,17 +5,41 @@
     Categories: {% for category in categories %} 
                     <input type="checkbox" name="categories" value="{{ category.id }}" {% if category.id in selectedcategories %} checked {% endif %}> {{ category.category }}
                 {% endfor %} <br>
+    Sort By: <select name="sort">
+                <option value="random" {% if selectedsort == "random" %} selected {% endif %}>Random</option>
+                <option value="name" {% if selectedsort == "name" %} selected {% endif %}>Name</option>
+                <option value="release" {% if selectedsort == "release" %} selected {% endif %}>Release date</option>
+                <option value="price" {% if selectedsort == "price" %} selected {% endif %}>Price</option>
+             </select> <br>
     <input type="submit" value="Search">
-    </form>
+</form>
 <hr>
 
 {% for game in games %}
 
-Title: {{ game.title }} <br>
+<a href="/game/{{ game.id }}"> {{ game.title }} </a> <br>
 Description: {{ game.description }} <br>
-Price: {{ game.price }} <br>
+Price: {{ game.price }}€  {% if game.percentage != 0 %} {{ game.percentage }}% {{ game.discountprice }}€ {% endif %} <br>
 Release Date: {{ game.release_date }} <br>
 Creator: {{ game.username }} <br>
-<a href="/game/{{ game.id }}"> visit store page </a>
+
+{% if game not in owned %}
+    Game is already owned
+{% else %}
+    {% if game not in wishlist %}
+        Game is already on wishlist
+    {% else %}
+        <form action="/wishlist" method="POST"> 
+            <input type=hidden name="game_id" value="{{ game.id }}"> 
+            <input type=hidden name="remove" value=""> 
+            <input type="submit" value="Add to wishlist">
+        </form>
+    {% endif %}
+    <form action="/cart" method="POST"> 
+        <input type=hidden name="game_id" value="{{ game.id }}"> 
+        <input type=hidden name="remove" value=""> 
+        <input type="submit" value="Add to cart">
+    </form>
+{% endif %}
 <hr>
 {% endfor %}

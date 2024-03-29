@@ -22,6 +22,7 @@ CREATE TABLE games (
     title TEXT UNIQUE NOT NULL,
     description TEXT NOT NULL,
     price DECIMAL NOT NULL,
+    discount DECIMAL NOT NULL DEFAULT 1.00,
     release_date DATE NOT NULL,
     release_time TIME NOT NULL,
     creator_id INTEGER REFERENCES users(id),

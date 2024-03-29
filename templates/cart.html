@@ -5,7 +5,8 @@ Balance: {{ balance }} € <br>
 
 {% for game in cartgames %}
     <hr>
-    {{ game.title }} {{ game.price }} € id:{{ game.id }}
+    <a href="/game/{{ game.id }}"> {{ game.title }} </a> (id:{{ game.id }}) <br>
+    {{ game.price }}€ {% if game.percentage != 0 %} {{ game.percentage }}% {{ game.discountprice }}€ {% endif %}
     <form action="/cart" method="POST">
         <input type=hidden name="game_id" value="{{ game.id }}">
         <input type=hidden name="remove" value="remove">

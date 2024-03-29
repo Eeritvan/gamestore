@@ -91,17 +91,18 @@ def wishlist_page():
             wishlist.remove_from_wishlist(user_id, game_id)
         else:
             date = datetime.now().strftime("%Y-%m-%d")
-            if wishlist.already_in_wishlist(user_id, game_id) != None:
+            if wishlist.already_in_wishlist(user_id, game_id):
                 return redirect("/wishlist") # todo error: game already in wishlist
             elif not wishlist.add_to_wishlist(user_id, game_id, date):
                 return redirect("/wishlist") # todo error: adding to wishlist failed
 
+    onsale = request.args.get("onsale")
     query = request.args.get("query") 
 
     searchtext = True
     if query != None or query == "":
         searchtext = query
-    wishlistgames = wishlist.get_wishlist(user_id, query)
+    wishlistgames = wishlist.get_wishlist(user_id, onsale, query)
     releasedgames = []
     for game in wishlistgames:
         gameinfo = games.get_game(game[1])
@@ -109,7 +110,8 @@ def wishlist_page():
             releasedgames.append(game)
     return render_template("wishlist.html", games = wishlistgames,
                                             searchtext = searchtext,
-                                            released = releasedgames)
+                                            released = releasedgames,
+                                            pressed = onsale)
 
 @app.route("/cart", methods=["GET", "POST"])
 def cart_page():
@@ -144,7 +146,7 @@ def checkout():
     user_id = users.user_id()
 
     for game in cart.get_cart(user_id):
-        price = float(game[1])
+        price = float(game[4])
         game_id = game[2]
         date = datetime.now().strftime("%Y-%m-%d")
 
@@ -161,18 +163,32 @@ def checkout():
 
 @app.route("/allgames", methods=["GET"])
 def allgames():
+    user_id = users.user_id()
     query = request.args.get("query")
     categorieslist = request.args.getlist("categories")
-    gamelist = games.search_games(query, categorieslist)
+    selectedsort = request.args.get("sort")
+    if not selectedsort:
+        selectedsort = "random"
 
+    gamelist = games.search_games(query, categorieslist, selectedsort)
     searchtext = True
     if query != None or query == "":
         searchtext = query
 
+    wished = owned = []
+    for game in gamelist:
+        if not wishlist.already_in_wishlist(user_id, game[5]):
+            wished.append(game)
+        if not library.already_in_library(user_id, game[5]):
+            owned.append(game)
+
     return render_template("allgames.html", games = gamelist,
                                             categories = categories.get_categories(),
                                             searchtext = searchtext,
-                                            selectedcategories = [int(x) for x in categorieslist])
+                                            selectedcategories = [int(x) for x in categorieslist],
+                                            wishlist = wished,
+                                            owned = owned,
+                                            selectedsort = selectedsort)
 
 @app.route("/newgame", methods=["GET"])
 def newgame():
@@ -278,14 +294,17 @@ def game(id):
         your_review = reviews.already_reviewed(user_id, id)
         if your_review != None:
             allreviews.remove(your_review)
-        
+
         released = validation.is_released(game[3], game[4])
         releasing_in = validation.releasing_in(game[3], game[4])
+        price, salepercentage, saleprice = games.get_price(id)
 
         return render_template("game.html", game_id = id,
                                             title = game[0],
                                             description = game[1],
-                                            price = game[2],
+                                            price = price,
+                                            priceoff = salepercentage,
+                                            saleprice = saleprice,
                                             release_date = game[3],
                                             released = released,
                                             releasing_in = releasing_in,
@@ -297,16 +316,23 @@ def game(id):
                                             your_review = your_review,
                                             owned = library.already_in_library(user_id, id))
     if request.method == "POST":
+        try:
+            discount = request.form["discount"]
+            if discount == "": # todo error: no number selected for discount
+                return redirect(str(id))
+            if not games.update_game_discount(id, 1-int(discount)*0.01): # todo error: updating database failed
+                return redirect(str(id))
 
-        date = datetime.now().strftime("%Y-%m-%d")
-        rating = request.form["rating"]
-        review = request.form["review"]
+        except: 
+            date = datetime.now().strftime("%Y-%m-%d")
+            rating = request.form["rating"]
+            review = request.form["review"]
 
-        if request.form["edited"] == "False":
-            reviews.add_review(user_id, id, date, rating, review)
-        elif request.form["edited"] == "True":
-            reviews.edit_review(user_id, id, date, rating, review)
-        
+            if request.form["edited"] == "False":
+                reviews.add_review(user_id, id, date, rating, review)
+            elif request.form["edited"] == "True":
+                reviews.edit_review(user_id, id, date, rating, review)
+
         return redirect(str(id))
         
 @app.route("/game/<int:id>/edit", methods=["GET"])
