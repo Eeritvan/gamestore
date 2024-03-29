@@ -29,7 +29,7 @@ def get_cart_total(user_id):
 def game_in_cart(user_id, game_id):
     sql = "SELECT game_id FROM cart WHERE user_id=:user_id AND game_id=:game_id"
     result = db.session.execute(text(sql), {"user_id":user_id, "game_id":game_id})
-    return result.fetchone()
+    return result.fetchone() != None
 
 def remove_from_cart(user_id, game_id): # todo error: database failure
     sql = "DELETE FROM cart WHERE user_id=:user_id and game_id=:game_id"

@@ -2,9 +2,7 @@ from db import db
 from sqlalchemy import text
 from werkzeug.utils import secure_filename
 from base64 import b64encode, b64decode
-import Modules.validation as validation
-import Modules.temporaryimages as tempimages
-import Modules.users as users
+from Modules import validation, temporaryimages, users
 
 def add_gameimage(game_id, imagename, imagedata):
     try:
@@ -51,7 +49,7 @@ def load_images(images):
             if validation.validate_imagesize(b64decode(imagedata)) == False: # todo error: image too large
                 return False
             imagelist.append((imagename, imagedata))
-            tempimages.add_temporary_image(users.user_id(), imagename, b64decode(imagedata))
+            temporaryimages.add_temporary_image(users.user_id(), imagename, b64decode(imagedata))
     else:
         for i in images:
             imagename = secure_filename(i.filename)
@@ -59,7 +57,7 @@ def load_images(images):
             if validation.validate_imagesize(b64decode(imagedata)) == False: # todo error: image too large
                 return False
             imagelist.append((imagename, imagedata))
-            tempimages.add_temporary_image(users.user_id(), imagename, b64decode(imagedata))
+            temporaryimages.add_temporary_image(users.user_id(), imagename, b64decode(imagedata))
     return imagelist
 
 def load_images_to_display(id):

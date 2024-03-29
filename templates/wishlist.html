@@ -2,6 +2,10 @@
 
 Wishlist <br>
 <hr>
+{% if not session.user_id %}
+    please log in to wishlist games.
+{% else %}
+
 
 <form action="/wishlist" method="GET">
     Search wishlist: <input type="search" name="query", value="{% if searchtext != True %}{{ searchtext }}{% endif %}">
@@ -30,3 +34,5 @@ Wishlist <br>
     added to wishlist on: {{ game.date }}
     <hr>
 {% endfor %}
+
+{% endif %}

@@ -1,6 +1,6 @@
+import math
 from db import db
 from sqlalchemy import text
-import math
 
 def add_newgame(title, description, price, date, time, creator):
     try:
@@ -58,7 +58,7 @@ def search_games(query=None, categorylist=None, selectedsort = None):
         parameters["categorylist"] = tuple(categorylist)
         parameters["category_count"] = len(categorylist)
     if selectedsort:
-        values = {"random":"RANDOM()", "name":"G.title", "release":"G.release_date", "price":"discountprice"}
+        values = {"random":"RANDOM()", "name":"LOWER(G.title)", "release":"G.release_date", "price":"discountprice"}
         sql += f" ORDER BY {values[selectedsort]}"
   
     result = db.session.execute(text(sql), parameters)

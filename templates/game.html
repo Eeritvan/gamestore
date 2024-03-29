@@ -19,6 +19,10 @@ Categories:
 
 <hr>
 
+{% if not session.user_id%}
+    please log in to buy or wishlist games.
+{% else %}
+
 {% if not owned %} 
     {% if released %}
         Buy game:
@@ -38,6 +42,7 @@ Wishlist game:
           </form>
 {% else %}
             You already own this game <br>
+{% endif %}
 {% endif %}
 <hr>
 {% for id, name, data in imagelist %}

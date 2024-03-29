@@ -1,5 +1,9 @@
 <!DOCTYPE html>
 
+{% if not session.user_id %}
+    please log in to see your collection.
+{% else %}
+
 <form action="/library" method="GET">
     Search library: <input type="search" name="query", value="{% if searchtext != True %}{{ searchtext }}{% endif %}">
     <input type="submit" value="Search">
@@ -10,3 +14,5 @@
     {{ game.id }} <a href="/game/{{ game.id }}"> {{ game.title }} </a>
     <hr>
 {% endfor %}
+
+{% endif %}

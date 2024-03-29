@@ -23,6 +23,7 @@ Price: {{ game.price }}€  {% if game.percentage != 0 %} {{ game.percentage }}%
 Release Date: {{ game.release_date }} <br>
 Creator: {{ game.username }} <br>
 
+{% if session.user_id %}
 {% if game not in owned %}
     Game is already owned
 {% else %}
@@ -40,6 +41,7 @@ Creator: {{ game.username }} <br>
         <input type=hidden name="remove" value=""> 
         <input type="submit" value="Add to cart">
     </form>
+{% endif %}
 {% endif %}
 <hr>
 {% endfor %}

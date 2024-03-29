@@ -1,19 +1,8 @@
-from app import app
-from flask import redirect, render_template, request
 from datetime import datetime
 from random import shuffle
-import Modules.users as users
-import Modules.balance as balance
-import Modules.games as games
-import Modules.images as images
-import Modules.validation as validation
-import Modules.reviews as reviews
-import Modules.library as library
-import Modules.wishlist as wishlist
-import Modules.cart as cart
-import Modules.history as history
-import Modules.temporaryimages as tempimages
-import Modules.categories as categories
+from flask import redirect, render_template, request
+from app import app
+from Modules import users, balance, games, images, validation, reviews, library, wishlist, cart, history, temporaryimages, categories
 
 @app.route("/", methods=["GET"])
 def frontpage():
@@ -74,13 +63,9 @@ def balance_page():
 @app.route("/library", methods=["GET"])
 def library_page():
     query = request.args.get("query")
-
-    searchtext = True
-    if query != None or query == "":
-        searchtext = query
     ownedgames = library.get_library(users.user_id(), query)
-    return render_template("library.html", ownedgames = ownedgames,
-                                           searchtext = searchtext,)
+
+    return render_template("library.html", ownedgames = ownedgames, searchtext = query if query else True,)
 
 @app.route("/wishlist", methods=["GET", "POST"])
 def wishlist_page():
@@ -99,9 +84,6 @@ def wishlist_page():
     onsale = request.args.get("onsale")
     query = request.args.get("query") 
 
-    searchtext = True
-    if query != None or query == "":
-        searchtext = query
     wishlistgames = wishlist.get_wishlist(user_id, onsale, query)
     releasedgames = []
     for game in wishlistgames:
@@ -109,7 +91,7 @@ def wishlist_page():
         if validation.is_released(gameinfo[3], gameinfo[4]):
             releasedgames.append(game)
     return render_template("wishlist.html", games = wishlistgames,
-                                            searchtext = searchtext,
+                                            searchtext = query if query else True,
                                             released = releasedgames,
                                             pressed = onsale)
 
@@ -122,10 +104,9 @@ def cart_page():
             cart.remove_from_cart(user_id, game_id)
         else:
             gameinfo = games.get_game(game_id)
-            released = validation.is_released(gameinfo[3], gameinfo[4])
-            if not released:
+            if not validation.is_released(gameinfo[3], gameinfo[4]):
                 return redirect("/cart") # todo error: game is not released yet
-            elif cart.game_in_cart(user_id, game_id) != None:
+            elif cart.game_in_cart(user_id, game_id):
                 return redirect("/cart") # todo error: game already in cart
             elif not cart.add_to_cart(user_id, game_id):
                 return redirect("/cart") # todo error: adding to cart failed
@@ -166,25 +147,15 @@ def allgames():
     user_id = users.user_id()
     query = request.args.get("query")
     categorieslist = request.args.getlist("categories")
-    selectedsort = request.args.get("sort")
-    if not selectedsort:
-        selectedsort = "random"
+    selectedsort = request.args.get("sort", "random")
 
     gamelist = games.search_games(query, categorieslist, selectedsort)
-    searchtext = True
-    if query != None or query == "":
-        searchtext = query
-
-    wished = owned = []
-    for game in gamelist:
-        if not wishlist.already_in_wishlist(user_id, game[5]):
-            wished.append(game)
-        if not library.already_in_library(user_id, game[5]):
-            owned.append(game)
+    wished = [game for game in gamelist if not wishlist.already_in_wishlist(user_id, game[5])]
+    owned  = [game for game in gamelist if not library.already_in_library(user_id, game[5])]
 
     return render_template("allgames.html", games = gamelist,
                                             categories = categories.get_categories(),
-                                            searchtext = searchtext,
+                                            searchtext = query if query else True,
                                             selectedcategories = [int(x) for x in categorieslist],
                                             wishlist = wished,
                                             owned = owned,
@@ -213,9 +184,10 @@ def preview():
     except: # todo error: invalid input
         return redirect("/")
 
-    edit = gameid = False
+    edit = False
+    gameid = False
     imagelist = []
-    tempimages.empty_temporary_images(users.user_id())
+    temporaryimages.empty_temporary_images(users.user_id())
 
     if request.form["editing"] == "True":
         gameid = request.form["gameid"]
@@ -264,9 +236,9 @@ def publish():
     else:
         gameid = games.add_newgame(title, description, price, date, time, users.user_id())
 
-    imagelist = tempimages.get_temporary_images(users.user_id())
-    tempimages.empty_temporary_images(users.user_id())
-    if len(imagelist) > 0:
+    imagelist = temporaryimages.get_temporary_images(users.user_id())
+    temporaryimages.empty_temporary_images(users.user_id())
+    if imagelist:
         for image in imagelist:
             if not images.add_gameimage(gameid, image[0], image[1]):
                 pass # todo error: uploading image to db failed.
@@ -283,7 +255,7 @@ def publish():
 def game(id):
     user_id = users.user_id()
     game = games.get_game(id)
-    if game == None: # todo error: game not found
+    if not game: # todo error: game not found
         return redirect("/")
     
     if request.method == "GET":
@@ -292,7 +264,7 @@ def game(id):
         allreviews = reviews.show_reviews(id)
         shuffle(allreviews)
         your_review = reviews.already_reviewed(user_id, id)
-        if your_review != None:
+        if your_review:
             allreviews.remove(your_review)
 
         released = validation.is_released(game[3], game[4])
@@ -340,7 +312,6 @@ def editgame(id):
     gameinfo = games.get_game(id)
     if not (users.is_moderator() or users.user_id() == gameinfo[6]): # todo error: not permission
         return redirect("/") 
-
     imagelist = images.load_images_to_display(id)
 
     return render_template("edit.html", current_date = datetime.now().date(),
