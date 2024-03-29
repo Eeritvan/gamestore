@@ -18,12 +18,16 @@ Categories:
 <hr>
 
 {% if not owned %} 
-Buy game:
-          <form action="/cart" method="POST"> 
-             <input type=hidden name="game_id" value="{{ game_id }}"> 
-             <input type=hidden name="remove" value=""> 
-             <input type="submit" value="Add to cart">
-          </form> <br>
+    {% if released %}
+        Buy game:
+            <form action="/cart" method="POST"> 
+                <input type=hidden name="game_id" value="{{ game_id }}"> 
+                <input type=hidden name="remove" value=""> 
+                <input type="submit" value="Add to cart">
+            </form> <br>
+    {% else %}
+        {{ releasing_in }} <br>
+    {% endif %}
 Wishlist game: 
           <form action="/wishlist" method="POST"> 
               <input type=hidden name="game_id" value="{{ game_id }}"> 

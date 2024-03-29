@@ -102,8 +102,14 @@ def wishlist_page():
     if query != None or query == "":
         searchtext = query
     wishlistgames = wishlist.get_wishlist(user_id, query)
+    releasedgames = []
+    for game in wishlistgames:
+        gameinfo = games.get_game(game[1])
+        if validation.is_released(gameinfo[3], gameinfo[4]):
+            releasedgames.append(game)
     return render_template("wishlist.html", games = wishlistgames,
-                                            searchtext = searchtext)
+                                            searchtext = searchtext,
+                                            released = releasedgames)
 
 @app.route("/cart", methods=["GET", "POST"])
 def cart_page():
@@ -113,7 +119,11 @@ def cart_page():
         if request.form["remove"] == "remove":
             cart.remove_from_cart(user_id, game_id)
         else:
-            if cart.game_in_cart(user_id, game_id) != None:
+            gameinfo = games.get_game(game_id)
+            released = validation.is_released(gameinfo[3], gameinfo[4])
+            if not released:
+                return redirect("/cart") # todo error: game is not released yet
+            elif cart.game_in_cart(user_id, game_id) != None:
                 return redirect("/cart") # todo error: game already in cart
             elif not cart.add_to_cart(user_id, game_id):
                 return redirect("/cart") # todo error: adding to cart failed
@@ -268,12 +278,17 @@ def game(id):
         your_review = reviews.already_reviewed(user_id, id)
         if your_review != None:
             allreviews.remove(your_review)
+        
+        released = validation.is_released(game[3], game[4])
+        releasing_in = validation.releasing_in(game[3], game[4])
 
         return render_template("game.html", game_id = id,
                                             title = game[0],
                                             description = game[1],
                                             price = game[2],
                                             release_date = game[3],
+                                            released = released,
+                                            releasing_in = releasing_in,
                                             creator = game[5],
                                             editpermission = (game[6] == user_id) or users.is_moderator(),
                                             imagelist = imagelist,

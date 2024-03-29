@@ -16,11 +16,17 @@ Wishlist <br>
         <input type=hidden name="remove" value="remove">
         <input type="submit" value="Remove from wishlist">
     </form>
-    <form action="/cart" method="POST"> 
-        <input type=hidden name="game_id" value="{{ game.id }}"> 
-        <input type=hidden name="remove" value=""> 
-        <input type="submit" value="Add to cart">
-     </form>
+    <!--# todo released or not -->
+    {% if game in released %}
+        <form action="/cart" method="POST"> 
+            <input type=hidden name="game_id" value="{{ game.id }}"> 
+            <input type=hidden name="remove" value=""> 
+            <input type="submit" value="Add to cart">
+         </form>
+    {% else %}
+         This game releases in  <br>
+    {% endif %}
     <a href="/game/{{ game.id }}"> visit store page </a> <br>
     added to wishlist on: {{ game.date }}
+    <hr>
 {% endfor %}

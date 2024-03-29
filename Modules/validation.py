@@ -77,3 +77,20 @@ def is_released(game_date, game_time):
     current_date = datetime.now().date()
     current_time = datetime.now().time()
     return current_date >= game_date and current_time >= game_time
+
+def releasing_in(game_date, game_time):
+    current = datetime.now()
+    game = datetime.combine(game_date, game_time)
+    delta = game-current
+    units = [("year", 365), ("month", 30), ("week", 7), ("day", 1)]
+
+    for unit, value in units:
+        if delta.days >= value:
+            count = delta.days // value
+            return f"The game is releasing in {count} {unit}{'s' if count > 1 else ''}"
+
+    hours = int(delta.total_seconds() // 3600)
+    if hours != 0:
+        return "The game is releasing in", hours, "hours"
+    else:
+        return "The game is releasing in an hour"
