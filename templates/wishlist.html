@@ -1,9 +1,15 @@
 <!DOCTYPE html>
 
 Wishlist <br>
+<hr>
 
-{% for game in wishlistgames %}
-    <hr>
+<form action="/wishlist" method="GET">
+    Search wishlist: <input type="search" name="query", value="{% if searchtext != True %}{{ searchtext }}{% endif %}">
+    <input type="submit" value="Search">
+</form>
+<hr>
+
+{% for game in games %}
     {{ game.title }} {{ game.price }} € id:{{ game.id }}
     <form action="/wishlist" method="POST">
         <input type=hidden name="game_id" value="{{ game.id }}">

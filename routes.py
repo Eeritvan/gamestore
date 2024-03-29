@@ -73,8 +73,14 @@ def balance_page():
 
 @app.route("/library", methods=["GET"])
 def library_page():
-    ownedgames = library.get_library(users.user_id())
-    return render_template("library.html", ownedgames = ownedgames)
+    query = request.args.get("query")
+
+    searchtext = True
+    if query != None or query == "":
+        searchtext = query
+    ownedgames = library.get_library(users.user_id(), query)
+    return render_template("library.html", ownedgames = ownedgames,
+                                           searchtext = searchtext,)
 
 @app.route("/wishlist", methods=["GET", "POST"])
 def wishlist_page():
@@ -90,8 +96,14 @@ def wishlist_page():
             elif not wishlist.add_to_wishlist(user_id, game_id, date):
                 return redirect("/wishlist") # todo error: adding to wishlist failed
 
-    wishlistgames = wishlist.get_wishlist(user_id)
-    return render_template("wishlist.html", wishlistgames = wishlistgames)
+    query = request.args.get("query") 
+
+    searchtext = True
+    if query != None or query == "":
+        searchtext = query
+    wishlistgames = wishlist.get_wishlist(user_id, query)
+    return render_template("wishlist.html", games = wishlistgames,
+                                            searchtext = searchtext)
 
 @app.route("/cart", methods=["GET", "POST"])
 def cart_page():
@@ -249,7 +261,6 @@ def game(id):
         return redirect("/")
     
     if request.method == "GET":
-        
         imagelist = images.load_images_to_display(id)
         
         allreviews = reviews.show_reviews(id)

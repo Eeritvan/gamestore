@@ -1,5 +1,11 @@
 <!DOCTYPE html>
 
+<form action="/library" method="GET">
+    Search library: <input type="search" name="query", value="{% if searchtext != True %}{{ searchtext }}{% endif %}">
+    <input type="submit" value="Search">
+</form>
+<hr>
+
 {% for game in ownedgames %}
     {{ game.id }} {{ game.title }}
     <hr>
