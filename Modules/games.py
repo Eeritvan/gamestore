@@ -98,3 +98,18 @@ def get_price(gameid):
         sale_price = "{:.2f}".format(sale_price)
         return (result[0], f"{percentage}%", f"{sale_price}€")
     return (result[0], "False", "False")
+
+def del_game(gameid):
+    try:
+        gamename = get_game(gameid)[0]
+
+        for table in ["library", "history"]:
+            sql = f"UPDATE {table} SET deleted_title=:name WHERE game_id=:id"
+            db.session.execute(text(sql), {"name":gamename, "id":gameid})
+
+        sql = "DELETE FROM games WHERE id=:gameid"
+        db.session.execute(text(sql), {"gameid":gameid})
+        db.session.commit()
+        return True
+    except:
+        return False

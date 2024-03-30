@@ -90,10 +90,12 @@ def wishlist_page():
         gameinfo = games.get_game(game[1])
         if validation.is_released(gameinfo[3], gameinfo[4]):
             releasedgames.append(game)
+
     return render_template("wishlist.html", games = wishlistgames,
                                             searchtext = query if query else True,
                                             released = releasedgames,
-                                            pressed = onsale)
+                                            pressed = onsale,
+                                            cart = [x[0] for x in cart.get_cart(user_id)])
 
 @app.route("/cart", methods=["GET", "POST"])
 def cart_page():
@@ -282,6 +284,7 @@ def game(id):
                                             releasing_in = releasing_in,
                                             creator = game[5],
                                             editpermission = (game[6] == user_id) or users.is_moderator(),
+                                            moderator = users.is_moderator(),
                                             imagelist = imagelist,
                                             reviews = allreviews,
                                             categories = categories.get_categories(id),
@@ -334,3 +337,14 @@ def deletereview(id):
     else: 
         reviews.delete_review(users.user_id(), id)
     return redirect(f"/game/{id}")
+
+@app.route("/game/<int:id>/deletegame", methods=["GET", "POST"])
+def deletegame(id):
+    gameowner = games.get_game(id)[6]
+    if not (users.is_moderator() or users.user_id() == gameowner): # todo error: not permission
+        return redirect("/")
+    if request.method == "GET":
+        return render_template("deletegame.html", gameid = id)
+    if not games.del_game(id): # todo error: game deletion failed
+        pass
+    return redirect("/")

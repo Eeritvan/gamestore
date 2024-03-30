@@ -7,10 +7,19 @@ def add_to_library(user_id, game_id): # todo error: database failure
     db.session.commit()
 
 def get_library(user_id, query = None):
-    sql = "SELECT G.title, G.id FROM games G, library L WHERE L.user_id=:user_id AND L.game_id=G.id"
+    sql = """
+            SELECT
+              COALESCE(G.title, L.deleted_title) as title, G.id 
+            FROM
+              library L 
+            LEFT JOIN
+              games G ON L.game_id=G.id 
+            WHERE
+              L.user_id=:user_id
+          """
     parameters = {"user_id":user_id}
     if query:
-        sql += " AND (LOWER(G.title) LIKE LOWER(:query))"
+        sql += " AND (LOWER(COALESCE(G.title, L.deleted_title)) LIKE LOWER(:query))"
         parameters["query"] = f"%{query}%"
     result = db.session.execute(text(sql), parameters)
     return result.fetchall()

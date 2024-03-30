@@ -25,8 +25,7 @@ CREATE TABLE games (
     discount DECIMAL NOT NULL DEFAULT 1.00,
     release_date DATE NOT NULL,
     release_time TIME NOT NULL,
-    creator_id INTEGER REFERENCES users(id),
-    visible BOOLEAN NOT NULL DEFAULT TRUE
+    creator_id INTEGER REFERENCES users(id)
     CHECK (price >= 0)
 );
 
@@ -50,14 +49,14 @@ INSERT INTO categories(category) VALUES
                                     ('Survival');
 
 CREATE TABLE game_categories (
-    game_id INTEGER REFERENCES games(id),
+    game_id INTEGER REFERENCES games(id) ON DELETE CASCADE,
     category_id INTEGER REFERENCES categories(id)
     CHECK (category_id > 0)
 );
 
 CREATE TABLE images (
     id SERIAL PRIMARY KEY,
-    game_id INTEGER REFERENCES games(id),
+    game_id INTEGER REFERENCES games(id) ON DELETE CASCADE,
     imagename TEXT,
     imagedata BYTEA
 );
@@ -70,23 +69,24 @@ CREATE TABLE temp_images (
 
 CREATE TABLE library (
     user_id INTEGER REFERENCES users(id),
-    game_id INTEGER REFERENCES games(id)
+    game_id INTEGER REFERENCES games(id) ON DELETE SET NULL,
+    deleted_title TEXT
 );
 
 CREATE TABLE wishlist (
     user_id INTEGER REFERENCES users(id),
     date DATE NOT NULL,
-    game_id INTEGER REFERENCES games(id)
+    game_id INTEGER REFERENCES games(id) ON DELETE CASCADE
 );
 
 CREATE TABLE cart (
     user_id INTEGER REFERENCES users(id),
-    game_id INTEGER REFERENCES games(id)
+    game_id INTEGER REFERENCES games(id) ON DELETE CASCADE
 );
 
 CREATE TABLE reviews (
     user_id INTEGER REFERENCES users(id),
-    game_id INTEGER REFERENCES games(id),
+    game_id INTEGER REFERENCES games(id) ON DELETE CASCADE,
     date DATE NOT NULL,
     edited DATE,
     rating TEXT NOT NULL,
@@ -95,7 +95,8 @@ CREATE TABLE reviews (
 
 CREATE TABLE history (
     user_id INTEGER REFERENCES users(id),
-    game_id INTEGER REFERENCES games(id),
+    game_id INTEGER REFERENCES games(id) ON DELETE SET NULL,
+    deleted_title TEXT,
     date DATE NOT NULL,
     sum DECIMAL NOT NULL
 );

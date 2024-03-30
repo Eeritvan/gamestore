@@ -23,11 +23,15 @@ Wishlist <br>
         <input type="submit" value="Remove from wishlist">
     </form>
     {% if game in released %}
-        <form action="/cart" method="POST"> 
-            <input type=hidden name="game_id" value="{{ game.id }}"> 
-            <input type=hidden name="remove" value=""> 
-            <input type="submit" value="Add to cart">
-         </form>
+        {% if game.title not in cart %}
+            <form action="/cart" method="POST"> 
+                <input type=hidden name="game_id" value="{{ game.id }}"> 
+                <input type=hidden name="remove" value=""> 
+                <input type="submit" value="Add to cart">
+             </form>
+        {% else %}
+             game is already in cart. <br>
+        {% endif %}
     {% else %}
          This game isnt released yet <br>
     {% endif %}
