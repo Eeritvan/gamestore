@@ -5,7 +5,7 @@ CREATE TABLE roles (
 
 INSERT INTO roles(role) VALUES 
                             ('user'),
-                            ('seller'),
+                            ('creator'),
                             ('moderator');
 
 CREATE TABLE users (
@@ -13,9 +13,21 @@ CREATE TABLE users (
     username TEXT UNIQUE NOT NULL, 
     password TEXT NOT NULL,
     joined DATE NOT NULL DEFAULT CURRENT_DATE,
-    role INTEGER REFERENCES roles(id) DEFAULT 1,
-    visible BOOLEAN NOT NULL DEFAULT TRUE
+    role INTEGER REFERENCES roles(id) DEFAULT 1
 );
+
+CREATE TABLE profile_picture (
+    id SERIAL PRIMARY KEY,
+    picturename TEXT,
+    picturedata BYTEA
+); 
+
+CREATE TABLE profile (
+    user_id INTEGER REFERENCES users(id) ON DELETE CASCADE,
+    bio TEXT DEFAULT '',
+    picture_id INTEGER REFERENCES profile_picture(id) ON DELETE CASCADE,
+    visible BOOLEAN NOT NULL DEFAULT TRUE
+); 
 
 CREATE TABLE games (
     id SERIAL PRIMARY KEY,
@@ -25,7 +37,7 @@ CREATE TABLE games (
     discount DECIMAL NOT NULL DEFAULT 1.00,
     release_date DATE NOT NULL,
     release_time TIME NOT NULL,
-    creator_id INTEGER REFERENCES users(id)
+    creator_id INTEGER REFERENCES users(id) ON DELETE SET NULL
     CHECK (price >= 0)
 );
 
@@ -62,30 +74,30 @@ CREATE TABLE images (
 );
 
 CREATE TABLE temp_images (
-    user_id INTEGER REFERENCES users(id),
+    user_id INTEGER REFERENCES users(id) ON DELETE CASCADE,
     imagename TEXT,
     imagedata BYTEA
 );
 
 CREATE TABLE library (
-    user_id INTEGER REFERENCES users(id),
+    user_id INTEGER REFERENCES users(id) ON DELETE CASCADE,
     game_id INTEGER REFERENCES games(id) ON DELETE SET NULL,
     deleted_title TEXT
 );
 
 CREATE TABLE wishlist (
-    user_id INTEGER REFERENCES users(id),
+    user_id INTEGER REFERENCES users(id) ON DELETE CASCADE,
     date DATE NOT NULL,
     game_id INTEGER REFERENCES games(id) ON DELETE CASCADE
 );
 
 CREATE TABLE cart (
-    user_id INTEGER REFERENCES users(id),
+    user_id INTEGER REFERENCES users(id) ON DELETE CASCADE,
     game_id INTEGER REFERENCES games(id) ON DELETE CASCADE
 );
 
 CREATE TABLE reviews (
-    user_id INTEGER REFERENCES users(id),
+    user_id INTEGER REFERENCES users(id) ON DELETE CASCADE,
     game_id INTEGER REFERENCES games(id) ON DELETE CASCADE,
     date DATE NOT NULL,
     edited DATE,
@@ -94,7 +106,8 @@ CREATE TABLE reviews (
 );
 
 CREATE TABLE history (
-    user_id INTEGER REFERENCES users(id),
+    id SERIAL PRIMARY KEY,
+    user_id INTEGER REFERENCES users(id) ON DELETE CASCADE,
     game_id INTEGER REFERENCES games(id) ON DELETE SET NULL,
     deleted_title TEXT,
     date DATE NOT NULL,
@@ -102,7 +115,7 @@ CREATE TABLE history (
 );
 
 CREATE TABLE balance (
-    user_id INTEGER REFERENCES users(id),
+    user_id INTEGER REFERENCES users(id) ON DELETE CASCADE,
     amount DECIMAL NOT NULL DEFAULT 0.00
     CHECK (amount >= 0)
 );

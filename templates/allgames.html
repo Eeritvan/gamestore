@@ -28,7 +28,7 @@ Creator: {{ game.username }} <br>
     Game is already owned
 {% else %}
     {% if game not in wishlist %}
-        Game is already on wishlist
+        Game is already on wishlist <br>
     {% else %}
         <form action="/wishlist" method="POST"> 
             <input type=hidden name="game_id" value="{{ game.id }}"> 
@@ -36,11 +36,15 @@ Creator: {{ game.username }} <br>
             <input type="submit" value="Add to wishlist">
         </form>
     {% endif %}
-    <form action="/cart" method="POST"> 
-        <input type=hidden name="game_id" value="{{ game.id }}"> 
-        <input type=hidden name="remove" value=""> 
-        <input type="submit" value="Add to cart">
-    </form>
+    {% if game.title not in cart %}
+        <form action="/cart" method="POST"> 
+            <input type=hidden name="game_id" value="{{ game.id }}"> 
+            <input type=hidden name="remove" value=""> 
+            <input type="submit" value="Add to cart">
+        </form>
+    {% else %}
+        Game is already on cart. <br>
+    {% endif %}
 {% endif %}
 {% endif %}
 <hr>

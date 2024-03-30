@@ -74,3 +74,8 @@ def del_images(gameid):
     sql = "DELETE FROM images WHERE game_id=:game_id"
     db.session.execute(text(sql), {"game_id":gameid})
     db.session.commit()
+
+def get_profilepic(imageid):
+    sql = "SELECT picturename, picturedata FROM profile_picture WHERE id=:imageid"
+    result = db.session.execute(text(sql), {"imageid":imageid}).fetchall()[0]
+    return (result[0], b64encode(result[1]).decode("utf-8"))

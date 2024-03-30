@@ -1,10 +1,8 @@
 from db import db
 from sqlalchemy import text
 
-def add_initialbalance(username, amount): # todo error: database failure
+def add_initialbalance(id, amount): # todo error: database failure
     amount = "{:.2f}".format(amount)
-    sql = "SELECT id FROM users WHERE username=:username"
-    id  = db.session.execute(text(sql), {"username":username}).fetchone()[0]
     sql = "INSERT INTO balance (user_id, amount) VALUES (:user_id, :amount)"
     db.session.execute(text(sql), {"user_id":id, "amount":amount})
     db.session.commit()

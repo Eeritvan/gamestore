@@ -1,0 +1,11 @@
+<!DOCTYPE html>
+
+Editing profile:
+
+<form action="/profile/{{ user_id }}/edit" method="POST" enctype="multipart/form-data">
+    Username = <input type="text" name="username" size="20" minlength="3" maxlength="50" value="{{ username }}" required> <br>
+    Bio: <textarea name="bio" rows="5" cols="40" maxlength="400">{{ bio }}</textarea> <br>
+    Profile picture: <input type="file" name="profpicture"> <br>
+    Visibility: <input type="radio" name="visibility" value="public" {% if visibility %} checked {% endif %}> Public <input type="radio" name="visibility" value="private" {% if not visibility %} checked {% endif %}> Private <br>
+    <input type="submit" value="Submit">
+</form>

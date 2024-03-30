@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 
 {% if session.user_id %}
-<a href="/logout">logout</a>
+<a href="/logout">logout</a> <a href="/profile/{{session.user_id}}">your profile</a>
 {% else %}
 <a href="/login">login</a>  <a href="/register">register</a>
 {% endif %}
@@ -27,7 +27,7 @@
 <a href="/wishlist">wishlist</a> <br>
 <a href="/cart">cart</a> <br>
 
-{% if seller or moderator %}
+{% if creator or moderator %}
 <hr>
 <a href="/newgame">new game</a> <br>
 Olet myyjä

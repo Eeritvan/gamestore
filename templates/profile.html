@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+
+{% if permission %}
+    <a href="/profile/{{ userid }}/edit"> edit </a>
+    <a href="/profile/{{ userid }}/history"> history </a> 
+    <a href="/profile/{{ userid }}/delete"> delete </a>
+    <hr>
+{% endif %}
+
+username: {{ username }} <br>
+bio: {{ bio }} <br>
+role: {{ role }} <br>
+joined: {{ joined }} <br>
+public: {{ public }} <br>
+picture: <br>
+<img src="data:image/png;base64,{{ picturedata }}" alt="{{ picturename }}" height="100">
+
+{% for game in games %}
+    <hr>
+    <a href="/game/{{ game.id }}"> {{ game.title }} </a>
+{% endfor %}

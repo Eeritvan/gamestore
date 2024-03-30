@@ -57,6 +57,5 @@ def already_reviewed(user_id, game_id): # todo error: database failure
             WHERE
               game_id = :game_id AND R.user_id = U.id AND R.user_id = :user_id
           """
-    result = db.session.execute(text(sql), {"user_id":user_id,
-                                            "game_id":game_id})
+    result = db.session.execute(text(sql), {"user_id":user_id, "game_id":game_id})
     return result.fetchone()

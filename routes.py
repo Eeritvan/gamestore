@@ -9,7 +9,7 @@ def frontpage():
     return render_template("frontpage.html", credits=balance.get_balance(users.user_id()),
                                              user = users.get_username(),
                                              user_id = users.user_id(),
-                                             seller = users.is_seller(),
+                                             creator = users.is_creator(),
                                              moderator = users.is_moderator())
 
 @app.route("/login", methods=["GET", "POST"])
@@ -153,6 +153,7 @@ def allgames():
 
     gamelist = games.search_games(query, categorieslist, selectedsort)
     wished = [game for game in gamelist if not wishlist.already_in_wishlist(user_id, game[5])]
+    incart = [x[0] for x in cart.get_cart(user_id)]
     owned  = [game for game in gamelist if not library.already_in_library(user_id, game[5])]
 
     return render_template("allgames.html", games = gamelist,
@@ -161,11 +162,12 @@ def allgames():
                                             selectedcategories = [int(x) for x in categorieslist],
                                             wishlist = wished,
                                             owned = owned,
+                                            cart = incart,
                                             selectedsort = selectedsort)
 
 @app.route("/newgame", methods=["GET"])
 def newgame():
-    if not users.is_seller() and not users.is_moderator(): # todo error: no permission to create games
+    if not users.is_creator() and not users.is_moderator(): # todo error: no permission to create games
         return redirect("/") 
     return render_template("newgame.html", current_date = datetime.now().strftime("%Y-%m-%d"),
                                            current_time = datetime.now().strftime("%H:%M"),
@@ -173,7 +175,7 @@ def newgame():
 
 @app.route("/game/preview", methods=["POST"])
 def preview():
-    if not users.is_seller() and not users.is_moderator(): # todo error: no permission to create games
+    if not users.is_creator() and not users.is_moderator(): # todo error: no permission to create games
         return redirect("/") 
     
     try:
@@ -332,7 +334,7 @@ def editgame(id):
 @app.route("/game/<int:id>/deletereview", methods=["GET"])
 def deletereview(id):
     username = (request.args.get("username"))
-    if username != None and users.is_moderator():
+    if username and users.is_moderator():
         reviews.delete_review(users.get_userid(username), id)
     else: 
         reviews.delete_review(users.user_id(), id)
@@ -344,7 +346,66 @@ def deletegame(id):
     if not (users.is_moderator() or users.user_id() == gameowner): # todo error: not permission
         return redirect("/")
     if request.method == "GET":
-        return render_template("deletegame.html", gameid = id)
+        return render_template("deletion.html", id = id, message = "Are you sure about deleting game:",
+                                                         action = f"/game/{id}/deletegame")
     if not games.del_game(id): # todo error: game deletion failed
+        pass
+    return redirect("/")
+
+@app.route("/profile/<int:id>", methods=["GET"])
+def profile(id):
+    profileinfo = users.get_profile(id)
+    if not profileinfo or not (profileinfo[0][4] or users.is_moderator() or users.user_id() == id): # todo error: profile not found / profile is private
+        return redirect("/")
+    profileinfo = profileinfo[0]
+    permission = True if users.user_id() == id or users.is_moderator() else False
+    name, data = images.get_profilepic(profileinfo[6])
+    return render_template("profile.html", permission = permission,
+                                           userid = id,
+                                           username = profileinfo[0],
+                                           bio = profileinfo[1],
+                                           joined = profileinfo[2],
+                                           role = profileinfo[3],
+                                           public = profileinfo[4],
+                                           picturename = name,
+                                           picturedata = data,
+                                           games = library.get_library(id),
+                                           gamesmade = 0)
+
+@app.route("/profile/<int:id>/edit", methods=["GET", "POST"])
+def editprofile(id):
+    profileinfo = users.get_profile(id)
+    if not profileinfo or not (users.is_moderator() or users.user_id() == profileinfo[0][5]): # todo error: no permission
+        return redirect("/")
+    if request.method == "GET":
+        return render_template("editprofile.html", user_id = id,
+                                                   username = profileinfo[0][0],
+                                                   bio = profileinfo[0][1],
+                                                   visibility = profileinfo[0][4])
+    username = request.form["username"] # todo: validate info
+    bio = request.form["bio"]
+    visibility = request.form["visibility"]
+    image = request.files["profpicture"]
+
+    if not users.update_profile(id, username, bio, visibility, image): # todo error: updating info failed
+        pass
+    return redirect(f"/profile/{id}")
+    
+@app.route("/profile/<int:id>/history", methods=["GET"])
+def profilehistory(id):
+    profileinfo = users.get_profile(id)
+    if not profileinfo or not (users.is_moderator() or users.user_id() == profileinfo[0][5]): # todo error: profile not found
+        return redirect("/")
+    return render_template("history.html", history = history.get_history(id), username = profileinfo[0][0])
+
+@app.route("/profile/<int:id>/delete", methods=["GET", "POST"])
+def del_profile(id):
+    profileinfo = users.get_profile(id)
+    if not profileinfo or not (users.is_moderator() or users.user_id() == profileinfo[0][5]): # todo error: no permission
+        return redirect("/")
+    if request.method == "GET":
+        return render_template("deletion.html", id = id, message = "Are you sure about deleting your account:",
+                                                         action = f"/profile/{id}/delete")
+    if not users.del_user(id): # todo error: user deletion failed
         pass
     return redirect("/")

@@ -49,6 +49,11 @@ def validate_imagesize(imagedata):
         return False
     return True
 
+def validate_profilepic(imagedata):
+    if len(imagedata) > 600*600:
+        return False
+    return True
+
 def fix_price(price):
     if price == "":
         price = "{:.2f}".format(0)

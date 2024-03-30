@@ -20,11 +20,12 @@ def add_newgame(title, description, price, date, time, creator):
 def get_game(id):
     sql = """
             SELECT
-              G.title, G.description, G.price, G.release_date, G.release_time, U.username, U.id, G.discount
+              G.title, G.description, G.price, G.release_date, G.release_time, COALESCE(U.username, 'None') AS username, U.id, G.discount
             FROM
-              games G, users U
+              games G
+            LEFT JOIN users U ON G.creator_id = U.id
             WHERE
-              G.id=:id AND G.creator_id=U.id
+              G.id = :id
           """
     result = db.session.execute(text(sql), {"id":id})
     return result.fetchone()
@@ -32,11 +33,11 @@ def get_game(id):
 def search_games(query=None, categorylist=None, selectedsort = None):
     sql = """
             SELECT
-              G.title, G.description, G.price, G.release_date, U.username, G.id, -ROUND((1-G.discount)*100) as percentage, ROUND(FLOOR(G.price * G.discount * 100) / 100, 2) AS discountprice
+              G.title, G.description, G.price, G.release_date, COALESCE(U.username, 'None') AS username, G.id, -ROUND((1-G.discount)*100) as percentage, ROUND(FLOOR(G.price * G.discount * 100) / 100, 2) AS discountprice
             FROM
-              games G, users U
-            WHERE 
-              G.creator_id=U.id
+              games G
+            LEFT JOIN users U ON G.creator_id = U.id
+            WHERE True
           """
     parameters = {}
     if query:
