@@ -12,5 +12,6 @@
         <input type="checkbox" name="categories" value="{{ category.category }}"> {{ category.category }}
     {% endfor %}
     <input type="hidden" name="editing" value="False">
+    <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
     <input type="submit" value="preview store page"> <br>
 </form>

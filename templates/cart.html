@@ -14,6 +14,7 @@ Balance: {{ balance }} € <br>
     <form action="/cart" method="POST">
         <input type=hidden name="game_id" value="{{ game.id }}">
         <input type=hidden name="remove" value="remove">
+        <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
         <input type="submit" value="Remove from cart">
     </form>
 {% endfor %}
@@ -23,6 +24,7 @@ Balance: {{ balance }} € <br>
     Total: {{ total }} €
     <hr>
     <form action="/cart/checkout" method="POST" >
+        <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
         <input type="submit" value="Checkout" {% if not enough_balance %}disabled{% endif %}>
     </form>
 {% endif %}

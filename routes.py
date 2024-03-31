@@ -1,6 +1,6 @@
 from datetime import datetime
 from random import shuffle
-from flask import redirect, render_template, request
+from flask import redirect, render_template, request, session
 from werkzeug.exceptions import BadRequestKeyError
 from app import app
 from Modules import users, balance, games, images, validation, reviews, library, \
@@ -49,6 +49,8 @@ def balance_page():
     user_id = users.user_id()
     if request.method == "GET":
         return render_template("balance.html", balance = balance.get_balance(user_id))
+    if session["csrf_token"] != request.form["csrf_token"]:
+        return redirect("/")
     amount = request.form.get("button")
     if amount == "own_value":
         amount = request.form.get("amount")
@@ -73,6 +75,8 @@ def library_page():
 def wishlist_page():
     user_id = users.user_id()
     if request.method == "POST":
+        if session["csrf_token"] != request.form["csrf_token"]:
+            return redirect("/")
         game_id = int(request.form["game_id"])
         if request.form["remove"] == "remove":
             wishlist.remove_from_wishlist(user_id, game_id)
@@ -103,6 +107,8 @@ def wishlist_page():
 def cart_page():
     user_id = users.user_id()
     if request.method == "POST":
+        if session["csrf_token"] != request.form["csrf_token"]:
+            return redirect("/")
         game_id = int(request.form["game_id"])
         if request.form["remove"] == "remove":
             cart.remove_from_cart(user_id, game_id)
@@ -132,6 +138,8 @@ def cart_page():
 @app.route("/cart/checkout", methods=["POST"])
 def checkout():
     user_id = users.user_id()
+    if session["csrf_token"] != request.form["csrf_token"]:
+        return redirect("/")
 
     for game in cart.get_cart(user_id):
         price = float(game[4])
@@ -180,9 +188,10 @@ def newgame():
 
 @app.route("/game/preview", methods=["POST"])
 def preview():
+    if session["csrf_token"] != request.form["csrf_token"]:
+        return redirect("/")
     if not users.is_creator() and not users.is_moderator():
         return redirect("/") # todo error: no permission to create games
-
     try:
         selectedcategories = request.form.getlist("categories")
         price = validation.fix_price(request.form["price"])
@@ -227,6 +236,8 @@ def preview():
 
 @app.route("/game/publish", methods=["POST"])
 def publish():
+    if session["csrf_token"] != request.form["csrf_token"]:
+        return redirect("/")
     try:
         title, description, price, date, time = validation.validate_gameinfo(request.form["title"],
                                                                              request.form["desc"],
@@ -305,6 +316,8 @@ def game_page(gameid):
                                             your_review = your_review,
                                             your_image = your_image,
                                             owned = library.already_in_library(user_id, gameid))
+    if session["csrf_token"] != request.form["csrf_token"]:
+        return redirect(str(gameid))
     try:
         discount = request.form["discount"]
         if discount == "" or not validation.validate_discount(discount):
@@ -316,7 +329,7 @@ def game_page(gameid):
         date = datetime.now().strftime("%Y-%m-%d")
         rating = request.form["rating"]
         review = request.form["review"]
-        if not validation.validate_rating(rating):
+        if not validation.validate_rating(rating, review):
             return redirect(str(gameid))
         if request.form["edited"] == "False":
             reviews.add_review(user_id, gameid, date, rating, review)
@@ -333,7 +346,7 @@ def editgame(gameid):
     imagelist = images.load_images_to_display(gameid)
     selectedcategories = [x[1] for x in categories.get_categories(gameid)]
 
-    return render_template("edit.html", current_date = datetime.now().date(),
+    return render_template("editgame.html", current_date = datetime.now().date(),
                                         title = gameinfo[0],
                                         description = gameinfo[1],
                                         price = gameinfo[2],
@@ -364,6 +377,8 @@ def deletegame(gameid):
                                 id = gameid,
                                 message = "Are you sure about deleting game:",
                                 action = f"/game/{gameid}/deletegame")
+    if session["csrf_token"] != request.form["csrf_token"]:
+        return redirect("/")
     if not games.del_game(gameid): # todo error: game deletion failed
         pass
     return redirect("/")
@@ -399,6 +414,8 @@ def editprofile(profileid):
                                                    username = profileinfo[0][0],
                                                    bio = profileinfo[0][1],
                                                    visibility = profileinfo[0][4])
+    if session["csrf_token"] != request.form["csrf_token"]:
+        return redirect("/")
     username = request.form["username"]
     bio = request.form["bio"]
     visibility = request.form["visibility"]
@@ -429,6 +446,8 @@ def del_profile(profileid):
                                 id = profileid,
                                 message = "Are you sure about deleting your account:",
                                 action = f"/profile/{profileid}/delete")
+    if session["csrf_token"] != request.form["csrf_token"]:
+        return redirect("/")
     if not users.del_user(profileid): # todo error: user deletion failed
         pass
     return redirect("/")

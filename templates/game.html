@@ -8,8 +8,11 @@ Edit game: <a href="/game/{{ game_id }}/edit">edit</a> <a href="/game/{{ game_id
 Title: {{ title }} <br>
 description: {{ description }} <br>
 Price: {{ price }}€ {{ priceoff if priceoff != "False" else "" }} {{ saleprice if priceoff != "False" else "" }}  <br>
-{% if editpermission %} <form action="/game/{{ game_id }}" method="POST"> Discount game: <input type="number" name="discount" min="0" max="100" step="1" placeholder="0"> % Off
-                                             <input type="submit" value="Submit"> </form> {% endif %}
+{% if editpermission %} <form action="/game/{{ game_id }}" method="POST">
+                            Discount game: <input type="number" name="discount" min="0" max="100" step="1" placeholder="0"> % Off
+                            <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
+                            <input type="submit" value="Submit">
+                        </form> {% endif %}
 Release date:  {{ release_date }} <br>
 Creator: <a href="/profile/{{ creatorid }}"> {{ creator }} </a> <br>
 Categories: 
@@ -29,6 +32,7 @@ Categories:
             <form action="/cart" method="POST"> 
                 <input type=hidden name="game_id" value="{{ game_id }}"> 
                 <input type=hidden name="remove" value=""> 
+                <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
                 <input type="submit" value="Add to cart">
             </form> <br>
     {% else %}
@@ -38,6 +42,7 @@ Wishlist game:
           <form action="/wishlist" method="POST"> 
               <input type=hidden name="game_id" value="{{ game_id }}"> 
               <input type=hidden name="remove" value=""> 
+              <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
               <input type="submit" value="Add to wishlist">
           </form>
 {% else %}
@@ -62,6 +67,7 @@ Wishlist game:
                 <input type="radio" name="rating" value="positive" {% if your_review.rating == 'positive' %}checked{% endif %}> Positive <br>
                 <input type="radio" name="rating" value="negative" {% if your_review.rating == 'negative' %}checked{% endif %}> Negative <br>
                 <textarea name="review" rows="5" cols="40" maxlength="200">{{ your_review.review }}</textarea> <br>
+                <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
                 <input type="submit" value="submit">
             </form>
 
@@ -73,6 +79,7 @@ Wishlist game:
                                     <input type="radio" name="rating" value="positive" checked> Positive <br>
                                     <input type="radio" name="rating" value="negative"> Negative <br>
                                     <textarea name="review" rows="5" cols="40" maxlength="200" placeholder="Write your review here"></textarea> <br>
+                                    <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
                                     <input type="submit" value="submit">
                                 </form>
         {% endif %}

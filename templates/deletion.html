@@ -2,5 +2,6 @@
 
 {{ message }}
 <form action="{{ action }}" method="POST">
+    <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
     <input type="submit" value="Yes">
 </form>

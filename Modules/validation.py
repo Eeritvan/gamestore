@@ -112,5 +112,7 @@ def validate_discount(discount):
     discount = int(discount.split(".")[0])
     return discount >= 0 and discount <=100
 
-def validate_rating(rating):
-    return rating == "positive" or rating == "negative"
+def validate_rating(rating, review):
+    checkrating = rating == "positive" or rating == "negative"
+    checkreview = len(review) >= 0 and len(review) <= 200
+    return checkrating and checkreview

@@ -9,6 +9,7 @@ Your balance is: {{ balance }} <br>
     <input type="radio" name="button" value="50"> 50€ <br>
     <input type="radio" id="own" name="button" value="own_value"> 
     <input type="number" name="amount" onclick="document.getElementById('own').checked = true" min="1" max="999" step="1"> <br>
+    <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
     <input type="submit" value="Deposit">
 </form>
 

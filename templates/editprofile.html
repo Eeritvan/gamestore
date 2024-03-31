@@ -7,5 +7,6 @@ Editing profile:
     Bio: <textarea name="bio" rows="5" cols="40" maxlength="500">{{ bio }}</textarea> <br>
     Profile picture: <input type="file" name="profpicture"> <br>
     Visibility: <input type="radio" name="visibility" value="public" {% if visibility %} checked {% endif %}> Public <input type="radio" name="visibility" value="private" {% if not visibility %} checked {% endif %}> Private <br>
+    <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
     <input type="submit" value="Submit">
 </form>
