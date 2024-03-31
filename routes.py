@@ -290,6 +290,7 @@ def game(id):
                                             released = released,
                                             releasing_in = releasing_in,
                                             creator = game[5],
+                                            creatorid = game[6],
                                             editpermission = (game[6] == user_id) or users.is_moderator(),
                                             moderator = users.is_moderator(),
                                             imagelist = imagelist,

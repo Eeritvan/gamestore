@@ -11,7 +11,7 @@ Price: {{ price }}€ {{ priceoff if priceoff != "False" else "" }} {{ saleprice
 {% if editpermission %} <form action="/game/{{ game_id }}" method="POST"> Discount game: <input type="number" name="discount" min="0" max="100" step="1" placeholder="0"> % Off
                                              <input type="submit" value="Submit"> </form> {% endif %}
 Release date:  {{ release_date }} <br>
-Creator: {{ creator }} <br>
+Creator: <a href="/profile/{{ creatorid }}"> {{ creator }} </a> <br>
 Categories: 
 {% for category in categories %}
     {{ category.category }} 
