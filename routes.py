@@ -36,6 +36,8 @@ def register():
     username = request.form["username"]
     password1 = request.form["password1"]
     password2 = request.form["password2"]
+    if not validation.validate_username(username):
+        return render_template("register.html") # todo error: invalid username
     if password1 != password2: # todo error: password mismatch
         return render_template("register.html")
     if users.register(username, password1):
@@ -51,8 +53,10 @@ def balance_page():
     if amount == "own_value":
         amount = request.form.get("amount")
     amount = amount.split(".")[0]
+    if not validation.validate_balance_amount(int(amount)):
+        return redirect("/") # todo error: amount not correct
 
-    if balance.update_balance(user_id, amount): # todo: success message
+    if balance.update_balance(user_id, amount):
         history.add_balance_to_history(user_id, datetime.now().strftime("%Y-%m-%d"), amount)
         return redirect("/")
     return redirect("/") # todo error: adding balance failed
@@ -69,7 +73,7 @@ def library_page():
 def wishlist_page():
     user_id = users.user_id()
     if request.method == "POST":
-        game_id = request.form["game_id"]
+        game_id = int(request.form["game_id"])
         if request.form["remove"] == "remove":
             wishlist.remove_from_wishlist(user_id, game_id)
         else:
@@ -99,7 +103,7 @@ def wishlist_page():
 def cart_page():
     user_id = users.user_id()
     if request.method == "POST":
-        game_id = request.form["game_id"]
+        game_id = int(request.form["game_id"])
         if request.form["remove"] == "remove":
             cart.remove_from_cart(user_id, game_id)
         else:
@@ -258,11 +262,10 @@ def publish():
     return redirect ("/")
 
 @app.route("/game/<int:gameid>", methods=["GET", "POST"])
-def gamepage(gameid):
+def game_page(gameid):
     user_id = users.user_id()
     game = games.get_game(gameid)
     if not game: # todo error: game not found
-        print("to")
         return redirect("/")
 
     if request.method == "GET":
@@ -304,22 +307,23 @@ def gamepage(gameid):
                                             owned = library.already_in_library(user_id, gameid))
     try:
         discount = request.form["discount"]
-        if discount == "": # todo error: no number selected for discount
-            return redirect(str(id))
-        if not games.update_game_discount(id, 1-int(discount)*0.01):
-            return redirect(str(id)) # todo error: updating database failed
+        if discount == "" or not validation.validate_discount(discount):
+            return redirect(str(gameid)) # todo error: no / invalid discount
+        if not games.update_game_discount(gameid, 1-int(discount)*0.01):
+            return redirect(str(gameid)) # todo error: updating database failed
 
     except BadRequestKeyError:
         date = datetime.now().strftime("%Y-%m-%d")
         rating = request.form["rating"]
         review = request.form["review"]
-
+        if not validation.validate_rating(rating):
+            return redirect(str(gameid))
         if request.form["edited"] == "False":
-            reviews.add_review(user_id, id, date, rating, review)
+            reviews.add_review(user_id, gameid, date, rating, review)
         elif request.form["edited"] == "True":
-            reviews.edit_review(user_id, id, date, rating, review)
+            reviews.edit_review(user_id, gameid, date, rating, review)
 
-    return redirect(str(id))
+    return redirect(str(gameid))
 
 @app.route("/game/<int:gameid>/edit", methods=["GET"])
 def editgame(gameid):
@@ -395,10 +399,13 @@ def editprofile(profileid):
                                                    username = profileinfo[0][0],
                                                    bio = profileinfo[0][1],
                                                    visibility = profileinfo[0][4])
-    username = request.form["username"] # todo: validate info
+    username = request.form["username"]
     bio = request.form["bio"]
     visibility = request.form["visibility"]
     image = request.files["profpicture"]
+
+    if not (validation.validate_username(username) and validation.validate_bio(bio)):
+        return redirect(f"/profile/{profileid}") # todo error: invalid bio / username
 
     if not users.update_profile(profileid, username, bio, visibility, image):
         pass # todo error: updating info failed

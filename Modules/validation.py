@@ -31,7 +31,7 @@ def validate_gameinfo(title, description, price, date, time):
         if int(split[1]) < 0 or int(split[1]) > 59:
             return False
         return True
-    if not title or len(title) > 100:
+    if not title or len(title) < 3 or len(title) > 100:
         return False
     if not price or not checkprice(price):
         return False
@@ -98,3 +98,19 @@ def releasing_in(game_date, game_time):
     if hours != 0:
         return "The game is releasing in", hours, "hours"
     return "The game is releasing in an hour"
+
+def validate_username(username):
+    return not (len(username) < 3 or len(username) > 25)
+
+def validate_bio(bio):
+    return not len(bio) > 500
+
+def validate_balance_amount(amount: int):
+    return amount >= 0 and amount <= 999
+
+def validate_discount(discount):
+    discount = int(discount.split(".")[0])
+    return discount >= 0 and discount <=100
+
+def validate_rating(rating):
+    return rating == "positive" or rating == "negative"

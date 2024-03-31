@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 
 <form action="/game/preview" method="POST" enctype="multipart/form-data">
-    Title of the game: <input type="text" name="title" size="20" maxlength="50" required> <br>
+    Title of the game: <input type="text" name="title" size="20" minlength="3" maxlength="50" required> <br>
     Write a description for the game: <textarea name="desc" rows="5" cols="40" maxlength="1000"></textarea> <br>
     Price: <input type="number" name="price" min="0" step="0.01" placeholder="0,00">€ <br>
     Release date: <input type="date" name="date" value="{{current_date}}" min="{{current_date}}" required> <br>

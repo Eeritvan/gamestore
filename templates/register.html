@@ -7,7 +7,7 @@
 
 {% else %}
 <form action="/register" method="POST">
-    create username: <input type="text" name="username" size="20" required> <br>
+    create username: <input type="text" name="username" size="20" minlength="3" maxlength="25" required> <br>
     create password: <input type="password" name="password1" size="20" required> <br>
     password again: <input type="password" name="password2" size="20" required> <br>
 <input type="submit" value="Register">
