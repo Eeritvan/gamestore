@@ -1,8 +1,8 @@
-from db import db
 from sqlalchemy import text
+from db import db
 
 def add_to_wishlist(user_id, game_id, date):
-    try:  
+    try:
         sql = "INSERT INTO wishlist (user_id, date, game_id) VALUES (:user_id, :date, :game_id)"
         db.session.execute(text(sql), {"user_id":user_id, "date":date, "game_id":game_id})
         db.session.commit()
@@ -17,7 +17,8 @@ def remove_from_wishlist(user_id, game_id):
 
 def get_wishlist(user_id, onsale = None, query = None):
     sql = """SELECT
-               G.title, G.id, W.date, G.price, -ROUND((1-G.discount)*100) as percentage, ROUND(FLOOR(G.price * G.discount * 100) / 100, 2) AS discountprice
+               G.title, G.id, W.date, G.price, -ROUND((1-G.discount)*100) as percentage,
+               ROUND(FLOOR(G.price * G.discount * 100) / 100, 2) AS discountprice
              FROM 
                games G, wishlist W 
              WHERE
@@ -35,4 +36,4 @@ def get_wishlist(user_id, onsale = None, query = None):
 def already_in_wishlist(user_id, game_id):
     sql = "SELECT game_id FROM wishlist WHERE user_id=:user_id AND game_id=:game_id"
     result = db.session.execute(text(sql), {"user_id":user_id, "game_id":game_id})
-    return result.fetchone() != None
+    return result.fetchone() is not None

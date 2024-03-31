@@ -1,5 +1,5 @@
-from db import db
 from sqlalchemy import text
+from db import db
 
 def add_to_library(user_id, game_id): # todo error: database failure
     sql = "INSERT INTO library (user_id, game_id) VALUES (:user_id, :game_id)"
@@ -27,4 +27,4 @@ def get_library(user_id, query = None):
 def already_in_library(user_id, game_id):
     sql = "SELECT game_id FROM library WHERE user_id=:user_id AND game_id=:game_id"
     result = db.session.execute(text(sql), {"user_id":user_id, "game_id":game_id})
-    return result.fetchone() != None
+    return result.fetchone() is not None

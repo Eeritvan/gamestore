@@ -1,8 +1,10 @@
 from datetime import datetime
 from random import shuffle
 from flask import redirect, render_template, request
+from werkzeug.exceptions import BadRequestKeyError
 from app import app
-from Modules import users, balance, games, images, validation, reviews, library, wishlist, cart, history, temporaryimages, categories
+from Modules import users, balance, games, images, validation, reviews, library, \
+                    wishlist, cart, history, temporaryimages, categories
 
 @app.route("/", methods=["GET"])
 def frontpage():
@@ -16,12 +18,11 @@ def frontpage():
 def login():
     if request.method == "GET": # todo error: already logged in
         return render_template("login.html")
-    if request.method == "POST":
-        username = request.form["username"]
-        password = request.form["password"]
-        if users.login(username, password):
-            return redirect("/")
-        return render_template("login.html")
+    username = request.form["username"]
+    password = request.form["password"]
+    if users.login(username, password):
+        return redirect("/")
+    return render_template("login.html")
 
 @app.route("/logout", methods=["GET"])
 def logout():
@@ -32,40 +33,37 @@ def logout():
 def register():
     if request.method == "GET": # todo error: already logged in
         return render_template("register.html")
-    if request.method == "POST":
-        username = request.form["username"]
-        password1 = request.form["password1"]
-        password2 = request.form["password2"]
-        if password1 != password2: # todo error: password mismatch
-            return render_template("register.html")
-        if users.register(username, password1):
-            return redirect("/")
-        else: # todo error: username already in use
-            return render_template("register.html")
+    username = request.form["username"]
+    password1 = request.form["password1"]
+    password2 = request.form["password2"]
+    if password1 != password2: # todo error: password mismatch
+        return render_template("register.html")
+    if users.register(username, password1):
+        return redirect("/")
+    return render_template("register.html") # todo error: username already in use
 
 @app.route("/balance", methods=["GET", "POST"])
 def balance_page():
     user_id = users.user_id()
     if request.method == "GET":
         return render_template("balance.html", balance = balance.get_balance(user_id))
-    if request.method == "POST":
-        amount = request.form.get("button")
-        if amount == "own_value":
-            amount = request.form.get("amount")
-        amount = amount.split(".")[0]
+    amount = request.form.get("button")
+    if amount == "own_value":
+        amount = request.form.get("amount")
+    amount = amount.split(".")[0]
 
-        if balance.update_balance(user_id, amount): # todo: success message
-            history.add_balance_to_history(user_id, datetime.now().strftime("%Y-%m-%d"), amount)
-            return redirect("/")
-        else: # todo error: adding balance failed
-            return redirect("/")
+    if balance.update_balance(user_id, amount): # todo: success message
+        history.add_balance_to_history(user_id, datetime.now().strftime("%Y-%m-%d"), amount)
+        return redirect("/")
+    return redirect("/") # todo error: adding balance failed
 
 @app.route("/library", methods=["GET"])
 def library_page():
     query = request.args.get("query")
     ownedgames = library.get_library(users.user_id(), query)
 
-    return render_template("library.html", ownedgames = ownedgames, searchtext = query if query else True,)
+    return render_template("library.html", ownedgames = ownedgames,
+                                           searchtext = query if query else True)
 
 @app.route("/wishlist", methods=["GET", "POST"])
 def wishlist_page():
@@ -78,11 +76,11 @@ def wishlist_page():
             date = datetime.now().strftime("%Y-%m-%d")
             if wishlist.already_in_wishlist(user_id, game_id):
                 return redirect("/wishlist") # todo error: game already in wishlist
-            elif not wishlist.add_to_wishlist(user_id, game_id, date):
+            if not wishlist.add_to_wishlist(user_id, game_id, date):
                 return redirect("/wishlist") # todo error: adding to wishlist failed
 
     onsale = request.args.get("onsale")
-    query = request.args.get("query") 
+    query = request.args.get("query")
 
     wishlistgames = wishlist.get_wishlist(user_id, onsale, query)
     releasedgames = []
@@ -108,9 +106,9 @@ def cart_page():
             gameinfo = games.get_game(game_id)
             if not validation.is_released(gameinfo[3], gameinfo[4]):
                 return redirect("/cart") # todo error: game is not released yet
-            elif cart.game_in_cart(user_id, game_id):
+            if cart.game_in_cart(user_id, game_id):
                 return redirect("/cart") # todo error: game already in cart
-            elif not cart.add_to_cart(user_id, game_id):
+            if not cart.add_to_cart(user_id, game_id):
                 return redirect("/cart") # todo error: adding to cart failed
 
     cartgames = cart.get_cart(user_id)
@@ -120,9 +118,12 @@ def cart_page():
     try:
         if total <= userbalance:
             enough_balance = True
-    except:
+    except TypeError:
         pass
-    return render_template("cart.html", cartgames = cartgames, total = total, balance = userbalance, enough_balance = enough_balance)
+    return render_template("cart.html", cartgames = cartgames,
+                                        total = total,
+                                        balance = userbalance,
+                                        enough_balance = enough_balance)
 
 @app.route("/cart/checkout", methods=["POST"])
 def checkout():
@@ -167,26 +168,27 @@ def allgames():
 
 @app.route("/newgame", methods=["GET"])
 def newgame():
-    if not users.is_creator() and not users.is_moderator(): # todo error: no permission to create games
-        return redirect("/") 
+    if not users.is_creator() and not users.is_moderator():
+        return redirect("/") # todo error: no permission to create games
     return render_template("newgame.html", current_date = datetime.now().strftime("%Y-%m-%d"),
                                            current_time = datetime.now().strftime("%H:%M"),
                                            categories = categories.get_categories())
 
 @app.route("/game/preview", methods=["POST"])
 def preview():
-    if not users.is_creator() and not users.is_moderator(): # todo error: no permission to create games
-        return redirect("/") 
-    
+    if not users.is_creator() and not users.is_moderator():
+        return redirect("/") # todo error: no permission to create games
+
     try:
         selectedcategories = request.form.getlist("categories")
+        price = validation.fix_price(request.form["price"])
         title, description, price, date, time = validation.validate_gameinfo(request.form["title"],
-                                                                             request.form["description"],
-                                                                             validation.fix_price(request.form["price"]),
+                                                                             request.form["desc"],
+                                                                             price,
                                                                              request.form["date"],
                                                                              request.form["time"])
-    except: # todo error: invalid input
-        return redirect("/")
+    except TypeError:
+        return redirect("/") # todo error: invalid input
 
     edit = False
     gameid = False
@@ -208,7 +210,7 @@ def preview():
     if not imgs: # todo error: some image was too large
         return redirect("/")
     imagelist += imgs
-    
+
     return render_template("preview.html", gameid = gameid,
                                            title = title,
                                            description = description,
@@ -223,18 +225,18 @@ def preview():
 def publish():
     try:
         title, description, price, date, time = validation.validate_gameinfo(request.form["title"],
-                                                                             request.form["description"],
+                                                                             request.form["desc"],
                                                                              request.form["price"],
                                                                              request.form["date"],
                                                                              request.form["time"])
         gamescategories = request.form.getlist("categories")
-    except: # todo error: invalid input
+    except TypeError: # todo error: invalid input
         return redirect("/")
-    
+
     if request.form["edit"] == "True":
         gameid = request.form["gameid"]
-        if not games.update_game(gameid, title, description, price, date, time): # todo error: something went wrong when adding games
-            return redirect ("/")
+        if not games.update_game(gameid, title, description, price, date, time):
+            return redirect ("/") # todo error: something went wrong when adding games
         categories.del_gamecategories(gameid)
         images.del_images(gameid)
     else:
@@ -249,26 +251,26 @@ def publish():
 
     for category in gamescategories:
         category_id = categories.get_categoryid(category)
-        if category_id != None:
+        if category_id is not None:
             categories.add_game_to_category(gameid, category_id)
         else: # todo error: category not found
             pass
     return redirect ("/")
 
-@app.route("/game/<int:id>", methods=["GET", "POST"])
-def game(id):
+@app.route("/game/<int:gameid>", methods=["GET", "POST"])
+def gamepage(gameid):
     user_id = users.user_id()
-    game = games.get_game(id)
+    game = games.get_game(gameid)
     if not game: # todo error: game not found
         print("to")
         return redirect("/")
-    
+
     if request.method == "GET":
-        imagelist = images.load_images_to_display(id)
-        
-        allreviews = reviews.show_reviews(id)
+        imagelist = images.load_images_to_display(gameid)
+
+        allreviews = reviews.show_reviews(gameid)
         shuffle(allreviews)
-        your_review = reviews.already_reviewed(user_id, id)
+        your_review = reviews.already_reviewed(user_id, gameid)
         your_image = 0
         if your_review:
             allreviews.remove(your_review)
@@ -278,9 +280,10 @@ def game(id):
 
         released = validation.is_released(game[3], game[4])
         releasing_in = validation.releasing_in(game[3], game[4])
-        price, salepercentage, saleprice = games.get_price(id)
+        price, salepercentage, saleprice = games.get_price(gameid)
+        editpermission = (game[6] == user_id) or users.is_moderator()
 
-        return render_template("game.html", game_id = id,
+        return render_template("game.html", game_id = gameid,
                                             title = game[0],
                                             description = game[1],
                                             price = price,
@@ -291,40 +294,40 @@ def game(id):
                                             releasing_in = releasing_in,
                                             creator = game[5],
                                             creatorid = game[6],
-                                            editpermission = (game[6] == user_id) or users.is_moderator(),
+                                            editpermission = editpermission,
                                             moderator = users.is_moderator(),
                                             imagelist = imagelist,
                                             reviews = allreviews,
-                                            categories = categories.get_categories(id),
+                                            categories = categories.get_categories(gameid),
                                             your_review = your_review,
                                             your_image = your_image,
-                                            owned = library.already_in_library(user_id, id))
-    if request.method == "POST":
-        try:
-            discount = request.form["discount"]
-            if discount == "": # todo error: no number selected for discount
-                return redirect(str(id))
-            if not games.update_game_discount(id, 1-int(discount)*0.01): # todo error: updating database failed
-                return redirect(str(id))
+                                            owned = library.already_in_library(user_id, gameid))
+    try:
+        discount = request.form["discount"]
+        if discount == "": # todo error: no number selected for discount
+            return redirect(str(id))
+        if not games.update_game_discount(id, 1-int(discount)*0.01):
+            return redirect(str(id)) # todo error: updating database failed
 
-        except: 
-            date = datetime.now().strftime("%Y-%m-%d")
-            rating = request.form["rating"]
-            review = request.form["review"]
+    except BadRequestKeyError:
+        date = datetime.now().strftime("%Y-%m-%d")
+        rating = request.form["rating"]
+        review = request.form["review"]
 
-            if request.form["edited"] == "False":
-                reviews.add_review(user_id, id, date, rating, review)
-            elif request.form["edited"] == "True":
-                reviews.edit_review(user_id, id, date, rating, review)
+        if request.form["edited"] == "False":
+            reviews.add_review(user_id, id, date, rating, review)
+        elif request.form["edited"] == "True":
+            reviews.edit_review(user_id, id, date, rating, review)
 
-        return redirect(str(id))
+    return redirect(str(id))
 
-@app.route("/game/<int:id>/edit", methods=["GET"])
-def editgame(id):
-    gameinfo = games.get_game(id)
+@app.route("/game/<int:gameid>/edit", methods=["GET"])
+def editgame(gameid):
+    gameinfo = games.get_game(gameid)
     if not (users.is_moderator() or users.user_id() == gameinfo[6]): # todo error: not permission
-        return redirect("/") 
-    imagelist = images.load_images_to_display(id)
+        return redirect("/")
+    imagelist = images.load_images_to_display(gameid)
+    selectedcategories = [x[1] for x in categories.get_categories(gameid)]
 
     return render_template("edit.html", current_date = datetime.now().date(),
                                         title = gameinfo[0],
@@ -334,41 +337,44 @@ def editgame(id):
                                         release_time = str(gameinfo[4])[:-3],
                                         released = validation.is_released(gameinfo[3], gameinfo[4]),
                                         categorieslist = categories.get_categories(),
-                                        selectedcategories = [x[1] for x in categories.get_categories(id)],
+                                        selectedcategories = selectedcategories,
                                         imagelist = imagelist,
-                                        gameid = id)
+                                        gameid = gameid)
 
-@app.route("/game/<int:id>/deletereview", methods=["GET"])
-def deletereview(id):
-    username = (request.args.get("username"))
+@app.route("/game/<int:gameid>/deletereview", methods=["GET"])
+def deletereview(gameid):
+    username = request.args.get("username")
     if username and users.is_moderator():
-        reviews.delete_review(users.get_userid(username), id)
-    else: 
-        reviews.delete_review(users.user_id(), id)
-    return redirect(f"/game/{id}")
+        reviews.delete_review(users.get_userid(username), gameid)
+    else:
+        reviews.delete_review(users.user_id(), gameid)
+    return redirect(f"/game/{gameid}")
 
-@app.route("/game/<int:id>/deletegame", methods=["GET", "POST"])
-def deletegame(id):
-    gameowner = games.get_game(id)[6]
+@app.route("/game/<int:gameid>/deletegame", methods=["GET", "POST"])
+def deletegame(gameid):
+    gameowner = games.get_game(gameid)[6]
     if not (users.is_moderator() or users.user_id() == gameowner): # todo error: not permission
         return redirect("/")
     if request.method == "GET":
-        return render_template("deletion.html", id = id, message = "Are you sure about deleting game:",
-                                                         action = f"/game/{id}/deletegame")
-    if not games.del_game(id): # todo error: game deletion failed
+        return render_template("deletion.html", 
+                                id = gameid,
+                                message = "Are you sure about deleting game:",
+                                action = f"/game/{gameid}/deletegame")
+    if not games.del_game(gameid): # todo error: game deletion failed
         pass
     return redirect("/")
 
-@app.route("/profile/<int:id>", methods=["GET"])
-def profile(id):
-    profileinfo = users.get_profile(id)
-    if not profileinfo or not (profileinfo[0][4] or users.is_moderator() or users.user_id() == id): # todo error: profile not found / profile is private
-        return redirect("/")
+@app.route("/profile/<int:profileid>", methods=["GET"])
+def profile(profileid):
+    profileinfo = users.get_profile(profileid)
+    visible = profileinfo[0][4] or users.is_moderator() or users.user_id() == profileid
+    if not profileinfo or not visible:
+        return redirect("/") # todo error: profile not found / profile is private
     profileinfo = profileinfo[0]
-    permission = True if users.user_id() == id or users.is_moderator() else False
+    permission = True if users.user_id() == profileid or users.is_moderator() else False
     name, data = images.get_profilepic(profileinfo[6])
     return render_template("profile.html", permission = permission,
-                                           userid = id,
+                                           userid = profileid,
                                            username = profileinfo[0],
                                            bio = profileinfo[1],
                                            joined = profileinfo[2],
@@ -376,16 +382,16 @@ def profile(id):
                                            public = profileinfo[4],
                                            picturename = name,
                                            picturedata = data,
-                                           games = library.get_library(id),
-                                           gamesmade = games.games_by_creator(id))
+                                           games = library.get_library(profileid),
+                                           gamesmade = games.games_by_creator(profileid))
 
-@app.route("/profile/<int:id>/edit", methods=["GET", "POST"])
-def editprofile(id):
-    profileinfo = users.get_profile(id)
-    if not profileinfo or not (users.is_moderator() or users.user_id() == profileinfo[0][5]): # todo error: no permission
-        return redirect("/")
+@app.route("/profile/<int:profileid>/edit", methods=["GET", "POST"])
+def editprofile(profileid):
+    profileinfo = users.get_profile(profileid)
+    if not profileinfo or not (users.is_moderator() or users.user_id() == profileinfo[0][5]):
+        return redirect("/") # todo error: no permission
     if request.method == "GET":
-        return render_template("editprofile.html", user_id = id,
+        return render_template("editprofile.html", user_id = profileid,
                                                    username = profileinfo[0][0],
                                                    bio = profileinfo[0][1],
                                                    visibility = profileinfo[0][4])
@@ -394,25 +400,28 @@ def editprofile(id):
     visibility = request.form["visibility"]
     image = request.files["profpicture"]
 
-    if not users.update_profile(id, username, bio, visibility, image): # todo error: updating info failed
-        pass
-    return redirect(f"/profile/{id}")
-    
-@app.route("/profile/<int:id>/history", methods=["GET"])
-def profilehistory(id):
-    profileinfo = users.get_profile(id)
-    if not profileinfo or not (users.is_moderator() or users.user_id() == profileinfo[0][5]): # todo error: profile not found
-        return redirect("/")
-    return render_template("history.html", history = history.get_history(id), username = profileinfo[0][0])
+    if not users.update_profile(profileid, username, bio, visibility, image):
+        pass # todo error: updating info failed
+    return redirect(f"/profile/{profileid}")
 
-@app.route("/profile/<int:id>/delete", methods=["GET", "POST"])
-def del_profile(id):
-    profileinfo = users.get_profile(id)
-    if not profileinfo or not (users.is_moderator() or users.user_id() == profileinfo[0][5]): # todo error: no permission
-        return redirect("/")
+@app.route("/profile/<int:profileid>/history", methods=["GET"])
+def profilehistory(profileid):
+    profileinfo = users.get_profile(profileid)
+    if not profileinfo or not (users.is_moderator() or users.user_id() == profileinfo[0][5]):
+        return redirect("/") # todo error: profile not found
+    return render_template("history.html", history = history.get_history(profileid),
+                                           username = profileinfo[0][0])
+
+@app.route("/profile/<int:profileid>/delete", methods=["GET", "POST"])
+def del_profile(profileid):
+    profileinfo = users.get_profile(profileid)
+    if not profileinfo or not (users.is_moderator() or users.user_id() == profileinfo[0][5]):
+        return redirect("/") # todo error: no permission
     if request.method == "GET":
-        return render_template("deletion.html", id = id, message = "Are you sure about deleting your account:",
-                                                         action = f"/profile/{id}/delete")
-    if not users.del_user(id): # todo error: user deletion failed
+        return render_template("deletion.html",
+                                id = profileid,
+                                message = "Are you sure about deleting your account:",
+                                action = f"/profile/{profileid}/delete")
+    if not users.del_user(profileid): # todo error: user deletion failed
         pass
     return redirect("/")

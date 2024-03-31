@@ -97,5 +97,4 @@ def releasing_in(game_date, game_time):
     hours = int(delta.total_seconds() // 3600)
     if hours != 0:
         return "The game is releasing in", hours, "hours"
-    else:
-        return "The game is releasing in an hour"
+    return "The game is releasing in an hour"

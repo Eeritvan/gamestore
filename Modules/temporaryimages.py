@@ -1,5 +1,5 @@
-from db import db
 from sqlalchemy import text
+from db import db
 
 def empty_temporary_images(user_id): # todo error handling
     sql = """
