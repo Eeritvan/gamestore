@@ -79,3 +79,16 @@ def get_profilepic(imageid):
     sql = "SELECT picturename, picturedata FROM profile_picture WHERE id=:imageid"
     result = db.session.execute(text(sql), {"imageid":imageid}).fetchall()[0]
     return (result[0], b64encode(result[1]).decode("utf-8"))
+
+def encode_reviewpictures(allreviews):
+    encoded_reviews = []
+    for review in allreviews:
+        review_list = list(review)
+        image_data = review_list[-1]
+        encoded_image = b64encode(image_data).decode('utf-8')
+        review_list[-1] = encoded_image
+        encoded_reviews.append(review_list)
+    return encoded_reviews
+
+def encode_image(image):
+    return b64encode(image).decode('utf-8')

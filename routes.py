@@ -260,6 +260,7 @@ def game(id):
     user_id = users.user_id()
     game = games.get_game(id)
     if not game: # todo error: game not found
+        print("to")
         return redirect("/")
     
     if request.method == "GET":
@@ -268,8 +269,12 @@ def game(id):
         allreviews = reviews.show_reviews(id)
         shuffle(allreviews)
         your_review = reviews.already_reviewed(user_id, id)
+        your_image = 0
         if your_review:
             allreviews.remove(your_review)
+            your_image = images.encode_image(your_review[-1])
+
+        allreviews = images.encode_reviewpictures(allreviews)
 
         released = validation.is_released(game[3], game[4])
         releasing_in = validation.releasing_in(game[3], game[4])
@@ -291,6 +296,7 @@ def game(id):
                                             reviews = allreviews,
                                             categories = categories.get_categories(id),
                                             your_review = your_review,
+                                            your_image = your_image,
                                             owned = library.already_in_library(user_id, id))
     if request.method == "POST":
         try:
@@ -311,7 +317,7 @@ def game(id):
                 reviews.edit_review(user_id, id, date, rating, review)
 
         return redirect(str(id))
-        
+
 @app.route("/game/<int:id>/edit", methods=["GET"])
 def editgame(id):
     gameinfo = games.get_game(id)
@@ -370,7 +376,7 @@ def profile(id):
                                            picturename = name,
                                            picturedata = data,
                                            games = library.get_library(id),
-                                           gamesmade = 0)
+                                           gamesmade = games.games_by_creator(id))
 
 @app.route("/profile/<int:id>/edit", methods=["GET", "POST"])
 def editprofile(id):

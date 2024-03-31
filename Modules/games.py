@@ -114,3 +114,15 @@ def del_game(gameid):
         return True
     except:
         return False
+    
+def games_by_creator(userid):
+    sql = """
+            SELECT 
+              G.id, G.title
+            FROM
+              games G, users U
+            WHERE
+              G.creator_id = U.id AND U.id =:userid
+          """
+    result = db.session.execute(text(sql), {"userid":userid}).fetchall()
+    return result

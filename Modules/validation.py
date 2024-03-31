@@ -79,9 +79,9 @@ def fix_price(price):
     return price
 
 def is_released(game_date, game_time):
-    current_date = datetime.now().date()
-    current_time = datetime.now().time()
-    return current_date >= game_date and current_time >= game_time
+    game = datetime.combine(game_date, game_time)
+    current = datetime.now()
+    return current >= game
 
 def releasing_in(game_date, game_time):
     current = datetime.now()

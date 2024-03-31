@@ -13,9 +13,20 @@ role: {{ role }} <br>
 joined: {{ joined }} <br>
 public: {{ public }} <br>
 picture: <br>
-<img src="data:image/png;base64,{{ picturedata }}" alt="{{ picturename }}" height="100">
+<img src="data:image/png;base64,{{ picturedata }}" alt="{{ picturename }}" height="100"> <br>
 
+{% if games|length > 0 %}
+<hr>
+Games in library: <br>
 {% for game in games %}
-    <hr>
-    <a href="/game/{{ game.id }}"> {{ game.title }} </a>
+    <a href="/game/{{ game.id }}"> {{ game.title }} </a> <br>
 {% endfor %}
+{% endif %}
+
+{% if gamesmade|length > 0 %}
+<hr>
+Games created by <b>{{ username }}</b> <br>
+    {% for id, title in gamesmade %}
+    <a href="/game/{{ id }}"> {{ title }} </a> <br>
+    {% endfor %}
+{% endif %}

@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+
+user: {{ username }} <br>
+<table>
+    <tr>
+      <th>Date</th>
+      <th>Event</th>
+      <th>Price</th>
+    </tr>
+    {% for date, title, sum in history %}
+    <tr>
+      <th>{{ date }}</th>
+      <th>{% if title != None %} Bought: {{title}} {% else %} Balance added {% endif %}</th>
+      <th>{{ sum }}€</th>
+    </tr>
+    {% endfor %}
+</table>

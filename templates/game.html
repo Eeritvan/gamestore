@@ -54,6 +54,7 @@ Wishlist game:
         You must buy the game to write a review
     {% else %}
         {% if your_review != None %}
+            <img src="data:image/png;base64,{{ your_image }}" alt="profilepicture" height="50"> <br>
             your review: {{ your_review.username }} {{ your_review.date }} {{ your_review.rating }} {{ your_review.review }} {% if your_review.edited != None %} (edited on: {{ your_review.edited }}) {% endif %}<br>
             <a href="" onclick="document.getElementById('edit').style.display = 'block'; return false;">edit your review</a>  <p>
             <form id="edit" action="/game/{{ game_id }}" method="POST" style="display: none;">
@@ -82,7 +83,9 @@ Wishlist game:
 
 <hr>
 
-{% for review in reviews %}
-    {{ review.username }} {{ review.date }} {{ review.rating }} {{ review.review }} {% if review.edited != None %} (edited on: {{ review.edited }}) {% endif %} 
-    {% if moderator %} <a href="/game/{{ game_id }}/deletereview?username={{ review.username }}">Delete</a> {% endif %} <br>
+{% for id, username, date, edited, rating, review, picturedata in reviews %}
+    <img src="data:image/png;base64,{{ picturedata }}" alt="profilepicture" height="50">
+    <a href="/profile/{{ id }}"> {{ username }} </a>
+    {{ date }} {{ rating }} {{ review }} {% if edited != None %} (edited on: {{ edited }}) {% endif %} 
+    {% if moderator %} <a href="/game/{{ game_id }}/deletereview?username={{ username }}">Delete</a> {% endif %} <br>
 {% endfor %}

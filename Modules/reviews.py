@@ -39,11 +39,11 @@ def delete_review(user_id, game_id): # todo error: database failure
 def show_reviews(game_id): # todo error: database failure
     sql = """
             SELECT 
-              U.username, date, edited, rating, review
+              U.id, U.username, date, edited, rating, review, P.picturedata
             FROM
-              reviews R, users U
+              reviews R, users U, profile_picture P, profile Pr
             WHERE
-              game_id = :game_id AND R.user_id = U.id
+              game_id = :game_id AND R.user_id = U.id AND Pr.user_id = U.id AND Pr.picture_id = P.id
           """
     result = db.session.execute(text(sql), {"game_id":game_id})
     return result.fetchall()
@@ -51,11 +51,11 @@ def show_reviews(game_id): # todo error: database failure
 def already_reviewed(user_id, game_id): # todo error: database failure
     sql = """
             SELECT 
-              U.username, date, edited, rating, review
+              U.id, U.username, date, edited, rating, review, P.picturedata
             FROM
-              reviews R, users U
+              reviews R, users U, profile_picture P, profile Pr
             WHERE
-              game_id = :game_id AND R.user_id = U.id AND R.user_id = :user_id
+              game_id = :game_id AND R.user_id = U.id AND R.user_id = :user_id AND Pr.user_id = U.id AND Pr.picture_id = P.id
           """
     result = db.session.execute(text(sql), {"user_id":user_id, "game_id":game_id})
     return result.fetchone()
