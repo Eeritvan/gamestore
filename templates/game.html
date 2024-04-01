@@ -5,16 +5,18 @@ Edit game: <a href="/game/{{ game_id }}/edit">edit</a> <a href="/game/{{ game_id
 <hr>
 {% endif %}
 
-Title: {{ title }} <br>
-description: {{ description }} <br>
-Price: {{ price }}€ {{ priceoff if priceoff != "False" else "" }} {{ saleprice if priceoff != "False" else "" }}  <br>
+Title: {{ game.title }} <br>
+description: {{ game.description }} <br>
+Price: {{ price.price }}€
+{% if price.percentage %} {{ price.percentage }}% {% endif %}
+{% if price.discountprice != price.price %} {{ price.discountprice }}€ {% endif %}
 {% if editpermission %} <form action="/game/{{ game_id }}" method="POST">
                             Discount game: <input type="number" name="discount" min="0" max="100" step="1" placeholder="0"> % Off
                             <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
                             <input type="submit" value="Submit">
                         </form> {% endif %}
-Release date:  {{ release_date }} <br>
-Creator: <a href="/profile/{{ creatorid }}"> {{ creator }} </a> <br>
+Release date:  {{ game.release_date }} <br>
+Creator: <a href="/profile/{{ game.id }}"> {{ game.username }} </a> <br>
 Categories: 
 {% for category in categories %}
     {{ category.category }} 

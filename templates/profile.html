@@ -7,11 +7,11 @@
     <hr>
 {% endif %}
 
-username: {{ username }} <br>
-bio: {{ bio }} <br>
-role: {{ role }} <br>
-joined: {{ joined }} <br>
-public: {{ public }} <br>
+username: {{ user.username }} <br>
+bio: {{ user.bio }} <br>
+role: {{ user.role }} <br>
+joined: {{ user.joined }} <br>
+public: {{ user.visible }} <br>
 picture: <br>
 <img src="data:image/png;base64,{{ picturedata }}" alt="{{ picturename }}" height="100"> <br>
 
@@ -25,7 +25,7 @@ Games in library: <br>
 
 {% if gamesmade|length > 0 %}
 <hr>
-Games created by <b>{{ username }}</b> <br>
+Games created by <b>{{ user.username }}</b> <br>
     {% for id, title in gamesmade %}
     <a href="/game/{{ id }}"> {{ title }} </a> <br>
     {% endfor %}

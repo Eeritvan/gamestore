@@ -1,4 +1,3 @@
-import math
 from sqlalchemy import text
 from sqlalchemy.exc import SQLAlchemyError
 from db import db
@@ -73,7 +72,10 @@ def search_games(query=None, categorylist=None, selectedsort = None):
     result = db.session.execute(text(sql), parameters).fetchall()
     return result
 
-def update_game(game_id, title, description, price, date, time):
+def update_game(game_id, title, description, price, date, time, user_id):
+    ogcreator = get_game(game_id)[6]
+    if user_id != ogcreator:
+        return False
     try:
         sql = """
               UPDATE 
@@ -106,14 +108,16 @@ def update_game_discount(game_id, discount):
         return False
 
 def get_price(game_id):
-    sql = "SELECT price, discount FROM games WHERE id=:gameid"
-    result = db.session.execute(text(sql), {"gameid":game_id}).fetchone()
-    if result[1] != 1.0:
-        percentage = -int((1-result[1])*100)
-        sale_price = math.floor(result[0] * result[1] * 100) / 100
-        sale_price = "{:.2f}".format(sale_price)
-        return (result[0], f"{percentage}%", f"{sale_price}€")
-    return (result[0], "False", "False")
+    sql = """SELECT
+                price,
+                -ROUND((1-discount)*100) as percentage, 
+                ROUND(FLOOR(price * discount * 100) / 100, 2) AS discountprice
+              FROM
+                games
+              WHERE
+                id=:gameid"""
+    result = db.session.execute(text(sql), {"gameid":game_id})
+    return result.fetchone()
 
 def del_game(game_id):
     try:

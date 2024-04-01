@@ -86,16 +86,19 @@ def link_profile(userid):
         return False
 
 def get_profile(userid):
-    sql = """
-            SELECT
-              U.username, P.bio, U.joined, R.role, P.visible, U.id, P.picture_id
-            FROM
-              users U, profile P, roles R
-            WHERE
-              U.id=:id AND P.user_id = U.id AND R.id = U.role
-          """
-    result =  db.session.execute(text(sql), {"id":userid})
-    return result.fetchall()
+    try:
+        sql = """
+                SELECT
+                  U.username, P.bio, U.joined, R.role, P.visible, U.id, P.picture_id
+                FROM
+                  users U, profile P, roles R
+                WHERE
+                  U.id=:id AND P.user_id = U.id AND R.id = U.role
+              """
+        result =  db.session.execute(text(sql), {"id":userid})
+        return result.fetchall()[0]
+    except:
+        return False
 
 def update_profile(userid, username, bio, visibility, image = None):
     visibility = True if visibility == "public" else False
@@ -130,7 +133,7 @@ def update_profile(userid, username, bio, visibility, image = None):
 def del_user(userid):
     out = user_id() == userid
     try:
-        picture_id = get_profile(userid)[0][6]
+        picture_id = get_profile(userid)[6]
         sql = "DELETE FROM profile_picture WHERE id=:id"
         db.session.execute(text(sql), {"id":picture_id})
         sql = "DELETE FROM users WHERE id=:id"

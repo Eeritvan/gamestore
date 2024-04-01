@@ -20,6 +20,7 @@ Wishlist <br>
     <form action="/wishlist" method="POST">
         <input type=hidden name="game_id" value="{{ game.id }}">
         <input type=hidden name="remove" value="remove">
+        <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
         <input type="submit" value="Remove from wishlist">
     </form>
     {% if game in released %}
@@ -27,6 +28,7 @@ Wishlist <br>
             <form action="/cart" method="POST"> 
                 <input type=hidden name="game_id" value="{{ game.id }}"> 
                 <input type=hidden name="remove" value=""> 
+                <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
                 <input type="submit" value="Add to cart">
              </form>
         {% else %}
