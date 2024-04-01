@@ -1,10 +1,16 @@
 from sqlalchemy import text
+from sqlalchemy.exc import SQLAlchemyError
 from db import db
 
-def add_to_library(user_id, game_id): # todo error: database failure
-    sql = "INSERT INTO library (user_id, game_id) VALUES (:user_id, :game_id)"
-    db.session.execute(text(sql), {"user_id":user_id, "game_id":game_id})
-    db.session.commit()
+def add_to_library(user_id, game_id):
+    try:
+        sql = "INSERT INTO library (user_id, game_id) VALUES (:user_id, :game_id)"
+        db.session.execute(text(sql), {"user_id":user_id, "game_id":game_id})
+        db.session.commit()
+        return True
+    except SQLAlchemyError:
+        db.session.rollback()
+        return False
 
 def get_library(user_id, query = None):
     sql = """

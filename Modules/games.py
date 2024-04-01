@@ -1,5 +1,6 @@
 import math
 from sqlalchemy import text
+from sqlalchemy.exc import SQLAlchemyError
 from db import db
 
 def add_newgame(title, description, price, date, time, creator):
@@ -16,7 +17,8 @@ def add_newgame(title, description, price, date, time, creator):
                                                 "release_time":time, "creator_id":creator})
         db.session.commit()
         return result.fetchone()[0]
-    except:
+    except SQLAlchemyError:
+        db.session.rollback()
         return False
 
 def get_game(game_id):
@@ -89,7 +91,8 @@ def update_game(game_id, title, description, price, date, time):
                                        "gameid":game_id})
         db.session.commit()
         return True
-    except:
+    except SQLAlchemyError:
+        db.session.rollback()
         return False
 
 def update_game_discount(game_id, discount):
@@ -98,7 +101,8 @@ def update_game_discount(game_id, discount):
         db.session.execute(text(sql), {"gameid":game_id, "discount":discount})
         db.session.commit()
         return True
-    except:
+    except SQLAlchemyError:
+        db.session.rollback()
         return False
 
 def get_price(game_id):

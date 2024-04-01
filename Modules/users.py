@@ -33,9 +33,8 @@ def register(username, password):
         db.session.commit()
     except:
         return False
-    balance.add_initialbalance(userid, 0.00)
-    link_profile(userid)
-
+    if not balance.add_initialbalance(userid, 0.00) or not link_profile(userid):
+        return False
     return login(username, password)
 
 def user_id():
@@ -51,7 +50,7 @@ def get_username():
 def get_userid(username):
     sql = "SELECT id FROM users WHERE username=:username"
     result =  db.session.execute(text(sql), {"username":username})
-    return result .fetchone()[0]
+    return result.fetchone()[0]
 
 def is_creator():
     if user_id() != 0:
@@ -68,18 +67,23 @@ def is_moderator():
     return False
 
 def link_profile(userid):
-    randomname = choice(os.listdir("static/default_profilepic/"))
-    image_path = os.path.join("static/default_profilepic/", randomname)
-    with open(image_path, 'rb') as f:
-        image_data = f.read()
+    try:
+        randomname = choice(os.listdir("static/default_profilepic/"))
+        image_path = os.path.join("static/default_profilepic/", randomname)
+        with open(image_path, 'rb') as f:
+            image_data = f.read()
 
-    sql = """INSERT INTO profile_picture(picturename, picturedata)
-             VALUES (:picturename, :picturedata) RETURNING id"""
-    image_id = db.session.execute(text(sql), {"picturename":randomname,
-                                              "picturedata":image_data}).fetchone()[0]
-    sql = "INSERT INTO profile(user_id, picture_id) VALUES (:userid, :id)"
-    db.session.execute(text(sql), {"userid":userid, "id":image_id})
-    db.session.commit()
+        sql = """INSERT INTO profile_picture(picturename, picturedata)
+                 VALUES (:picturename, :picturedata) RETURNING id"""
+        image_id = db.session.execute(text(sql), {"picturename":randomname,
+                                                  "picturedata":image_data}).fetchone()[0]
+        sql = "INSERT INTO profile(user_id, picture_id) VALUES (:userid, :id)"
+        db.session.execute(text(sql), {"userid":userid, "id":image_id})
+        db.session.commit()
+        return True
+    except:
+        db.session.rollback()
+        return False
 
 def get_profile(userid):
     sql = """
@@ -120,6 +124,7 @@ def update_profile(userid, username, bio, visibility, image = None):
         db.session.commit()
         return True
     except:
+        db.session.rollback()
         return False
 
 def del_user(userid):
@@ -135,4 +140,5 @@ def del_user(userid):
             logout()
         return True
     except:
+        db.session.rollback()
         return False

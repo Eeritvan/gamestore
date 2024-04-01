@@ -1,4 +1,5 @@
 from sqlalchemy import text
+from sqlalchemy.exc import SQLAlchemyError
 from db import db
 
 def add_to_wishlist(user_id, game_id, date):
@@ -7,13 +8,19 @@ def add_to_wishlist(user_id, game_id, date):
         db.session.execute(text(sql), {"user_id":user_id, "date":date, "game_id":game_id})
         db.session.commit()
         return True
-    except:
+    except SQLAlchemyError:
+        db.session.rollback()
         return False
 
 def remove_from_wishlist(user_id, game_id):
-    sql = "DELETE FROM wishlist WHERE user_id=:user_id and game_id=:game_id"
-    db.session.execute(text(sql), {"user_id":user_id, "game_id":game_id})
-    db.session.commit()
+    try:
+        sql = "DELETE FROM wishlist WHERE user_id=:user_id and game_id=:game_id"
+        db.session.execute(text(sql), {"user_id":user_id, "game_id":game_id})
+        db.session.commit()
+        return True
+    except SQLAlchemyError:
+        db.session.rollback()
+        return False
 
 def get_wishlist(user_id, onsale = None, query = None):
     sql = """SELECT

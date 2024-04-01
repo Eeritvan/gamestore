@@ -1,5 +1,6 @@
 from base64 import b64encode, b64decode
 from sqlalchemy import text
+from sqlalchemy.exc import SQLAlchemyError
 from werkzeug.utils import secure_filename
 from Modules import validation, temporaryimages, users
 from db import db
@@ -15,7 +16,8 @@ def add_gameimage(game_id, imagename, imagedata):
         db.session.execute(text(sql), {"game_id":game_id, "name":imagename, "data":imagedata})
         db.session.commit()
         return True
-    except:
+    except SQLAlchemyError:
+        db.session.rollback()
         return False
 
 def get_gameimages(game_id = None, imageid = None):
@@ -47,17 +49,19 @@ def load_images(images):
             imagename = secure_filename(selected[0][1])
             imagedata = b64encode(selected[0][2]).decode("utf-8")
             if validation.validate_imagesize(b64decode(imagedata)) is False:
-                return False # todo error: image too large
+                return False
             imagelist.append((imagename, imagedata))
-            temporaryimages.add_temporary_image(users.user_id(), imagename, b64decode(imagedata))
+            if not temporaryimages.add_temporary_image(users.user_id(), imagename, b64decode(imagedata)):
+                return False
     else:
         for i in images:
             imagename = secure_filename(i.filename)
             imagedata = b64encode(i.read()).decode("utf-8")
             if validation.validate_imagesize(b64decode(imagedata)) is False:
-                return False  # todo error: image too large
+                return False
             imagelist.append((imagename, imagedata))
-            temporaryimages.add_temporary_image(users.user_id(), imagename, b64decode(imagedata))
+            if not temporaryimages.add_temporary_image(users.user_id(), imagename, b64decode(imagedata)):
+                return False
     return imagelist
 
 def load_images_to_display(game_id):
@@ -71,9 +75,14 @@ def load_images_to_display(game_id):
     return imagelist
 
 def del_images(game_id):
-    sql = "DELETE FROM images WHERE game_id=:game_id"
-    db.session.execute(text(sql), {"game_id":game_id})
-    db.session.commit()
+    try:
+        sql = "DELETE FROM images WHERE game_id=:game_id"
+        db.session.execute(text(sql), {"game_id":game_id})
+        db.session.commit()
+        return True
+    except SQLAlchemyError:
+        db.session.rollback()
+        return False
 
 def get_profilepic(image_id):
     sql = "SELECT picturename, picturedata FROM profile_picture WHERE id=:imageid"
