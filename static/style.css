@@ -1,0 +1,13 @@
+nav {
+    display: flex;
+    justify-content: space-between;
+}
+
+nav div:first-child {
+    margin-right: 20px;
+}
+
+nav a {
+    margin-left: 5px;
+    margin-right: 5px;
+}

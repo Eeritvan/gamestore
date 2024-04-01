@@ -7,11 +7,9 @@ from Modules import users, balance, games, images, validation, reviews, library,
 
 @app.route("/", methods=["GET"])
 def frontpage():
-    return render_template("frontpage.html", credits=balance.get_balance(users.user_id()),
+    return render_template("frontpage.html", balance=balance.get_balance(users.user_id()),
                                              user = users.get_username(),
-                                             user_id = users.user_id(),
-                                             creator = users.is_creator(),
-                                             moderator = users.is_moderator())
+                                             user_id = users.user_id())
 
 @app.route("/login", methods=["GET", "POST"])
 def login():

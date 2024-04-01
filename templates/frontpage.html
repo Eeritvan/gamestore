@@ -1,39 +1,19 @@
 <!DOCTYPE html>
+<html>
+  <head>
+    {% extends "navbar.html" %}
+    {% block title %}Frontpage{% endblock %}
+    {% block balance %} {{ balance }} {% endblock %}
+  </head>
+  <body>
+  {% block content %}
 
-{% if session.user_id %}
-<a href="/logout">logout</a> <a href="/profile/{{session.user_id}}">your profile</a>
-{% else %}
-<a href="/login">login</a>  <a href="/register">register</a>
-{% endif %}
+    <h1>Welcome to the store</h1>
+    
+    <form action="/allgames" method="GET">
+      <input type="search" name="query" placeholder="search for games"> <input type="submit" value="Search">
+    </form>
 
-<hr>
-
-<h1>Welcome to the store</h1>
-
-{% if session.user_id %}
-<p> Logged in as: {{ user }} (id: {{ user_id }})</p>
-<p> Your balance: {{ credits }} € </p>
-<p> <a href="/balance">add balance</a> </p>
-{% endif %}
-
-<hr>
-
-<form action="/allgames" method="GET">
-    <input type="search" name="query" placeholder="search for games"> <input type="submit" value="Search">
-</form>
-
-<a href="/allgames">view all games</a> <br>
-<a href="/library">library</a> <br>
-<a href="/wishlist">wishlist</a> <br>
-<a href="/cart">cart</a> <br>
-
-{% if creator or moderator %}
-<hr>
-<a href="/newgame">new game</a> <br>
-Olet myyjä
-{% endif %}
-
-{% if moderator %}
-<hr>
-Olet modetaattori
-{% endif %}
+  {% endblock %}
+  </body>
+</html>
