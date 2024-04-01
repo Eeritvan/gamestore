@@ -1,17 +1,17 @@
 <!DOCTYPE html>
 
 <form action="/game/preview" method="POST" enctype="multipart/form-data">
-    Title of the game: <input type="text" name="title" size="20" minlength="3" maxlength="50" value="{{title}}" required> <br>
-    Write a description for the game: <textarea name="desc" rows="5" cols="40" maxlength="1000">{{description}}</textarea> <br>
-    Price: <input type="number" name="price" min="0" step="0.01" placeholder="0" value="{{price}}">€ <br>
+    Title of the game: <input type="text" name="title" size="20" minlength="3" maxlength="50" value="{{game.title}}" required> <br>
+    Write a description for the game: <textarea name="desc" rows="5" cols="40" maxlength="1000">{{game.description}}</textarea> <br>
+    Price: <input type="number" name="price" min="0" max="999" step="0.01" placeholder="0" value="{{game.price}}">€ <br>
     {% if not released %}
-        Release date: <input type="date" name="date" value="{{release_date}}" min="{{current_date}}" required> <br>
+        Release date: <input type="date" name="date" value="{{game.release_date}}" min="{{current_date}}" required> <br>
         Release time: <input type="time" name="time" value="{{release_time}}"> <br>
     {% else %}
         Game was already released on: <br> 
-        Release date: <input type="date" value="{{release_date}}" disabled> <br>
+        Release date: <input type="date" value="{{game.release_date}}" disabled> <br>
         Release time: <input type="time" value="{{release_time}}" disabled> <br>
-        <input type="hidden" name="date" value="{{release_date}}">
+        <input type="hidden" name="date" value="{{game.release_date}}">
         <input type="hidden" name="time" value="{{release_time}}">
     {% endif %}
     File: <input type="file" name="loadedimages" multiple> <br>

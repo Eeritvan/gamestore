@@ -31,7 +31,7 @@ def validate_gameinfo(title, description, price, date, time):
         if int(split[1]) < 0 or int(split[1]) > 59:
             return False
         return True
-    if not title or len(title) < 3 or len(title) > 100:
+    if not title or len(title) < 3 or len(title) > 50:
         return False
     if not price or not checkprice(price):
         return False
@@ -106,13 +106,13 @@ def validate_bio(bio):
     return not len(bio) > 500
 
 def validate_balance_amount(amount: int):
-    return amount >= 0 and amount <= 999
+    return 0 <= amount <= 999
 
 def validate_discount(discount):
     discount = int(discount.split(".")[0])
-    return discount >= 0 and discount <=100
+    return 0 <= discount <= 100
 
 def validate_rating(rating, review):
-    checkrating = rating == "positive" or rating == "negative"
+    checkrating = rating in ("positive", "negative")
     checkreview = len(review) >= 0 and len(review) <= 200
     return checkrating and checkreview
