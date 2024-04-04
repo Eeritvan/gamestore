@@ -7,6 +7,12 @@ Editing profile:
     Bio: <textarea name="bio" rows="5" cols="40" maxlength="500">{{ user.bio }}</textarea> <br>
     Profile picture: <input type="file" name="profpicture"> <br>
     Visibility: <input type="radio" name="visibility" value="public" {% if user.visible %} checked {% endif %}> Public <input type="radio" name="visibility" value="private" {% if not user.visible %} checked {% endif %}> Private <br>
+    Change role:
+    <select name="role">
+        <option value="user" {% if user.role == "user" %} selected {% endif %}>User</option>
+        <option value="creator" {% if user.role == "creator" %} selected {% endif %}>Creator</option>
+        <option value="moderator" {% if user.role == "moderator" %} selected {% endif %}>Moderator</option>
+    </select> <br>
     <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
     <input type="submit" value="Submit">
 </form>

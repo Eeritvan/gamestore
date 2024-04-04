@@ -365,10 +365,11 @@ def editprofile(profile_id):
     bio = request.form["bio"]
     visibility = request.form["visibility"]
     image = request.files["profpicture"]
+    role = request.form["role"]
 
     if not (validation.validate_username(username) and validation.validate_bio(bio)):
         return render_template("error.html", message="Invalid username / bio. Try something else.")
-    if not users.update_profile(profile_id, username, bio, visibility, image):
+    if not users.update_profile(profile_id, username, bio, visibility, role, image):
         return render_template("error.html", message="Updating profile failed. Try again.")
     return redirect(f"/profile/{profile_id}")
 

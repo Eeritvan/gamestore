@@ -100,7 +100,7 @@ def get_profile(userid):
     except:
         return False
 
-def update_profile(userid, username, bio, visibility, image = None):
+def update_profile(userid, username, bio, visibility, role, image = None):
     visibility = True if visibility == "public" else False
     try:
         if image:
@@ -120,9 +120,11 @@ def update_profile(userid, username, bio, visibility, image = None):
                                            "picturename":imagename,
                                            "picturedata":imagedata})
 
-        sql = "UPDATE users SET username=:username WHERE id =:userid"
-        db.session.execute(text(sql), {"userid":userid, "username":username})
-        sql = "UPDATE profile SET bio=:bio, visible=:visible WHERE user_id =:userid"
+        sql = "SELECT id FROM roles WHERE role=:role"
+        roleid = db.session.execute(text(sql), {"role":role}).fetchone()[0]
+        sql = "UPDATE users SET username=:username, role=:role WHERE id=:userid"
+        db.session.execute(text(sql), {"userid":userid, "username":username, "role":roleid})
+        sql = "UPDATE profile SET bio=:bio, visible=:visible WHERE user_id=:userid"
         db.session.execute(text(sql), {"userid":userid, "bio":bio, "visible":visibility})
         db.session.commit()
         return True
