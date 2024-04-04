@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8">
     <title>{% block title %}{% endblock %}</title>
-    <link rel="stylesheet" href="/static/style.css">
+    <link rel="stylesheet" href="/static/navbar.css">
   </head>
   <body>
     <nav>
@@ -14,7 +14,7 @@
         <a href="/wishlist">Wishlist</a>
         <a href="/cart">Cart</a>
         {% if session.user_id %}
-          <a href="/cart">Balance ({% block balance %}{% endblock %}€)</a>
+          <a href="/balance">Balance ({% block balance %}{% endblock %}€)</a>
         {% endif %}
         {% if creator or moderator %}
           <a href="/newgame">Create new game</a> <br>

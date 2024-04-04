@@ -1,4 +1,5 @@
 from datetime import datetime
+from Modules import users
 
 def validate_gameinfo(title, description, price, date, time):
     def checkprice(price):
@@ -116,3 +117,6 @@ def validate_rating(rating, review):
     checkrating = rating in ("positive", "negative")
     checkreview = len(review) >= 0 and len(review) <= 200
     return checkrating and checkreview
+
+def createpermission():
+    return users.is_creator() or users.is_moderator()

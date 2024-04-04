@@ -1,16 +1,22 @@
 <!DOCTYPE html>
-
-{% if session.user_id %}
-<p> You are already logged in </p>
-
-<a href="/logout">logout</a>
-
-{% else %}
-<form action="/register" method="POST">
+<html>
+  <head>
+    {% extends "navbar.html" %}
+    {% block title %}Register{% endblock %}
+    {% block balance %} {{ balance }} {% endblock %}
+  </head>
+  <body>
+  {% block content %}
+  {% if session.user_id %}
+    <p> You are already logged in </p>
+  {% else %}
+  <form action="/register" method="POST">
     create username: <input type="text" name="username" size="20" minlength="3" maxlength="25" required> <br>
     create password: <input type="password" name="password1" size="20" required> <br>
     password again: <input type="password" name="password2" size="20" required> <br>
-<input type="submit" value="Register">
-</form>
-
-{% endif %}
+  <input type="submit" value="Register">
+  </form>
+  {% endif %}
+  {% endblock %}
+  </body>
+</html>

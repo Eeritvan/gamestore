@@ -1,3 +1,13 @@
 <!DOCTYPE html>
-
-{{ message }}
+<html>
+  <head>
+    {% extends "navbar.html" %}
+    {% block title %}Error{% endblock %}
+    {% block balance %} {{ balance }} {% endblock %}
+  </head>
+  <body>
+  {% block content %}
+    {{ message }}
+  {% endblock %}
+  </body>
+</html>
