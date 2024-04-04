@@ -1,7 +1,3 @@
-"""
-Creating app, linking to routes and getting session key
-"""
-
 from os import getenv
 from flask import Flask
 
