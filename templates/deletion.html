@@ -1,7 +1,19 @@
 <!DOCTYPE html>
-
-{{ message }}
-<form action="{{ action }}" method="POST">
-    <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
-    <input type="submit" value="Yes">
-</form>
+<html>
+  <head>
+    <link rel="stylesheet" href="/static/singlecolumn.css">
+    {% extends "navbar.html" %}
+    {% block title %}Error{% endblock %}
+  </head>
+  <body>
+    {% block content %}
+      <div class="layout">
+        {{ message }}
+        <form action="{{ action }}" method="POST">
+          <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
+          <input type="submit" value="Yes">
+        </form>
+      </div>
+    {% endblock %}
+  </body>
+</html>

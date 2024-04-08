@@ -8,11 +8,11 @@
   </head>
   <body>
     {% block content %}
-      <div class="publishpermission">
-        {% if newgamepermission %}
+      {% if newgamepermission %}
+        <div class="publishpermission">
           <a href="/newgame">Publish new game</a>
-        {% endif %}
-      </div>
+        </div>
+      {% endif %}
       <div class="content">
         <div class="filters">
           <form action="/allgames" method="GET">

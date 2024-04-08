@@ -1,0 +1,36 @@
+.profile {
+    background-color: grey;
+    box-sizing: border-box;
+    border-radius: 15px;
+    padding: 10px;
+    display: flex;
+    align-items: start;
+    overflow: hidden;
+    word-wrap: break-word;
+}
+
+.profile-pic {
+    margin-right: 20px;
+}
+
+.permissions {
+    
+}
+
+#profilepic {
+    border-radius: 25px;
+}
+
+.user-detail {
+    margin-top: 40px;
+    margin-bottom: 20px;
+    display: inline-block;
+}
+
+.game {
+    background-color: grey;
+    box-sizing: border-box;
+    padding: 15px;
+    margin-bottom: 5px;
+    border-radius: 7px;
+}

@@ -1,32 +1,51 @@
 <!DOCTYPE html>
+<html>
+  <head>
+    <link rel="stylesheet" href="/static/profile.css">
+    {% extends "navbar.html" %}
+    {% block title %}{{ user.username }}{% endblock %}
+  </head>
+  <body>
+    {% block content %}
+      <div class="profile">
+        <div class="profile-pic">
+          <img id="profilepic" src="data:image/png;base64,{{ picturedata }}" alt="{{ picturename }}" height="225">
+        </div>
+        <div class="profile-info">
+            <h1 class="user-detail">{{ user.username }}</h1> <span class="user-detail">({{ user.role }})</span> <br>
+          Joined: {{ user.joined }} <br>
+          About {{ user.username }}: {{ user.bio }} <br>
+        </div>
+        {% if permission %}
+          <div class=permissions>
+            <a href="/profile/{{ userid }}/edit"> edit </a>
+            <a href="/profile/{{ userid }}/history"> history </a> 
+            <a href="/profile/{{ userid }}/delete"> delete </a>
+          </div>
+        {% endif %}
+      </div>
 
-{% if permission %}
-    <a href="/profile/{{ userid }}/edit"> edit </a>
-    <a href="/profile/{{ userid }}/history"> history </a> 
-    <a href="/profile/{{ userid }}/delete"> delete </a>
-    <hr>
-{% endif %}
+      {% if games|length > 0 %}
+        <div class="library">
+          Games in library: <br>
+          {% for game in games %}
+            <div class="game">
+              <a href="/game/{{ game.id }}"> {{ game.title }} </a> <br>
+            </div>
+          {% endfor %}
+        </div>
+      {% endif %}
 
-username: {{ user.username }} <br>
-bio: {{ user.bio }} <br>
-role: {{ user.role }} <br>
-joined: {{ user.joined }} <br>
-public: {{ user.visible }} <br>
-picture: <br>
-<img src="data:image/png;base64,{{ picturedata }}" alt="{{ picturename }}" height="100"> <br>
-
-{% if games|length > 0 %}
-<hr>
-Games in library: <br>
-{% for game in games %}
-    <a href="/game/{{ game.id }}"> {{ game.title }} </a> <br>
-{% endfor %}
-{% endif %}
-
-{% if gamesmade|length > 0 %}
-<hr>
-Games created by <b>{{ user.username }}</b> <br>
-    {% for id, title in gamesmade %}
-    <a href="/game/{{ id }}"> {{ title }} </a> <br>
-    {% endfor %}
-{% endif %}
+      {% if gamesmade|length > 0 %}
+        <div class="gamesmade">
+          Games created by <b>{{ user.username }}</b> <br>
+            {% for id, title in gamesmade %}
+            <div class="game">
+              <a href="/game/{{ id }}"> {{ title }} </a> <br>
+            </div>
+            {% endfor %}
+        </div>
+      {% endif %}
+    {% endblock %}
+  </body>
+</html>

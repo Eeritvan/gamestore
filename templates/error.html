@@ -1,13 +1,15 @@
 <!DOCTYPE html>
 <html>
   <head>
+    <link rel="stylesheet" href="/static/singlecolumn.css">
     {% extends "navbar.html" %}
     {% block title %}Error{% endblock %}
-    {% block balance %} {{ balance }} {% endblock %}
   </head>
   <body>
-  {% block content %}
-    {{ message }}
-  {% endblock %}
+    {% block content %}
+    <div class="layout">
+      {{ message }}
+    </div>
+    {% endblock %}
   </body>
 </html>
