@@ -84,9 +84,22 @@ def del_images(game_id):
         db.session.rollback()
         return False
 
-def get_profilepic(image_id):
-    sql = "SELECT picturename, picturedata FROM profile_picture WHERE id=:imageid"
-    result = db.session.execute(text(sql), {"imageid":image_id}).fetchall()[0]
+def get_profilepic(image_id, user_id = None):
+    if image_id:
+        sql = "SELECT picturename, picturedata FROM profile_picture WHERE id=:imageid"
+        result = db.session.execute(text(sql), {"imageid":image_id}).fetchall()[0]
+    else:
+        if user_id == 0:
+            return None, None
+        sql = """
+                SELECT 
+                  picturename, picturedata
+                FROM
+                  profile_picture P, profile Pro
+                WHERE
+                  Pro.user_id=:user_id
+              """
+        result = db.session.execute(text(sql), {"user_id":user_id}).fetchall()[0]
     return (result[0], b64encode(result[1]).decode("utf-8"))
 
 def encode_reviewpictures(allreviews):

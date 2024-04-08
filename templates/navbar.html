@@ -6,7 +6,7 @@
     <link rel="stylesheet" href="/static/navbar.css">
   </head>
   <body>
-    <nav>
+    <nav class="navbar">
       <div>
         <a href="/">Frontpage</a>
         <a href="/allgames">All games</a>
@@ -14,7 +14,7 @@
         <a href="/wishlist">Wishlist</a>
         <a href="/cart">Cart</a>
         {% if session.user_id %}
-          <a href="/balance">Balance ({% block balance %}{% endblock %}€)</a>
+          <a href="/balance">Balance </a>
         {% endif %}
         {% if creator or moderator %}
           <a href="/newgame">Create new game</a> <br>
@@ -24,12 +24,12 @@
         {% if session.user_id %}
           <a href="/profile/{{session.user_id}}">your profile</a>
           <a href="/logout">logout</a>
+          <img class="profilepic" src="data:image/png;base64,{{ picturedata }}" alt="{{ picturename }}" height="44">
         {% else %}
           <a href="/login">login</a>
         {% endif %}
       </div>
     </nav>
-    <hr>
     {% block content %}{% endblock %}
   </body>
 </html>

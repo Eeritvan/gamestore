@@ -1,0 +1,45 @@
+.publishpermission {
+    background-color: Red;
+    height: 50px;
+    border-radius: 15px;
+    margin-bottom: 1vh;
+    position:relative;
+    padding-left: 45%;
+    display: flex;
+    align-items: center;
+}
+
+.content {
+    display: flex;
+    justify-content: space-between;
+}
+
+.categories {
+    box-sizing: border-box;
+    background-color: grey;
+    width: 20%;
+    padding: 10px;
+    border-radius: 10px;
+
+}
+
+.gamelist {
+    width: 79%;
+}
+
+.game {
+    background-color: grey;
+    box-sizing: border-box;
+    padding: 15px;
+    margin-bottom: 5px;
+    border-radius: 7px;
+}
+
+input[type="search"] {
+    width: 100%;
+    height: 30px;
+    padding: 5px;
+    border: none;
+    border-radius: 5px;
+    margin-bottom: 5px;
+}
