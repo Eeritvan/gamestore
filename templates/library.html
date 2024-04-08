@@ -1,18 +1,33 @@
 <!DOCTYPE html>
-
-{% if not session.user_id %}
-    please log in to see your collection.
-{% else %}
-
-<form action="/library" method="GET">
-    Search library: <input type="search" name="query", value="{% if searchtext != True %}{{ searchtext }}{% endif %}">
-    <input type="submit" value="Search">
-</form>
-<hr>
-
-{% for game in ownedgames %}
-    {{ game.id }} <a href="/game/{{ game.id }}"> {{ game.title }} </a>
-    <hr>
-{% endfor %}
-
-{% endif %}
+<html>
+  <head>
+    <link rel="stylesheet" href="/static/twocolums.css">
+    {% extends "navbar.html" %}
+    {% block title %}Library{% endblock %}
+  </head>
+  <body>
+    {% block content %}
+      <div class="error">
+        {% if not session.user_id %}
+          please log in to see your collection.
+        {% else %}
+      </div>
+      <div class="content">
+        <div class="filters">
+          <form action="/library" method="GET">
+            <input type="search" name="query" placeholder="Search" value="{% if searchtext != True %}{{ searchtext }}{% endif %}">
+            <input type="submit" value="Search">
+          </form>
+        </div>
+        <div class="gamelist">
+          {% for game in ownedgames %}
+          <div class="game">
+            <a href="/game/{{ game.id }}"> {{ game.title }} </a>
+          </div>
+          {% endfor %}
+          {% endif %}
+        </div>
+      </div>
+    {% endblock %}
+  </body>
+</html>

@@ -2,7 +2,7 @@
 
 <html>
   <head>
-    <link rel="stylesheet" href="/static/allgames.css">
+    <link rel="stylesheet" href="/static/twocolums.css">
     {% extends "navbar.html" %}
     {% block title %}Browse games{% endblock %}
   </head>
@@ -14,7 +14,7 @@
         {% endif %}
       </div>
       <div class="content">
-        <div class="categories">
+        <div class="filters">
           <form action="/allgames" method="GET">
             <input type="search" name="query" class="search" placeholder="Search" value="{% if searchtext != True %}{{ searchtext }}{% endif %}"> <br>
             Categories: 

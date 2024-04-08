@@ -1,23 +1,26 @@
 <!DOCTYPE html>
 <html>
   <head>
+    <link rel="stylesheet" href="/static/singlecolumn.css">
     {% extends "navbar.html" %}
     {% block title %}Login{% endblock %}
     {% block balance %} {{ balance }} {% endblock %}
   </head>
   <body>
-  {% block content %}
-  {% if session.user_id %}
-    <p> You are already logged in </p>  
-  {% else %}
-    <form action="/login" method="POST">
-      username: <input type="text" name="username" size="20" required> <br>
-      password: <input type="password" name="password" size="20" required> <br>
-    <input type="submit" value="Login">
-    </form>
-    <br>
-    <a href="/register">Create new account here</a>
-  {% endif %}
-  {% endblock %}
+    {% block content %}
+      {% if session.user_id %}
+        <p> You are already logged in </p>  
+      {% else %}
+        <div class="layout">
+          <form action="/login" method="POST">
+            username: <input type="text" name="username" size="20" required> <br>
+            password: <input type="password" name="password" size="20" required> <br>
+            <input type="submit" value="Login">
+          </form>
+          <br>
+          <a href="/register">Create new account here</a>
+        </div>
+      {% endif %}
+    {% endblock %}
   </body>
 </html>

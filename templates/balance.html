@@ -1,19 +1,29 @@
 <!DOCTYPE html>
-
-{% if session.user_id %}
-Your balance is: {{ balance }} <br>
-
-<form action="/balance" method="POST">
-    <input type="radio" name="button" value="5" checked> 5€ <br>
-    <input type="radio" name="button" value="10"> 10€ <br>
-    <input type="radio" name="button" value="50"> 50€ <br>
-    <input type="radio" id="own" name="button" value="own_value"> 
-    <input type="number" name="amount" onclick="document.getElementById('own').checked = true" min="1" max="999" step="1"> <br>
-    <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
-    <input type="submit" value="Deposit">
-</form>
-
-{% else %}
-You are not logged in.
-
-{% endif %}
+<html>
+  <head>
+    <link rel="stylesheet" href="/static/singlecolumn.css">
+    {% extends "navbar.html" %}
+    {% block title %}Balance{% endblock %}
+  </head>
+  <body>
+    {% block content %}
+      {% if session.user_id %}
+        <div class="layout">
+          Your balance: {{ balance }}€ <br>
+          Add balance:
+          <form action="/balance" method="POST">
+            <input type="radio" name="button" value="5" checked> 5€ <br>
+            <input type="radio" name="button" value="10"> 10€ <br>
+            <input type="radio" name="button" value="50"> 50€ <br>
+            <input type="radio" id="own" name="button" value="own_value"> 
+            <input type="number" name="amount" onclick="document.getElementById('own').checked = true" min="1" max="999" step="1"> <br>
+            <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
+            <input type="submit" value="Deposit">
+          </form>
+        </div>
+    {% else %}
+      You are not logged in.
+    {% endif %}
+    {% endblock %}
+  </body>
+</html>

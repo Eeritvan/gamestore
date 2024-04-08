@@ -1,33 +1,43 @@
 <!DOCTYPE html>
-
-Cart <br>
-{% if not session.user_id %}
-    please log in to buy games.
-{% else %}
-
-Balance: {{ balance }} € <br>
-
-{% for game in cartgames %}
-    <hr>
-    <a href="/game/{{ game.id }}"> {{ game.title }} </a> (id:{{ game.id }}) <br>
-    {{ game.price }}€ {% if game.percentage != 0 %} {{ game.percentage }}% {{ game.discountprice }}€ {% endif %}
-    <form action="/cart" method="POST">
-        <input type=hidden name="game_id" value="{{ game.id }}">
-        <input type=hidden name="remove" value="remove">
-        <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
-        <input type="submit" value="Remove from cart">
-    </form>
-{% endfor %}
-
-{% if cartgames|length > 0 %}
-    <hr>
-    Total: {{ total }} €
-    <hr>
-    <form action="/cart/checkout" method="POST" >
-        <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
-        <input type="submit" value="Checkout" {% if not enough_balance %}disabled{% endif %}>
-    </form>
-{% endif %}
-
-
-{% endif %}
+<html>
+  <head>
+    <link rel="stylesheet" href="/static/twocolums.css">
+    {% extends "navbar.html" %}
+    {% block title %}Cart{% endblock %}
+  </head>
+  <body>
+    {% block content %}
+      <div>
+        {% if not session.user_id %}
+            please log in to buy games.
+        {% else %}
+          <div class="content">
+            <div class="filters">
+              {% if cartgames|length > 0 %}
+                Balance: {{ balance }} € <br>
+                Total: {{ total }} €
+                <form action="/cart/checkout" method="POST" >
+                  <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
+                  <input type="submit" value="Checkout" {% if not enough_balance %}disabled{% endif %}>
+                </form>
+              {% endif %}
+            </div>
+            <div class="gamelist">
+              {% for game in cartgames %}
+                <div class="game">
+                  <a href="/game/{{ game.id }}"> {{ game.title }} </a> <br>
+                  {{ game.price }}€ {% if game.percentage != 0 %} {{ game.percentage }}% {{ game.discountprice }}€ {% endif %}
+                  <form action="/cart" method="POST">
+                    <input type=hidden name="game_id" value="{{ game.id }}">
+                    <input type=hidden name="remove" value="remove">
+                    <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
+                    <input type="submit" value="Remove from cart">
+                  </form>
+                </div>
+              {% endfor %}
+            </div>
+        {% endif %}
+      </div>
+    {% endblock %}
+  </body>
+</html>

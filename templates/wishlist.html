@@ -1,44 +1,56 @@
 <!DOCTYPE html>
-
-Wishlist <br>
-<hr>
-{% if not session.user_id %}
-    please log in to wishlist games.
-{% else %}
-
-
-<form action="/wishlist" method="GET">
-    Search wishlist: <input type="search" name="query", value="{% if searchtext != True %}{{ searchtext }}{% endif %}">
-    <input type="checkbox" name="onsale" value="True" {% if pressed == "True" %} checked {% endif %}> Games on sale
-    <input type="submit" value="Search">
-</form>
-<hr>
-
-{% for game in games %}
-    <a href="/game/{{ game.id }}"> {{ game.title }} </a> (id:{{ game.id }}) <br>
-     {{ game.price }}€ {% if game.percentage != 0 %} {{ game.percentage }}% {{ game.discountprice }}€ {% endif %} 
-    <form action="/wishlist" method="POST">
-        <input type=hidden name="game_id" value="{{ game.id }}">
-        <input type=hidden name="remove" value="remove">
-        <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
-        <input type="submit" value="Remove from wishlist">
-    </form>
-    {% if game in released %}
-        {% if game.title not in cart %}
-            <form action="/cart" method="POST"> 
-                <input type=hidden name="game_id" value="{{ game.id }}"> 
-                <input type=hidden name="remove" value=""> 
-                <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
-                <input type="submit" value="Add to cart">
-             </form>
+<html>
+  <head>
+    <link rel="stylesheet" href="/static/twocolums.css">
+    {% extends "navbar.html" %}
+    {% block title %}Wishlist{% endblock %}
+  </head>
+  <body>
+    {% block content %}
+      <div>
+        {% if not session.user_id %}
+          please log in to wishlist games.
         {% else %}
-             game is already in cart. <br>
+          <div class="content">
+            <div class="filters">
+              <form action="/wishlist" method="GET">
+                <input type="search" name="query" placeholder="Search" value="{% if searchtext != True %}{{ searchtext }}{% endif %}">
+                <input type="checkbox" name="onsale" value="True" {% if pressed == "True" %} checked {% endif %}> Games on sale
+                <input type="submit" value="Search">
+              </form>
+            </div>
+            <div class="gamelist">
+              {% for game in games %}
+                <div class="game">
+                  <a href="/game/{{ game.id }}"> {{ game.title }} </a> <br>
+                    {{ game.price }}€ {% if game.percentage != 0 %} {{ game.percentage }}% {{ game.discountprice }}€ {% endif %} 
+                  <form action="/wishlist" method="POST">
+                    <input type=hidden name="game_id" value="{{ game.id }}">
+                    <input type=hidden name="remove" value="remove">
+                    <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
+                    <input type="submit" value="Remove from wishlist">
+                  </form>
+                  {% if game in released %}
+                    {% if game.title not in cart %}
+                      <form action="/cart" method="POST"> 
+                        <input type=hidden name="game_id" value="{{ game.id }}"> 
+                        <input type=hidden name="remove" value=""> 
+                        <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
+                        <input type="submit" value="Add to cart">
+                      </form>
+                    {% else %}
+                      game is already in cart. <br>
+                    {% endif %}
+                  {% else %}
+                       This game isnt released yet <br>
+                  {% endif %}
+                  added to wishlist on: {{ game.date }}
+                </div>
+              {% endfor %}
+            </div>
+          </div>
         {% endif %}
-    {% else %}
-         This game isnt released yet <br>
-    {% endif %}
-    added to wishlist on: {{ game.date }}
-    <hr>
-{% endfor %}
-
-{% endif %}
+      </div>
+    {% endblock %}
+  </body>
+</html>
