@@ -4,30 +4,33 @@
     <meta charset="utf-8">
     <title>{% block title %}{% endblock %}</title>
     <link rel="stylesheet" href="/static/navbar.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@24,400,0,0" />
   </head>
   <body>
-    <nav class="navbar">
-      <div>
-        <a href="/">Frontpage</a>
-        <a href="/allgames">All games</a>
-        <a href="/library">Library</a>
-        <a href="/wishlist">Wishlist</a>
-        <a href="/cart">Cart</a>
-        {% if session.user_id %}
-          <a href="/balance">Balance </a>
-        {% endif %}
-        {% if creator or moderator %}
-          <a href="/newgame">Create new game</a> <br>
-        {% endif %}
-      </div>
-      <div>
-        {% if session.user_id %}
-          <a href="/profile/{{session.user_id}}">your profile</a>
-          <a href="/logout">logout</a>
-          <img class="profilepic" src="data:image/png;base64,{{ picturedata }}" alt="{{ picturename }}" height="44">
-        {% else %}
-          <a href="/login">login</a>
-        {% endif %}
+    <nav class="backdrop">
+      <div class="navbar">
+        <div class="navbar_vasen">
+          <a href="/"> <span class="material-symbols-rounded"> home </span> Frontpage</a>
+          <a href="/allgames"> <span class="material-symbols-rounded"> search </span> All games</a>
+          <a href="/library"> <span class="material-symbols-rounded"> joystick </span> Library</a>
+          <a href="/wishlist"> <span class="material-symbols-rounded"> favorite </span> Wishlist</a>
+          <a href="/cart"> <span class="material-symbols-rounded"> shopping_cart </span> Cart</a>
+          {% if session.user_id %}
+            <a href="/balance"> <span class="material-symbols-rounded"> payments </span> Balance </a>
+          {% endif %}
+          {% if creator or moderator %}
+            <a href="/newgame">Create new game</a> <br>
+          {% endif %}
+        </div>
+        <div class="navbar_oikea">
+          {% if session.user_id %}
+            <a href="/logout">logout</a>
+            <a href="/profile/{{session.user_id}}">your profile</a>
+            <img class="navbar_profilepic" src="data:image/png;base64,{{ picturedata }}" alt="{{ picturename }}" height="44">
+          {% else %}
+            <a href="/login">login</a>
+          {% endif %}
+        </div>
       </div>
     </nav>
     {% block content %}{% endblock %}
