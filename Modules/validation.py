@@ -1,5 +1,5 @@
 from datetime import datetime
-from Modules import users
+from Modules import users, games
 
 def validate_gameinfo(title, description, price, date, time):
     def checkprice(price):
@@ -120,3 +120,12 @@ def validate_rating(rating, review):
 
 def createpermission():
     return users.is_creator() or users.is_moderator()
+
+def get_releasedgames(gamelist):
+    releasedgames = []
+    for game in gamelist:
+        print(game[1])
+        gameinfo = games.get_game(game[5])
+        if is_released(gameinfo[3], gameinfo[4]):
+            releasedgames.append(game)
+    return releasedgames

@@ -24,7 +24,7 @@ def remove_from_wishlist(user_id, game_id):
 
 def get_wishlist(user_id, onsale = None, query = None):
     sql = """SELECT
-               G.title, G.id, W.date, G.price, -ROUND((1-G.discount)*100) as percentage,
+               G.title, G.id, W.date, G.price, -ROUND((1-G.discount)*100) as percentage, G.id,
                ROUND(FLOOR(G.price * G.discount * 100) / 100, 2) AS discountprice
              FROM 
                games G, wishlist W 

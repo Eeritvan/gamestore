@@ -10,13 +10,13 @@
     <nav class="backdrop">
       <div class="navbar">
         <div class="navbar_vasen">
-          <a href="/"> <span class="material-symbols-rounded"> home </span> Frontpage</a>
-          <a href="/allgames"> <span class="material-symbols-rounded"> search </span> All games</a>
-          <a href="/library"> <span class="material-symbols-rounded"> joystick </span> Library</a>
-          <a href="/wishlist"> <span class="material-symbols-rounded"> favorite </span> Wishlist</a>
-          <a href="/cart"> <span class="material-symbols-rounded"> shopping_cart </span> Cart</a>
+          <a href="/" class="select"> <span class="material-symbols-rounded"> home </span> Frontpage</a>
+          <a href="/allgames" class="select"> <span class="material-symbols-rounded"> search </span> All games</a>
+          <a href="/library" class="select"> <span class="material-symbols-rounded"> joystick </span> Library</a>
+          <a href="/wishlist" class="select"> <span class="material-symbols-rounded"> favorite </span> Wishlist</a>
+          <a href="/cart" class="select"> <span class="material-symbols-rounded"> shopping_cart </span> Cart</a>
           {% if session.user_id %}
-            <a href="/balance"> <span class="material-symbols-rounded"> payments </span> Balance </a>
+            <a href="/balance" class="select"> <span class="material-symbols-rounded"> payments </span> Balance </a>
           {% endif %}
           {% if creator or moderator %}
             <a href="/newgame">Create new game</a> <br>
@@ -25,14 +25,28 @@
         <div class="navbar_oikea">
           {% if session.user_id %}
             <a href="/logout">logout</a>
-            <a href="/profile/{{session.user_id}}">your profile</a>
-            <img class="navbar_profilepic" src="data:image/png;base64,{{ picturedata }}" alt="{{ picturename }}" height="44">
+            <a href="/profile/{{session.user_id}}"> your profile </a>
           {% else %}
             <a href="/login">login</a>
           {% endif %}
         </div>
       </div>
     </nav>
+    <div class="swing11">
+      <div class="swing12">
+        <div class="background1"> </div>
+      </div>
+    </div>
+    <div class="swing21">
+      <div class="swing22">
+        <div class="background2"> </div>
+      </div>
+    </div>
+    <div class="swing31">
+      <div class="swing32">
+        <div class="background3"> </div>
+      </div>
+    </div>
     {% block content %}{% endblock %}
   </body>
 </html>

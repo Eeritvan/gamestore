@@ -7,12 +7,9 @@ from Modules import users, balance, games, images, validation, reviews, library,
 
 @app.route("/", methods=["GET"])
 def frontpage():
-    picturename, picturedata = images.get_profilepic(None, users.user_id())
     return render_template("frontpage.html", balance=balance.get_balance(users.user_id()),
                                              user = users.get_username(),
-                                             user_id = users.user_id(),
-                                             picturename = picturename,
-                                             picturedata = picturedata)
+                                             user_id = users.user_id())
 
 @app.route("/login", methods=["GET", "POST"])
 def login():
@@ -83,19 +80,15 @@ def wishlist_page():
                 return render_template("error.html", message="This game is already in wishlist")
             if not wishlist.add_to_wishlist(user_id, game_id, date):
                 return render_template("error.html", message="Adding to wishlist failed")
+        return redirect(request.referrer)
 
     onsale = request.args.get("onsale")
     query = request.args.get("query")
     wishlistgames = wishlist.get_wishlist(user_id, onsale, query)
-    releasedgames = []
-    for game in wishlistgames:
-        gameinfo = games.get_game(game[1])
-        if validation.is_released(gameinfo[3], gameinfo[4]):
-            releasedgames.append(game)
 
     return render_template("wishlist.html", games = wishlistgames,
                                             searchtext = query or True,
-                                            released = releasedgames,
+                                            released = validation.get_releasedgames(wishlistgames),
                                             pressed = onsale,
                                             cart = [x[0] for x in cart.get_cart(user_id)])
 
@@ -165,6 +158,7 @@ def allgames():
                                             owned = owned,
                                             cart = incart,
                                             selectedsort = selectedsort,
+                                            released = validation.get_releasedgames(gamelist),
                                             newgamepermission = validation.createpermission())
 
 @app.route("/newgame", methods=["GET"])
