@@ -1,35 +1,35 @@
 <!DOCTYPE html>
-
 <html>
   <head>
-    <link rel="stylesheet" href="/static/twocolums.css">
+    <link rel="stylesheet" href="/static/twocolumnlayout.css">
+    <link rel="stylesheet" href="/static/inputs.css">
     {% extends "navbar.html" %}
     {% block title %}Browse games{% endblock %}
   </head>
   <body>
     {% block content %}
       <div>
-        <h1>Browse Games</h1>
+        <h1 class="title">Browse Games</h1>
       </div>
       <div class="content">
         <div class="filters">
-          <h2> Filters </h2>
+          <h2 class="title"> Filters </h2>
           <form action="/allgames" method="GET">
             <input type="search" name="query" class="search" placeholder="Search" value="{% if searchtext != True %}{{ searchtext }}{% endif %}"> <br>
-            <div class="container">
+            Sort By:
+            <select name="sort">
+              <option value="random" {% if selectedsort == "random" %} selected {% endif %}>Random</option>
+              <option value="name" {% if selectedsort == "name" %} selected {% endif %}>Name</option>
+              <option value="release" {% if selectedsort == "release" %} selected {% endif %}>Release date</option>
+              <option value="price" {% if selectedsort == "price" %} selected {% endif %}>Price</option>
+            </select>
+            <div class="categorylist">
               {% for category in categories %} 
                   <input type="checkbox" id="{{ category.id }}" name="categories" value="{{ category.id }}" {% if category.id in selectedcategories %} checked {% endif %}>
                   <label for="{{ category.id }}">{{ category.category }}</label>
               {% endfor %}
             </div>
-            Sort By:
-              <select name="sort">
-                <option value="random" {% if selectedsort == "random" %} selected {% endif %}>Random</option>
-                <option value="name" {% if selectedsort == "name" %} selected {% endif %}>Name</option>
-                <option value="release" {% if selectedsort == "release" %} selected {% endif %}>Release date</option>
-                <option value="price" {% if selectedsort == "price" %} selected {% endif %}>Price</option>
-              </select> <br>
-              <button type="submit" class="button button-28" role="button"> <span class="material-symbols-rounded"> search </span> search </button>
+            <button type="submit" class="button button-wide" role="button"> <span class="material-symbols-rounded"> search </span> search </button>
           </form>
         </div>
         <div class="gamelist">
@@ -41,7 +41,7 @@
           {% for game in games %}
             <div class="game">
               <div class="gamethumbnail">
-                <!-- kuva -->
+                image here??
               </div>
               <div class="gameinformation">
                 <div class="tophalf">
@@ -49,23 +49,25 @@
                     <h2 class="select"> <a href="/game/{{ game.id }}"> {{ game.title }} </a> </h2>
                   </div>
                   <div id="wishlist">
-                    {% if game not in wishlist %} <!-- game already in wishlist-->
+                    {% if game not in wishlist %}
                       <form action="/wishlist" method="POST">
                         <input type=hidden name="game_id" value="{{ game.id }}">
                         <input type=hidden name="remove" value="remove">
                         <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
-                        <button type="submit" class="button button-29" role="button"> <span class="material-symbols-rounded"> heart_broken </span> </button>
+                        <button type="submit" class="button button-unwishlist" role="button"> <span class="material-symbols-rounded"> heart_broken </span> </button>
                       </form>
                     {% else %}
-                      {% if game not in owned %}
-                        <span class="button button-disabled"> <span class="material-symbols-rounded"> heart_check </span> </span>
-                      {% else %}
-                        <form action="/wishlist" method="POST">
-                          <input type=hidden name="game_id" value="{{ game.id }}"> 
-                          <input type=hidden name="remove" value=""> 
-                          <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
-                          <button type="submit" class="button button-28" role="button"> <span class="material-symbols-rounded"> favorite </span> </button>
-                        </form>
+                      {% if session.user_id %}
+                        {% if game not in owned %}
+                          <span class="button button-disabled"> <span class="material-symbols-rounded"> heart_check </span> </span>
+                        {% else %}
+                          <form action="/wishlist" method="POST">
+                            <input type=hidden name="game_id" value="{{ game.id }}"> 
+                            <input type=hidden name="remove" value=""> 
+                            <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
+                            <button type="submit" class="button button-wishlist" role="button"> <span class="material-symbols-rounded"> favorite </span> </button>
+                          </form>
+                        {% endif %}
                       {% endif %}
                     {% endif %}
                   </div>
@@ -81,7 +83,7 @@
                   </div>
                   <div id="purchase">
                     <div id="pricesection">
-                      {% if game.percentage != 0 %} <!-- on alennus-->
+                      {% if game.percentage != 0 %}
                         <div id="pricesection_discount">
                           {{ game.percentage }}%
                         </div>
@@ -93,14 +95,14 @@
                             {{ game.discountprice }}€
                           </div>
                         </div>
-                      {% else %} <!-- ei oo alennus -->
+                      {% else %}
                         {{ game.price }}€
                       {% endif %}
                     </div>
                     <div id="cartbutton">
                       {% if session.user_id %} <!-- if logged in in -->
                         {% if game not in owned %} <!-- game owned already-->
-                            <span class="button button-31 button-disabled"> <span class="material-symbols-rounded"> check </span> already owned </span>
+                            <span class="button button-wide button-disabled"> <span class="material-symbols-rounded"> check </span> already owned </span>
                         {% else %}
                           {% if game in released %}
                             {% if game.title not in cart %} <!-- game not in cart yet-->
@@ -108,17 +110,17 @@
                                 <input type=hidden name="game_id" value="{{ game.id }}"> 
                                 <input type=hidden name="remove" value=""> 
                                 <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
-                                <button type="submit" class="button button-30" role="button"> <span class="material-symbols-rounded"> shopping_cart_checkout </span> Add to cart </button>
+                                <button type="submit" class="button button-cart" role="button"> <span class="material-symbols-rounded"> shopping_cart_checkout </span> Add to cart </button>
                               </form>
                             {% else %}
-                            <span class="button button-31 button-disabled"> <span class="material-symbols-rounded"> production_quantity_limits </span> In cart already </span>
+                              <span class="button button-wide button-disabled"> <span class="material-symbols-rounded"> production_quantity_limits </span> In cart already </span>
                             {% endif %}
                           {% else %}
-                          <span class="button button-31 button-disabled"> <span class="material-symbols-rounded"> schedule </span> Not released </span>
+                            <span class="button button-wide button-disabled"> <span class="material-symbols-rounded"> schedule </span> Not released </span>
                           {% endif %}
                         {% endif %}
                       {% else %}
-                        please log in to buy games
+                      <span class="button button-wide button-disabled"> Log in to buy games </span>
                       {% endif %}
                     </div>
                   </div>

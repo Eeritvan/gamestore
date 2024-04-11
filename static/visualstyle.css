@@ -17,17 +17,35 @@ form, h2, b, i {
     text-decoration: None;
 }
 
-a{
+a {
     background-color: transparent;
     text-decoration: None;
     display: flex;
     align-items: center;
 }
 
+.title {
+    margin-left: 2vw;
+    z-index: 10;
+}
+
+.select {
+    transition: all 300ms cubic-bezier(.23, 1, 0.32, 1);
+}
+
+.select:hover {
+    transform: translateY(-2px);
+}
+
+.material-symbols-rounded {
+    vertical-align: middle;
+    background-color: transparent;
+}
+
 @keyframes rotate {
     0% { transform: rotate(0deg); }
     100% { transform: rotate(360deg); }
-  }
+}
 
 .background1 {
     --easing: cubic-bezier(0.8, 0.2, 0.2, 0.8);
@@ -139,19 +157,6 @@ a{
     background-color: transparent;
     animation: rotate 40s infinite;
     animation-timing-function: linear;
-}
-
-.material-symbols-rounded {
-    vertical-align: middle;
-    background-color: transparent;
-}
-
-.select {
-    transition: all 300ms cubic-bezier(.23, 1, 0.32, 1);
-}
-
-.select:hover {
-    transform: translateY(-2px);
 }
   
 .backdrop {

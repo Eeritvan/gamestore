@@ -124,7 +124,6 @@ def createpermission():
 def get_releasedgames(gamelist):
     releasedgames = []
     for game in gamelist:
-        print(game[1])
         gameinfo = games.get_game(game[5])
         if is_released(gameinfo[3], gameinfo[4]):
             releasedgames.append(game)

@@ -25,6 +25,13 @@
     border-radius: 15px;
 }
 
+.categorylist {
+    background-color: transparent;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
 .gamelist {
     width: 74%;
 }
@@ -43,8 +50,8 @@
 }
 
 .game:hover {
-    border: 2px solid lightgrey; /* Change to the border style you want */
-    box-shadow: 0 0 10px black; /* Add glow effect */
+    border: 2px solid lightgrey;
+    box-shadow: 0 0 10px black;
 }
 
 .gamethumbnail {
@@ -153,8 +160,8 @@
     display: flex;
     width: 50%;
     height: 60%;
-    background-color: #0066ff;
-    border-radius: 15px;
+    background: linear-gradient(to right, rgba(138, 31, 226, 0.5), #0066ff); 
+    border-radius: 12px;
 }
 
 #cartbutton {
@@ -163,139 +170,4 @@
     display: flex;
     width: 50%;
     height: 100%;
-}
-
-
-
-/* SEARCH */
-
-input[type="search"] {
-    width: 100%;
-    height: 30px;
-    padding: 5px;
-    border: none;
-    border-radius: 5px;
-    margin-bottom: 5px;
-}
-
-
-
-/* CHECKBOX */
-
-.container {
-    background-color: transparent;
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-}
-
-input[type="checkbox"] {
-    display: none;
-}
-
-input[type="checkbox"] + label {
-    display: inline-flex;
-    justify-content: center;
-    align-items: center;
-    appearance: none;
-    background-color: rgba(0, 0, 0, 0.2);
-    border: 2px solid #1A1A1A;
-    border-radius: 15px;
-    box-sizing: border-box;
-    color: #3B3B3B;
-    cursor: pointer;
-    font-size: 16px;
-    min-height: 60px;
-    padding: 16px 24px;
-    text-align: center;
-    transition: all 300ms cubic-bezier(.23, 1, 0.32, 1);
-    width: 100px;
-    height: 50px;
-    margin: 5px;
-}
-
-input[type="checkbox"] + label:hover {
-    color: #fff;
-    background-color: #1A1A1A;
-    box-shadow: rgba(0, 0, 0, 0.25) 0 8px 15px;
-    transform: translateY(-2px);
-}
-
-input[type="checkbox"]:checked + label {
-    color: #fff;
-    background-color: #1A1A1A;
-    box-shadow: rgba(0, 0, 0, 0.25) 0 8px 15px;
-    transform: translateY(-2px);
-}
-
-input[type="checkbox"]:active + label {
-    box-shadow: none;
-    transform: translateY(0);
-}
-
-
-/* BUTTON */
-
-
-.button {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    appearance: none;
-    background-color: rgba(0, 0, 0, 0.2);
-    border: 2px solid #1A1A1A;
-    border-radius: 15px;
-    box-sizing: border-box;
-    color: #3B3B3B;
-    cursor: pointer;
-    font-size: 16px;
-    padding: 16px 24px;
-    text-align: center;
-    transition: all 300ms cubic-bezier(.23, 1, 0.32, 1);
-    width: 50px;
-    height: 50px;
-}
-
-.button-31 {
-    width: 150px;
-}
-
-.button-disabled {
-    pointer-events: none;
-    cursor: not-allowed;
-    opacity: 0.6;
-}
-
-.button:hover {
-   box-shadow: rgba(0, 0, 0, 0.25) 0 8px 15px;
-   transform: translateY(-2px);
-}
-
-.button:active {
-   box-shadow: none;
-   transform: translateY(0);
-}
-
-.button-28:hover {
-   color: #fff;
-   background-color: #0066ff;
-}
-
-.button-29 {
-    background-color: #1A1A1A;
- }
- 
-.button-29:hover {
-   color: #fff;
-   background-color: red;
-}
-
-.button-30 {
-   width: 150px;
-   color: #fff;
-}
-
-.button-30:hover {
-   color: #fff;
-   background: linear-gradient(to right, rgba(42, 232, 153, 0.85), rgba(78, 81, 232, 1));
 }
