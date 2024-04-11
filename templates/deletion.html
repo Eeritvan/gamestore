@@ -1,18 +1,32 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <link rel="stylesheet" href="/static/singlecolumn.css">
+    <link rel="stylesheet" href="/static/singlecolumnlayout.css">
+    <link rel="stylesheet" href="/static/inputs.css">
     {% extends "navbar.html" %}
     {% block title %}Error{% endblock %}
   </head>
   <body>
     {% block content %}
       <div class="layout">
-        {{ message }}
-        <form action="{{ action }}" method="POST">
-          <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
-          <input type="submit" value="Yes">
-        </form>
+        <div class="boxtitle">
+          <h1> Deletion </h1>
+        </div>
+        <div class="content">
+          <div class="content_upper">
+            <p> This action can't be <b>undone</b> </p>
+          </div>
+          <div class="content_lower">
+            <br>
+            {{ message }}
+            <form action="{{ action }}" method="POST">
+              <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
+              <div id="submitbutton">
+                <button type="submit" class="button button-removecart" role="button"> <span class="material-symbols-rounded"> delete </span> Delete </button>
+              </div>
+            </form>
+          </div>
+        </div>
       </div>
     {% endblock %}
   </body>

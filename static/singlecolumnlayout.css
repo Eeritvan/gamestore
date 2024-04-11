@@ -11,6 +11,10 @@
     padding: 10px;
 }
 
+p {
+    background-color: transparent;
+}
+
 .boxtitle {
     background-color: transparent;
     margin-left: 20px;

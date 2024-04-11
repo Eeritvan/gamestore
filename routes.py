@@ -326,7 +326,7 @@ def deletegame(game_id):
     if request.method == "GET":
         return render_template("deletion.html",
                                 id = game_id,
-                                message = "Are you sure about deleting game:",
+                                message = "Are you sure about deleting this game:",
                                 action = f"/game/{game_id}/deletegame")
     check_csrf()
     if not games.del_game(game_id):
