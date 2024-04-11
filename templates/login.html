@@ -1,7 +1,8 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <link rel="stylesheet" href="/static/singlecolumn.css">
+    <link rel="stylesheet" href="/static/singlecolumnlayout.css">
+    <link rel="stylesheet" href="/static/inputs.css">
     {% extends "navbar.html" %}
     {% block title %}Login{% endblock %}
     {% block balance %} {{ balance }} {% endblock %}
@@ -9,16 +10,36 @@
   <body>
     {% block content %}
       {% if session.user_id %}
-        <p> You are already logged in </p>  
+        <div class="layout">
+          <div class="boxtitle">
+            <h1> Already logged in </h1>
+          </div>
+          <div class="content">
+            <div class="content_upper">
+              <a href="/logout" id="link">logout</a>
+              <br>
+              <a href="/" id="link">Back to frontpage</a>
+            </div>
+          </div>
+        </div>
       {% else %}
         <div class="layout">
-          <form action="/login" method="POST">
-            username: <input type="text" name="username" size="20" required> <br>
-            password: <input type="password" name="password" size="20" required> <br>
-            <input type="submit" value="Login">
-          </form>
-          <br>
-          <a href="/register">Create new account here</a>
+          <div class="boxtitle">
+            <h1> Login </h1>
+          </div>
+          <div class="content">
+            <div class="content_upper">
+              <form action="/login" method="POST">
+                Username: <input type="text" class="textfield" name="username" size="20" required> <br>
+                Password: <input type="password" class="textfield" name="password" size="20" required> <br>
+                <div id="submitbutton">
+                  <button type="submit" class="button button-cart" role="button"> <span class="material-symbols-rounded"> login </span>  Login </button>
+                </div>
+                </form>
+            <div class="content_lower">
+              <a href="/register" id="link">Create new account here</a>
+            </div>
+          </div>
         </div>
       {% endif %}
     {% endblock %}

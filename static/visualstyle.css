@@ -12,7 +12,7 @@ body {
     z-index: 1;
 }
 
-form, h2, b, i {
+form, h1, h2, b, i {
     background-color: transparent;
     text-decoration: None;
 }

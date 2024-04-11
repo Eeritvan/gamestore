@@ -1,7 +1,8 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <link rel="stylesheet" href="/static/singlecolumn.css">
+    <link rel="stylesheet" href="/static/singlecolumnlayout.css">
+    <link rel="stylesheet" href="/static/inputs.css">
     {% extends "navbar.html" %}
     {% block title %}Balance{% endblock %}
   </head>
@@ -9,21 +10,37 @@
     {% block content %}
       {% if session.user_id %}
         <div class="layout">
-          Your balance: {{ balance }}€ <br>
-          Add balance:
-          <form action="/balance" method="POST">
-            <input type="radio" name="button" value="5" checked> 5€ <br>
-            <input type="radio" name="button" value="10"> 10€ <br>
-            <input type="radio" name="button" value="50"> 50€ <br>
-            <input type="radio" id="own" name="button" value="own_value"> 
-            <input type="number" name="amount" onclick="document.getElementById('own').checked = true" min="1" max="999" step="1"> <br>
-            <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
-            <input type="submit" value="Deposit">
-          </form>
+          <div class="boxtitle">
+            <h1> add balance </h1>
+          </div>
+          <div class="content">
+            <div class="content_upper">
+              Current balance: {{ balance }}€ <br> <br>
+              Add balance:
+            </div>
+            <div class="content_lower">
+              <form action="/balance" method="POST">
+                <input type="radio" id="radio5" name="button" value="5" checked>
+                <label for="radio5">5€</label>
+                <input type="radio" id="radio10" name="button" value="10">
+                <label for="radio10">10€</label>
+                <input type="radio" id="radio50" name="button" value="50">
+                <label for="radio50">50€</label>
+                <input type="radio" id="own" name="button" value="own_value">
+                <label for="own">
+                    <input type="number" id="own_number" name="amount" onclick="document.getElementById('own').checked = true" min="1" max="999" step="1" placeholder="Own">
+                </label><br>
+                <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
+                <div id="deposit">
+                  <button type="submit" class="button button-cart" role="button"> <span class="material-symbols-rounded"> wallet </span> Deposit </button>
+                </div>
+              </form>
+            </div>
+          </div>
         </div>
-    {% else %}
-      You are not logged in.
-    {% endif %}
+      {% else %}
+        You are not logged in.
+      {% endif %}
     {% endblock %}
   </body>
 </html>

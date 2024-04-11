@@ -23,7 +23,7 @@ def login():
 @app.route("/logout", methods=["GET"])
 def logout():
     users.logout()
-    return redirect("/")
+    return redirect(request.referrer)
 
 @app.route("/register", methods=["GET", "POST"])
 def register():

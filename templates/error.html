@@ -1,14 +1,22 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <link rel="stylesheet" href="/static/singlecolumn.css">
+    <link rel="stylesheet" href="/static/singlecolumnlayout.css">
     {% extends "navbar.html" %}
     {% block title %}Error{% endblock %}
   </head>
   <body>
     {% block content %}
     <div class="layout">
-      {{ message }}
+      <div class="boxtitle">
+        <h1> {{ message }} </h1>
+      </div>
+      <div class="content">
+        <div class="content_upper">
+          <a href="/" id="link">Back to frontpage</a>
+        </div>
+      </div>
+    </div>
     </div>
     {% endblock %}
   </body>

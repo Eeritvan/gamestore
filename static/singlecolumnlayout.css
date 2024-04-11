@@ -1,9 +1,65 @@
 .layout {
-    background-color: grey;
-    width: 20%;
+    background-color: transparent;
+    backdrop-filter: blur(100px);
+    margin-top: 18vh;
+    margin-left: auto;
+    margin-right: auto;
+    width: 20vw;
     min-width: 200px;
-    margin: 0 auto;
-    box-sizing: border-box;
-    border-radius: 10px;
+    height: 40vh;
+    border-radius: 15px;
     padding: 10px;
+}
+
+.boxtitle {
+    background-color: transparent;
+    margin-left: 20px;
+}
+
+.content {
+    background-color: transparent;
+    margin: 20px;
+    flex-direction: column;
+    display: flex;
+    height:70%;
+}
+
+.content_upper {
+    background-color: transparent;
+    margin: 10px;
+}
+
+.content_lower {
+    background-color: transparent; 
+    text-align: center;
+}
+
+#deposit {
+    background-color: transparent;
+    display: flex;
+    justify-content: center;
+}
+
+input[type="number"]#own_number {
+    background: transparent;
+    border: None;
+}
+
+.textfield {
+    border-radius: 6px;
+    box-shadow: 0 0 7px #4d4d4d;
+    margin-top: 4px;
+    margin-bottom: 4px;
+    margin-right: -20px;
+}
+
+#submitbutton {
+    margin: 20px;
+    background-color: transparent;
+    display: flex;
+    justify-content: center;
+}
+
+#link {
+    text-decoration: underline;
 }
