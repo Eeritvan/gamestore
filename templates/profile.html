@@ -2,6 +2,7 @@
 <html>
   <head>
     <link rel="stylesheet" href="/static/profile.css">
+    <link rel="stylesheet" href="/static/inputs.css">
     {% extends "navbar.html" %}
     {% block title %}{{ user.username }}{% endblock %}
   </head>
@@ -9,43 +10,64 @@
     {% block content %}
       <div class="profile">
         <div class="profile-pic">
-          <img id="profilepic" src="data:image/png;base64,{{ picturedata }}" alt="{{ picturename }}" height="225">
+          <img id="profilepic" src="data:image/png;base64,{{ picturedata }}" height="225">
         </div>
         <div class="profile-info">
-            <h1 class="user-detail">{{ user.username }}</h1> <span class="user-detail">({{ user.role }})</span> <br>
-          Joined: {{ user.joined }} <br>
-          About {{ user.username }}: {{ user.bio }} <br>
+          <div class="profile-tophalf">
+            <div class="profile-name">
+              <h1 class="user-detail">{{ user.username }}</h1> {% if user.role != "user" %} <span class="user-detail">({{ user.role }})</span> {% endif %} <br>
+            </div>
+            <div class="profile-actions">
+              {% if permission %}
+                <div id="delete">
+                  <a href="/profile/{{ userid }}/delete" class="button button-wide-small" role="button">
+                    <span class="material-symbols-rounded"> delete </span> Delete
+                  </a>
+                </div>
+                <div id="history">
+                  <a href="/profile/{{ userid }}/history" class="button button-wide-small" role="button">
+                    <span class="material-symbols-rounded"> history </span> history
+                  </a>
+                </div>
+                <div id="edit">
+                  <a href="/profile/{{ userid }}/edit" class="button button-wide-small" role="button">
+                    <span class="material-symbols-rounded"> edit </span> edit
+                  </a>
+                </div>
+              {% endif %}
+            </div>
+          </div>
+          <div class="profile-bottom">
+            Joined: {{ user.joined }} <br>
+            About {{ user.username }}: {{ user.bio }} <br>
+          </div>
         </div>
-        {% if permission %}
-          <div class=permissions>
-            <a href="/profile/{{ userid }}/edit"> edit </a>
-            <a href="/profile/{{ userid }}/history"> history </a> 
-            <a href="/profile/{{ userid }}/delete"> delete </a>
+      </div>
+      <div class="shrink">
+        {% if games|length > 0 %}
+          <div class="library">
+            <h1>{{ user.username }}'s library: </h1>
+            {% for game in games %}
+              <div class="game">
+                <a href="/game/{{ game.id }}"> {{ game.title }} </a> <br>
+              </div>
+            {% endfor %}
+          </div>
+        {% endif %}
+
+        <!-- GAMES MADE BY *** -->
+
+        {% if gamesmade|length > 0 %}
+          <div class="gamesmade">
+            <h1>Games made by {{ user.username }} </h1>
+              {% for id, title in gamesmade %}
+              <div class="game">
+                <a href="/game/{{ id }}"> {{ title }} </a> <br>
+              </div>
+              {% endfor %}
           </div>
         {% endif %}
       </div>
-
-      {% if games|length > 0 %}
-        <div class="library">
-          Games in library: <br>
-          {% for game in games %}
-            <div class="game">
-              <a href="/game/{{ game.id }}"> {{ game.title }} </a> <br>
-            </div>
-          {% endfor %}
-        </div>
-      {% endif %}
-
-      {% if gamesmade|length > 0 %}
-        <div class="gamesmade">
-          Games created by <b>{{ user.username }}</b> <br>
-            {% for id, title in gamesmade %}
-            <div class="game">
-              <a href="/game/{{ id }}"> {{ title }} </a> <br>
-            </div>
-            {% endfor %}
-        </div>
-      {% endif %}
     {% endblock %}
   </body>
 </html>

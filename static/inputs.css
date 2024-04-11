@@ -172,3 +172,13 @@ input[type="radio"]:active + label {
 .button-removecart:hover {
     background-color: red;
 }
+
+.button-wide-small {
+    color: white;
+    width: 110px;
+    height: 45px;
+}
+
+.button-wide-small:hover {
+    background-color: red;
+}

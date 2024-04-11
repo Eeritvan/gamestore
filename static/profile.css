@@ -1,5 +1,12 @@
+.shrink {
+    width: 50vw;
+    margin-left: auto;
+    margin-right: auto;
+}
+
 .profile {
-    background-color: grey;
+    background-color: transparent;
+    backdrop-filter: blur(100px);
     box-sizing: border-box;
     border-radius: 15px;
     padding: 10px;
@@ -10,11 +17,54 @@
 }
 
 .profile-pic {
+    background-color: transparent;
     margin-right: 20px;
 }
 
-.permissions {
-    
+.profile-info {
+    background-color: transparent;
+    display: flex;
+    width:100%;
+    flex-direction: column;
+}
+
+.profile-tophalf {
+    background-color: transparent;
+    display: flex;
+    width: 100%;
+    flex: 1;
+}
+
+.profile-name {
+    background-color: transparent;
+    width:60%;
+}
+
+.profile-actions {
+    background-color: transparent;
+    width:40%;
+    display: flex;
+    justify-content: flex-end;
+    flex-wrap: wrap;
+}
+
+#history {
+    background-color: transparent;
+    width: 115px;
+}
+
+#delete {
+    background-color: transparent;
+    width: 115px;
+}
+
+#edit {
+    background-color: transparent;
+    width: 115px;
+}
+
+.profile-bottom {
+    background-color: transparent;
 }
 
 #profilepic {
@@ -22,13 +72,15 @@
 }
 
 .user-detail {
+    background-color: transparent;
     margin-top: 40px;
     margin-bottom: 20px;
     display: inline-block;
 }
 
 .game {
-    background-color: grey;
+    background-color: transparent;
+    backdrop-filter: blur(100px);
     box-sizing: border-box;
     padding: 15px;
     margin-bottom: 5px;
