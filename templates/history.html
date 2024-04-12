@@ -1,26 +1,30 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <link rel="stylesheet" href="/static/singlecolumn.css">
+    <link rel="stylesheet" href="/static/history.css">
+    <link rel="stylesheet" href="/static/inputs.css">
     {% extends "navbar.html" %}
     {% block title %}History{% endblock %}
   </head>
   <body>
     {% block content %}
       <div class="layout">
-        <table>
-            <tr>
-              <th>Date</th>
-              <th>Event</th>
-              <th>Price</th>
-            </tr>
-            {% for date, title, sum in history %}
-            <tr>
-              <th>{{ date }}</th>
-              <th>{% if title != None %} Bought: {{title}} {% else %} Balance added {% endif %}</th>
-              <th>{{ sum }}€</th>
-            </tr>
-            {% endfor %}
+        <div class="boxtitle">
+          <h1> History </h1>
+        </div>
+        <table class="table">
+          <tr>
+            <th>Date</th>
+            <th>Event</th>
+            <th>Sum</th>
+          </tr>
+          {% for date, title, sum in history %}
+          <tr>
+            <td>{{ date }}</td>
+            <td>{% if title != None %} Bought game: {{title}} {% else %} Balance added: {% endif %}</td>
+            <td>{{ sum }}€</td>
+          </tr>
+          {% endfor %}
         </table>
       </div>
     {% endblock %}

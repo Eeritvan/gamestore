@@ -46,7 +46,7 @@
       <div class="shrink">
         {% if games|length > 0 %}
           <div class="library">
-            <h1>{{ user.username }}'s library: </h1>
+            <h1 class="title">{{ user.username }}'s library: </h1>
             {% for game in games %}
               <div class="game">
                 <a href="/game/{{ game.id }}"> {{ game.title }} </a> <br>
@@ -54,12 +54,9 @@
             {% endfor %}
           </div>
         {% endif %}
-
-        <!-- GAMES MADE BY *** -->
-
         {% if gamesmade|length > 0 %}
           <div class="gamesmade">
-            <h1>Games made by {{ user.username }} </h1>
+            <h1 class="title">Games made by {{ user.username }} </h1>
               {% for id, title in gamesmade %}
               <div class="game">
                 <a href="/game/{{ id }}"> {{ title }} </a> <br>
