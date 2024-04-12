@@ -1,18 +1,41 @@
 <!DOCTYPE html>
-
-Editing profile:
-
-<form action="/profile/{{ user.id }}/edit" method="POST" enctype="multipart/form-data">
-    Username = <input type="text" name="username" size="20" minlength="3" maxlength="25" value="{{ user.username }}" required> <br>
-    Bio: <textarea name="bio" rows="5" cols="40" maxlength="500">{{ user.bio }}</textarea> <br>
-    Profile picture: <input type="file" name="profpicture"> <br>
-    Visibility: <input type="radio" name="visibility" value="public" {% if user.visible %} checked {% endif %}> Public <input type="radio" name="visibility" value="private" {% if not user.visible %} checked {% endif %}> Private <br>
-    Change role:
-    <select name="role">
-        <option value="user" {% if user.role == "user" %} selected {% endif %}>User</option>
-        <option value="creator" {% if user.role == "creator" %} selected {% endif %}>Creator</option>
-        <option value="moderator" {% if user.role == "moderator" %} selected {% endif %}>Moderator</option>
-    </select> <br>
-    <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
-    <input type="submit" value="Submit">
-</form>
+<html>
+  <head>
+    <link rel="stylesheet" href="/static/inputs.css">
+    <link rel="stylesheet" href="/static/profile_edit.css">
+    {% extends "navbar.html" %}
+    {% block title %}Edit profile{% endblock %}
+  </head>
+  <body>
+    {% block content %}
+      <div class="layout">
+        <div class="boxtitle">
+          <h1> Edit profile </h1>
+        </div>
+        <div class="content">
+            
+            <form action="/profile/{{ user.id }}/edit" method="POST" enctype="multipart/form-data">
+                Username: <input type="text" class="textfield" name="username" size="20" minlength="3" maxlength="25" value="{{ user.username }}" required> <br>
+                About yourself: <br> <textarea name="bio" class="textbox" maxlength="500">{{ user.bio }}</textarea> <br>
+                Profile picture: <input type="file" class="filearea" name="profpicture"> <br>
+                Visibility:
+                  <input type="radio" id="radiopublic" name="visibility" value="public" {% if user.visible %} checked {% endif %}> 
+                  <label for="radiopublic">Public</label>
+                  <input type="radio" id="radioprivate" name="visibility" value="private" {% if not user.visible %} checked {% endif %}>
+                  <label for="radioprivate">Private</label> <br>
+                Change role:
+                <select name="role" class="selectarea">
+                  <option value="user" {% if user.role == "user" %} selected {% endif %}>User</option>
+                  <option value="creator" {% if user.role == "creator" %} selected {% endif %}>Creator</option>
+                  <option value="moderator" {% if user.role == "moderator" %} selected {% endif %}>Moderator</option>
+                </select> <br>
+                <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
+                <div id="submit">
+                  <button type="submit" class="button button-cart" role="button"> Submit </button>
+                </div>
+            </form>
+        </div>
+      </div>
+    {% endblock %}
+  </body>
+</html>

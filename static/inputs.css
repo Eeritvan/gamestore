@@ -70,7 +70,6 @@ input[type="radio"] + label {
     color: #3B3B3B;
     cursor: pointer;
     font-size: 16px;
-    min-height: 60px;
     padding: 16px 24px;
     text-align: center;
     transition: all 300ms cubic-bezier(.23, 1, 0.32, 1);
@@ -135,50 +134,29 @@ input[type="radio"]:active + label {
    transform: translateY(-2px);
 }
 
-.button:active {
-   box-shadow: none;
-   transform: translateY(0);
-}
-
 .button-wishlist:hover {
-   color: #fff;
    background-color: #0066ff;
 }
 
 .button-unwishlist {
     background-color: #1A1A1A;
- }
- 
-.button-unwishlist:hover {
-   color: #fff;
-   background-color: red;
 }
 
-.button-cart {
+.button-cart, .button-removecart {
    width: 150px;
-   color: #fff;
+   color: white;
 }
 
-.button-cart:hover {
-   color: #fff;
-   background: linear-gradient(to right, rgba(42, 232, 153, 0.85), rgba(78, 81, 232, 1));
-}
-
-.button-removecart {
-    color: #fff;
-    width: 150px;
-}
-
-.button-removecart:hover {
-    background-color: red;
-}
-
-.button-wide-small {
+.button-wide-small-colors, .button-wide-small-remove {
     color: white;
     width: 110px;
     height: 45px;
 }
 
-.button-wide-small:hover {
+.button-cart:hover, .button-wide-small-colors:hover {
+    background: linear-gradient(to right, rgba(42, 232, 153, 0.85), rgba(78, 81, 232, 1));
+ }
+
+.button-wide-small-remove:hover, .button-unwishlist:hover, .button-removecart:hover {
     background-color: red;
 }
