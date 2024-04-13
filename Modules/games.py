@@ -1,6 +1,7 @@
 from sqlalchemy import text
 from sqlalchemy.exc import SQLAlchemyError
 from db import db
+from Modules import users
 
 def add_newgame(title, description, price, date, time, creator):
     try:
@@ -74,7 +75,7 @@ def search_games(query=None, categorylist=None, selectedsort = None):
 
 def update_game(game_id, title, description, price, date, time, user_id):
     ogcreator = get_game(game_id)[6]
-    if user_id != ogcreator:
+    if user_id != ogcreator and not users.is_moderator():
         return False
     try:
         sql = """

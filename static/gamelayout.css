@@ -40,7 +40,7 @@ h1, h2, h3, .ownreviewlayout {
     z-index: 50;
 }
 
-.edit {
+.actions {
     justify-content: flex-end;
     background-color: transparent;
     display: flex;
@@ -246,10 +246,6 @@ h1, h2, h3, .ownreviewlayout {
 #indent {
     margin-left: 5px;
     background-color: transparent;
-}
-
-#link {
-    text-decoration: underline;
 }
 
 #creator {

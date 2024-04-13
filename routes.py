@@ -205,6 +205,7 @@ def preview():
                                                       Recommended size is 1600x900")
     imagelist += imgs
 
+    print(edit)
     return render_template("preview.html", gameid = gameid,
                                            title = title,
                                            description = description,

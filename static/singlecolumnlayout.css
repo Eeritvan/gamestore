@@ -63,7 +63,3 @@ input[type="number"]#own_number {
     display: flex;
     justify-content: center;
 }
-
-#link {
-    text-decoration: underline;
-}

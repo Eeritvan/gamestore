@@ -1,23 +1,73 @@
 <!DOCTYPE html>
-
-Title: {{ title }} <br>
-description: {{ description }} <br>
-Price: {{ price }} € <br>
-Release date: {{ date }} <br>
-Time: {{ time }} <br>
-categories: {% for category in categories %} {{ category }} {% endfor %} <br>
-{% for imagename, imagedata in imagelist %}
-    <img src="data:image/png;base64,{{ imagedata }}" alt="{{ imagename }}" height="500">
-{% endfor %} <br>
-<form action="/game/publish" method="POST">
-    <input type="hidden" name="title" value="{{ title }}">
-    <input type="hidden" name="desc" value="{{ description }}">
-    <input type="hidden" name="price" value="{{ price }}">
-    <input type="hidden" name="date" value="{{ date }}">
-    <input type="hidden" name="time" value="{{ time }}">
-    {% for category in categories %} <input type="hidden" name="categories" value="{{ category }}"> {% endfor %}
-    <input type="hidden" name="edit" value="{{ edit }}">
-    <input type="hidden" name="gameid" value="{{ gameid }}">
-    <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
-    <input type="submit" value="publish">
-</form>
+<html>
+  <head>
+    <link rel="stylesheet" href="/static/gamelayout.css">
+    <link rel="stylesheet" href="/static/inputs.css">
+    {% extends "navbar.html" %}
+    {% block title %}Preview - {{ title }}{% endblock %}
+  </head>
+  <body>
+    {% block content %}
+    <div>
+      <h1 class="title">Preview storepage:</h1>
+    </div>
+    <div class="content">
+        <div class="imagearea">
+          {% for imagename, imagedata in imagelist %}
+            <img class="images" src="data:image/png;base64,{{ imagedata }}" alt="{{ imagename }}">
+          {% endfor %}
+        </div>
+        <div class="infoarea">
+          <div class="actions">
+            <form action="/game/publish" method="POST">
+              <input type="hidden" name="title" value="{{ title }}">
+              <input type="hidden" name="desc" value="{{ description }}">
+              <input type="hidden" name="price" value="{{ price }}">
+              <input type="hidden" name="date" value="{{ date }}">
+              <input type="hidden" name="time" value="{{ time }}">
+              {% for category in categories %}
+                <input type="hidden" name="categories" value="{{ category }}">
+              {% endfor %}
+              <input type="hidden" name="edit" value="{{ edit }}">
+              <input type="hidden" name="gameid" value="{{ gameid }}">
+              <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
+              <button type="submit" class="button button-wide button-cart" role="button"> Publish </button>
+            </form>
+          </div>
+          <div class="gametitle">
+            <h1> {{ title }} </h1>
+          </div>
+          <div class="info">
+            <div class="gameinformation">
+              <div id="creator">
+                Creator: <i> Creator name </i>
+              </div>
+              <div id="indent">Release date: {{ date }} </div>
+            </div>
+            <div class="addwishlist">  
+              <button type="submit" class="button button-wide button-wishlist" role="button"> <span class="material-symbols-rounded"> favorite </span> Wishlist </button>
+            </div>
+          </div>
+          <div class="addcart">
+            <div id="pricesection">
+                {{ price }}€
+            </div>
+            <div id="cartbutton">
+              <button type="submit" class="button button-cart" role="button"> <span class="material-symbols-rounded"> shopping_cart_checkout </span> Add to cart </button>
+            </div>
+          </div>
+          <div class="categories">
+            <h3> Categories: </h3>
+            {% for category in categories %}
+              {{ category }}
+            {% endfor %}
+          </div>
+          <div class="description">
+            <h2> About {{ title }}: </h2>
+            {{ description }}
+          </div>
+        </div>
+      </div>
+    {% endblock %}
+  </body>
+</html>

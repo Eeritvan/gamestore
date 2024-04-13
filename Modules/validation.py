@@ -36,7 +36,7 @@ def validate_gameinfo(title, description, price, date, time):
         return False
     if not price or not checkprice(price):
         return False
-    if not date or date < datetime.now().strftime("%Y-%m-%d") or not checkdate(date):
+    if not date or not checkdate(date):
         return False
     if len(description) > 1000:
         return False

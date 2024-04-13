@@ -19,7 +19,7 @@
         </div>
         <div class="infoarea">
           {% if editpermission %}
-            <div class="edit">
+            <div class="actions">
               <a href="/game/{{ game_id }}/deletegame" id="indent" class="button button-wide-small-remove" role="button">
                 <span class="material-symbols-rounded"> delete </span> delete
               </a>
@@ -94,7 +94,7 @@
                         <input type=hidden name="game_id" value="{{ game_id }}"> 
                         <input type=hidden name="remove" value=""> 
                         <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
-                        <button type="submit" class="button button-cart" role="button"> <span class="material-symbols-rounded"> shopping_cart_checkout </span> Add to cart
+                        <button type="submit" class="button button-cart" role="button"> <span class="material-symbols-rounded"> shopping_cart_checkout </span> Add to cart </button>
                       </form>
                     {% else %}
                       <span class="button button-wide button-disabled"> <span class="material-symbols-rounded"> production_quantity_limits </span> In cart already </span>
