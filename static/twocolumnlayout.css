@@ -1,5 +1,5 @@
 .publishpermission {
-    background-color: transparent;
+    background: linear-gradient(to left, rgba(0, 89, 172, 0.219), transparent);
     backdrop-filter: blur(100px);
     height: 50px;
     border-radius: 15px;
@@ -40,32 +40,20 @@
     background-color: transparent;
     backdrop-filter: blur(100px);
     box-sizing: border-box;
-    padding: 7px;
+    padding: 7px 20px; /* Added padding-right and padding-left from .gameinformation */
     margin-bottom: 5px;
-    border-radius: 7px;
+    border-radius: 15px;
     height: 130px;
     display: flex;
+    flex-direction: column; /* Added from .gameinformation */
     justify-content: space-between;
     border: 2px solid transparent;
+    width: 100%; /* Added from .gameinformation */
 }
 
 .game:hover {
     border: 2px solid lightgrey;
     box-shadow: 0 0 10px black;
-}
-
-.gamethumbnail {
-    background-color: transparent;
-    width: 40%;
-    height: 100%;
-}
-
-.gameinformation {
-    background-color: transparent;
-    width: 60%;
-    height: 100%;
-    display: flex;
-    flex-direction: column;
 }
 
 .tophalf {
@@ -87,7 +75,7 @@
 #title {
     background-color: transparent;
     text-decoration: None;
-    width: 85%;
+    flex: 1;
     height: 100%;
     position: relative;
     white-space: nowrap;
@@ -98,13 +86,13 @@
     background-color: transparent;
     justify-content: flex-end;
     display: flex;
-    width: 15%;
+    width: 60px;
     height: 100%;
 }
 
 #info {
     background-color: transparent;
-    width: 50%;
+    flex: 1;
     height: 100%;
 }
 
@@ -122,16 +110,15 @@
     display: flex;
     align-items: center;
     flex-direction: row;
-    width: 50%;
+    flex: 1;
+    width: 100px;
     height: 100%;
-    margin-right: 20px;
 }
 
 #pricesection_price {
     background-color: transparent;
-    width: 50%;
+    width: 80px;
     height: 100%;
-    margin-right: -10px;
 }
 
 #pricesection_og {
@@ -157,7 +144,7 @@
     align-items: center;
     justify-content: center;
     display: flex;
-    width: 50%;
+    width: 80px;
     height: 60%;
     background: linear-gradient(to right, rgba(138, 31, 226, 0.5), #0066ff); 
     border-radius: 12px;
@@ -167,6 +154,6 @@
     background-color: transparent;
     justify-content: flex-end;
     display: flex;
-    width: 50%;
+    width: 160px;
     height: 100%;
 }

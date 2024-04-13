@@ -27,12 +27,7 @@
         <div class="gamelist">
           {% for game in ownedgames %}
           <div class="game">
-            <div class="gamethumbnail">
-              image here??
-            </div>
-            <div class="gameinformation">
-              <a href="/game/{{ game.id }}" id="title" class="select"> <h2> {{ game.title }} </h2> </a>
-            </div>
+            <a href="/game/{{ game.id }}" id="title" class="select"> <h2> {{ game.title }} </h2> </a>
           </div>
           {% endfor %}
           {% endif %}
