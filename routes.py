@@ -185,12 +185,11 @@ def preview():
                                                                              request.form["time"])
     except TypeError:
         return render_template("error.html", message="Invalid input")
-
     edit = request.form["editing"] == "True"
     gameid = request.form["gameid"] if edit else False
     imagelist = []
     if not temporaryimages.empty_temporary_images(users.user_id()):
-        return render_template("error.html", message="An error occured loading images. Try again.")
+        return render_template("error.html", message="An error occured handling images. Try again.")
 
     if edit:
         selectedimages = request.form.getlist("image_ids")
@@ -200,10 +199,12 @@ def preview():
 
     loadedimages = request.files.getlist("loadedimages")
     imgs = images.load_images(loadedimages)
-    if not imgs:
+    if imgs == False:
         return render_template("error.html", message="Image was too large. \
                                                       Maximum size is 1600x900")
     imagelist += imgs
+    if len(imagelist) > 5:
+        return render_template("error.html", message="too many images")
 
     return render_template("preview.html", gameid = gameid,
                                            title = title,
@@ -287,7 +288,7 @@ def game_page(game_id):
         date = datetime.now().strftime("%Y-%m-%d")
         rating = request.form.get("rating")
         review = request.form.get("review")
-        if validation.validate_rating(rating, review):
+        if review != None and validation.validate_rating(rating, review):
             if request.form.get("edited") == "False":
                 if not reviews.add_review(user_id, game_id, date, rating, review):
                     return render_template("error.html", message="Adding review failed. Try again.")

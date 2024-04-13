@@ -50,7 +50,8 @@ def load_images(images):
             imagedata = b64encode(selected[0][2]).decode("utf-8")
             if validation.validate_imagesize(b64decode(imagedata)) is False:
                 return False
-            imagelist.append((imagename, imagedata))
+            if (imagename, imagedata) != ('', ''):
+                imagelist.append((imagename, imagedata))
             if not temporaryimages.add_temporary_image(users.user_id(), imagename, b64decode(imagedata)):
                 return False
     else:
@@ -59,7 +60,8 @@ def load_images(images):
             imagedata = b64encode(i.read()).decode("utf-8")
             if validation.validate_imagesize(b64decode(imagedata)) is False:
                 return False
-            imagelist.append((imagename, imagedata))
+            if (imagename, imagedata) != ('', ''):
+                imagelist.append((imagename, imagedata))
             if not temporaryimages.add_temporary_image(users.user_id(), imagename, b64decode(imagedata)):
                 return False
     return imagelist
