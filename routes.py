@@ -202,10 +202,9 @@ def preview():
     imgs = images.load_images(loadedimages)
     if not imgs:
         return render_template("error.html", message="Image was too large. \
-                                                      Recommended size is 1600x900")
+                                                      Maximum size is 1600x900")
     imagelist += imgs
 
-    print(edit)
     return render_template("preview.html", gameid = gameid,
                                            title = title,
                                            description = description,

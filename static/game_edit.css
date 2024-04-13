@@ -1,0 +1,92 @@
+p { 
+    background-color: transparent;
+}
+
+.layout {
+    background: transparent;
+    backdrop-filter: blur(100px);
+    margin-top: 6vh;
+    margin-left: auto;
+    margin-right: auto;
+    width: 60%;
+    border-radius: 15px;
+    padding: 10px;
+    flex-direction: column;
+    display: flex;
+}
+
+.info {
+    background: rgba(77, 77, 77, 0.2);
+    margin: 12px;
+    padding-top: 1px;
+    padding-left: 10px;
+    padding-right: 10px;
+    padding-bottom: 10px;
+    box-sizing: border-box;
+    border-radius: 15px;
+}
+
+.images {
+    background: rgba(77, 77, 77, 0.2);
+    margin: 12px;
+    padding-top: 1px;
+    padding-left: 10px;
+    padding-right: 10px;
+    padding-bottom: 10px;
+    box-sizing: border-box;
+    border-radius: 15px;
+}
+
+.categories {
+    background: rgba(77, 77, 77, 0.2);
+    margin: 12px;
+    padding-top: 1px;
+    padding-left: 10px;
+    padding-right: 10px;
+    padding-bottom: 10px;
+    box-sizing: border-box;
+    border-radius: 15px;
+}
+
+.previewbutton {
+    background: transparent;
+    justify-content: center;
+    display: flex;
+}
+
+.textfield {
+    border-radius: 6px;
+    box-shadow: 0 0 7px #4d4d4d;
+    margin-top: 4px;
+    margin-bottom: 4px;
+    margin-right: -20px;
+}
+
+.textbox {
+    border-radius: 6px;
+    box-shadow: 0 0 7px #4d4d4d;
+    margin-top: 4px;
+    margin-bottom: 4px;
+    margin-right: -40px;
+    margin-left: 10px;
+    width: calc(100% - 20px);
+    height: 13vh;
+    resize: none;
+}
+
+.filearea {
+    background-color: transparent;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+.imagearea {
+    background-color: transparent;
+    justify-content: center;
+    display: flex;
+}
+
+.image {
+    border-radius: 10px;
+    margin: 5px;
+}

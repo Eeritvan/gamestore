@@ -8,11 +8,11 @@ input[type="search"] {
     box-shadow: 0 0 7px #4d4d4d;
 }
 
-input[type="checkbox"] {
+input[type="checkbox"]:not(.no-style) {
     display: none;
 }
 
-input[type="checkbox"] + label {
+input[type="checkbox"]:not(.no-style) + label {
     display: inline-flex;
     justify-content: center;
     align-items: center;
@@ -33,21 +33,21 @@ input[type="checkbox"] + label {
     margin: 5px;
 }
 
-input[type="checkbox"] + label:hover {
+input[type="checkbox"]:not(.no-style) + label:hover {
     color: #fff;
     background-color: #1A1A1A;
     box-shadow: rgba(0, 0, 0, 0.25) 0 8px 15px;
     transform: translateY(-2px);
 }
 
-input[type="checkbox"]:checked + label {
+input[type="checkbox"]:not(.no-style):checked + label {
     color: #fff;
     background-color: #1A1A1A;
     box-shadow: rgba(0, 0, 0, 0.25) 0 8px 15px;
     transform: translateY(-2px);
 }
 
-input[type="checkbox"]:active + label {
+input[type="checkbox"]:not(.no-style):active + label {
     box-shadow: none;
     transform: translateY(0);
 }

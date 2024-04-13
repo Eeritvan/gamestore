@@ -1,17 +1,43 @@
 <!DOCTYPE html>
-
-<form action="/game/preview" method="POST" enctype="multipart/form-data">
-    Title of the game: <input type="text" name="title" size="20" minlength="3" maxlength="50" required> <br>
-    Write a description for the game: <textarea name="desc" rows="5" cols="40" maxlength="1000"></textarea> <br>
-    Price: <input type="number" name="price" min="0" max="999" step="0.01" placeholder="0,00">€ <br>
-    Release date: <input type="date" name="date" value="{{current_date}}" min="{{current_date}}" required> <br>
-    Release time: <input type="time" name="time" value="{{current_time}}"> <br>
-    File: <input type="file" name="loadedimages" multiple> <br>
-    Select categories: <br>
-    {% for category in categories %}
-        <input type="checkbox" name="categories" value="{{ category.category }}"> {{ category.category }}
-    {% endfor %}
-    <input type="hidden" name="editing" value="False">
-    <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
-    <input type="submit" value="preview store page"> <br>
-</form>
+<html>
+  <head>
+    <link rel="stylesheet" href="/static/game_edit.css">
+    <link rel="stylesheet" href="/static/inputs.css">
+    {% extends "navbar.html" %}
+    {% block title %}Edit game{% endblock %}
+  </head>
+  <body> 
+    {% block content %}
+      <div class="layout">
+        <h1 class="title"> New game </h1>
+          <form action="/game/preview" method="POST" enctype="multipart/form-data">
+            <div class="info">
+              <h2 class="title"> Information </h2> 
+              Title: <input type="text" class="textfield" name="title" size="20" minlength="3" maxlength="50" required> <br>
+              Price: <input type="number" class="textfield" name="price" min="0" max="999" step="0.01" placeholder="0,00">€ <br>
+              Release date: <input type="date" class="textfield" name="date" value="{{current_date}}" min="{{current_date}}" required> <br>
+              Release time: <input type="time" class="textfield" name="time" value="{{current_time}}"> <br>
+              Description: <br>
+                <textarea name="desc" class="textbox" maxlength="1000"></textarea>
+            </div>
+            <div class="images">
+              <h2 class="title"> Images </h2> 
+              Upload images: <input type="file" class="filearea" name="loadedimages" multiple> <br>
+            </div>
+            <div class="categories">
+              <h2 class="title"> Categories </h2> 
+              {% for category in categories %}
+                <input type="checkbox" id="{{ category.id }}" name="categories" value="{{ category.category }}">
+                <label for="{{ category.id }}">{{ category.category }}</label>
+              {% endfor %}
+            </div>
+            <div class="previewbutton">
+                <input type="hidden" name="editing" value="False">
+                <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
+              <button type="submit" class="button button-cart" role="button"> <span class="material-symbols-rounded"> arrow_forward </span> Preview </button>
+            </div>
+          </form>
+      </div>
+    {% endblock %}
+  </body>
+</html>
