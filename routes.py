@@ -109,6 +109,7 @@ def cart_page():
                 return render_template("error.html", message="This game is already in cart")
             if not cart.add_to_cart(user_id, game_id):
                 return render_template("error.html", message="Adding to cart failed")
+        return redirect(request.referrer)
 
     cartgames = cart.get_cart(user_id)
     total = cart.get_cart_total(user_id)
@@ -260,10 +261,8 @@ def game_page(game_id):
         allreviews = reviews.show_reviews(game_id)
         shuffle(allreviews)
         your_review = reviews.already_reviewed(user_id, game_id)
-        your_image = 0
         if your_review:
             allreviews.remove(your_review)
-            your_image = images.encode_image(your_review[-1])
 
         return render_template("game.html", game_id = game_id,
                                 game = game,
@@ -276,8 +275,9 @@ def game_page(game_id):
                                 reviews = images.encode_reviewpictures(allreviews),
                                 categories = categories.get_categories(game_id),
                                 your_review = your_review,
-                                your_image = your_image,
-                                owned = library.already_in_library(user_id, game_id))
+                                owned = library.already_in_library(user_id, game_id),
+                                cart = [x[0] for x in cart.get_cart(user_id)],
+                                wishlist = [x[0] for x in wishlist.get_wishlist(user_id)])
     check_csrf()
     discount = request.form.get("discount")
     if discount and validation.validate_discount(discount):
@@ -313,10 +313,10 @@ def editgame(game_id):
 
 @app.route("/game/<int:game_id>/deletereview", methods=["GET"])
 def deletereview(game_id):
-    user_id = users.get_userid(request.args.get("username")) if users.is_moderator() else users.user_id()
-    if not reviews.delete_review(user_id, game_id):
-        return render_template("error.html", message="Deleting review failed.")
-    return redirect(f"/game/{game_id}")
+    user_id = request.args.get("id") or users.user_id()
+    if (users.is_moderator() or user_id == users.user_id()) and reviews.delete_review(user_id, game_id):
+        return redirect(f"/game/{game_id}")
+    return render_template("error.html", message="Deleting review failed.")
 
 @app.route("/game/<int:game_id>/deletegame", methods=["GET", "POST"])
 def deletegame(game_id):

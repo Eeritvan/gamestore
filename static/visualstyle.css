@@ -192,7 +192,7 @@ a {
 }
 
 .navbar_vasen {
-    width: 70%;
+    width: 80%;
     display: flex;
     justify-content: flex-start;
     margin-left: 2vw;
@@ -201,7 +201,7 @@ a {
 }
 
 .navbar_oikea {
-    width: 30%;
+    width: 20%;
     justify-content: flex-end;
     display: flex;
     flex-direction: row; /* Change this line */

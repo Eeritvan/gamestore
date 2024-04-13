@@ -100,12 +100,12 @@
                       {% endif %}
                     </div>
                     <div id="cartbutton">
-                      {% if session.user_id %} <!-- if logged in in -->
-                        {% if game not in owned %} <!-- game owned already-->
+                      {% if session.user_id %}
+                        {% if game not in owned %}
                             <span class="button button-wide button-disabled"> <span class="material-symbols-rounded"> check </span> already owned </span>
                         {% else %}
                           {% if game in released %}
-                            {% if game.title not in cart %} <!-- game not in cart yet-->
+                            {% if game.title not in cart %}
                               <form action="/cart" method="POST"> 
                                 <input type=hidden name="game_id" value="{{ game.id }}"> 
                                 <input type=hidden name="remove" value=""> 

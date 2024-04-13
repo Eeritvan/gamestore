@@ -1,0 +1,273 @@
+h1, h2, h3, .ownreviewlayout {
+    background-color: transparent;
+}
+
+.content {
+    width: 100%;
+    height: 99vh;
+    background-color: transparent;
+    display: flex;
+    justify-content: space-between;
+    z-index: 50;
+}
+
+.imagearea {
+    width: 55%;
+    border-radius: 15px;
+    background-color: transparent;
+    backdrop-filter: blur(100px);
+    display: flex;
+    flex-direction: column;
+    overflow-x: hidden;
+    overflow-y: auto;
+    z-index: 50;
+    padding: 5px;
+}
+
+.images {
+    margin: 4px;
+    border-radius: 15px;
+    z-index: 50;
+}
+
+.infoarea {
+    width: 44%;
+    border-radius: 15px;
+    background-color: transparent;
+    backdrop-filter: blur(100px);
+    box-sizing: border-box;
+    padding: 20px;
+    z-index: 50;
+}
+
+.edit {
+    justify-content: flex-end;
+    background-color: transparent;
+    display: flex;
+    margin-bottom: -20px;
+}
+
+.gametitle {
+    background-color: transparent;
+    margin: 30px;
+}
+
+.info {
+    background-color: transparent;
+    height: 60px;
+    display: flex;
+    justify-content: space-between;
+}
+
+.gameinformation {
+    background-color: transparent;
+    flex: 1;
+}
+
+.addwishlist {
+    justify-content: flex-end;
+    display: flex;
+    background: transparent;
+    flex: 1;
+}
+
+.addcart {
+    height: 70px;
+    background-color: transparent;
+    display: flex;
+}
+
+#pricesection {
+    background-color: transparent;
+    justify-content: flex-end;
+    display: flex;
+    align-items: center;
+    flex-direction: row;
+    width: calc(160px + 100%);
+    height: 100%;
+    margin-right: 20px;
+}
+
+#pricesection_price {
+    background-color: transparent;
+    width: 80px;
+    height: 100%;
+    margin-right: -10px;
+}
+
+#pricesection_og {
+    align-items: center;
+    justify-content: center;
+    text-decoration: line-through;
+    color: #3B3B3B;
+    display: flex;
+    height: 50%;
+    background-color: transparent;
+}
+
+#pricesection_discountprice {
+    align-items: center;
+    justify-content: center;
+    display: flex;
+    height: 50%;
+    background-color: transparent;
+}
+
+#pricesection_discount {
+    align-items: center;
+    justify-content: center;
+    display: flex;
+    width: 55px;
+    height: 30px;
+    background: linear-gradient(to right, rgba(138, 31, 226, 0.5), #0066ff); 
+    border-radius: 12px;
+}
+
+#cartbutton {
+    background-color: transparent;
+    justify-content: flex-end;
+    align-items: center;
+    display: flex;
+    width: 150px;
+    height: 100%;
+}
+
+.discount {
+    height: 70px;
+    background-color: transparent;
+    justify-content: flex-end;
+    display: flex;    
+}
+
+.discount form {
+    display: flex;
+    width: 70%;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: nowrap;
+}
+
+.categories {
+    height: 70px;
+    background-color: transparent;
+}
+
+.description {
+    background-color: transparent;
+    word-wrap: break-word;
+    line-height: 1.5;
+}
+
+.reviewarea {
+    margin-top: 3vh;
+    padding: 20px;
+    box-sizing: border-box;
+    background-color: transparent;
+    backdrop-filter: blur(100px);
+    border-radius: 15px;
+    z-index: 50;
+    min-height: 70vh;
+}
+
+.ownreview {
+    background-color: rgba(122, 122, 122, 0.15);
+    border-radius: 15px;
+    margin-left: auto;
+    margin-right: auto;
+    width: 70%;
+    height: 200px;
+    padding: 15px;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+}
+
+.ownreviewlayout form, .reviewlayout {
+    display: flex;
+    width: 100%;
+    background-color: transparent;
+}
+
+.rating {
+    flex: 1;
+    background: transparent;
+}
+
+.reviewtext {
+    flex: 1;
+    background: transparent;
+}
+
+#textbox {
+    border-radius: 6px;
+    box-shadow: 0 0 7px #4d4d4d;
+    height:100px;
+    width:340px;
+    resize: none;
+}
+
+.submitbutton > *:not(:last-child) {
+    margin-bottom: 10px;
+}
+
+.submitbutton {
+    flex: 1;
+    background-color: transparent;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    align-items: flex-end;
+}
+
+.positivereview {
+    background-color: rgba(0, 145, 12, 0.35);
+    border-radius: 15px;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    width: 70%;
+    height: 200px;
+    padding: 15px;
+}
+
+.negativereview {
+    background-color: rgba(126, 0, 0, 0.35);
+    border-radius: 15px;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    width: 70%;
+    height: 200px;
+    padding: 15px;
+}
+
+#indent {
+    margin-left: 5px;
+    background-color: transparent;
+}
+
+#link {
+    text-decoration: underline;
+}
+
+#creator {
+    display: flex;
+    background: transparent;
+    margin-bottom: 5px;
+    margin-left: 5px;
+}
+
+.textfield {
+    border-radius: 6px;
+    box-shadow: 0 0 7px #4d4d4d;
+    margin-top: 4px;
+    margin-bottom: 4px;
+}
+
+.review_user {
+    display: flex;
+    align-items: center;
+    background-color: transparent;
+}

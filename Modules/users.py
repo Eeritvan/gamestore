@@ -47,11 +47,6 @@ def get_username():
         return result.fetchone()[0]
     return False
 
-def get_userid(username):
-    sql = "SELECT id FROM users WHERE username=:username"
-    result =  db.session.execute(text(sql), {"username":username})
-    return result.fetchone()[0]
-
 def is_creator():
     if user_id() != 0:
         sql = "SELECT R.role FROM users U , roles R WHERE U.id=:id AND U.role=R.id"

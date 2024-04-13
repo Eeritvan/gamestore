@@ -1,100 +1,195 @@
 <!DOCTYPE html>
-
-{% if editpermission %}
-Edit game: <a href="/game/{{ game_id }}/edit">edit</a> <a href="/game/{{ game_id }}/deletegame">delete</a>
-<hr>
-{% endif %}
-
-Title: {{ game.title }} <br>
-description: {{ game.description }} <br>
-Price: {{ price.price }}€
-{% if price.percentage %} {{ price.percentage }}% {% endif %}
-{% if price.discountprice != price.price %} {{ price.discountprice }}€ {% endif %} <br>
-{% if editpermission %} <form action="/game/{{ game_id }}" method="POST">
-                            Discount game: <input type="number" name="discount" min="0" max="100" step="1" placeholder="0"> % Off
-                            <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
-                            <input type="submit" value="Submit">
-                        </form> {% endif %}
-Release date:  {{ game.release_date }} <br>
-Creator: <a href="/profile/{{ game.id }}"> {{ game.username }} </a> <br>
-Categories: 
-{% for category in categories %}
-    {{ category.category }} 
-{% endfor %} <br>
-
-<hr>
-
-{% if not session.user_id%}
-    please log in to buy or wishlist games.
-{% else %}
-
-{% if not owned %} 
-    {% if released %}
-        Buy game:
-            <form action="/cart" method="POST"> 
-                <input type=hidden name="game_id" value="{{ game_id }}"> 
-                <input type=hidden name="remove" value=""> 
+<html>
+  <head>
+    <link rel="stylesheet" href="/static/gamelayout.css">
+    <link rel="stylesheet" href="/static/inputs.css">
+    {% extends "navbar.html" %}
+    {% block title %}{{ game.title }}{% endblock %}
+  </head>
+  <body>
+    {% block content %}
+      <div>
+        <h1 class="title">Game:</h1>
+      </div>
+      <div class="content">
+        <div class="imagearea">
+          {% for id, name, data in imagelist %}
+            <img class="images" src="data:image/png;base64,{{ data }}" alt="{{ name }}">
+          {% endfor %}
+        </div>
+        <div class="infoarea">
+          {% if editpermission %}
+            <div class="edit">
+              <a href="/game/{{ game_id }}/deletegame" id="indent" class="button button-wide-small-remove" role="button">
+                <span class="material-symbols-rounded"> delete </span> delete
+              </a>
+              <a href="/game/{{ game_id }}/edit" id="indent" class="button button-wide-small-colors" role="button">
+                <span class="material-symbols-rounded"> edit </span> edit
+              </a>
+            </div>
+          {% endif %}
+          <div class="gametitle">
+            <h1> {{ game.title }} </h1>
+          </div>
+          <div class="info">
+            <div class="gameinformation">
+              <div id="creator">
+                Creator: <a id="link" href="/profile/{{ game.id }}"> {{ game.username }} </a>
+              </div>
+              <div id="indent">Release date:  {{ game.release_date }} </div>
+              {% if not released %}
+                <div id="indent">{{ releasing_in }} </div>
+              {% endif %}
+            </div>
+            <div class="addwishlist">
+              {% if session.user_id%}
+                {% if not owned %} 
+                  {% if game.title not in wishlist %}
+                    <form action="/wishlist" method="POST"> 
+                      <input type=hidden name="game_id" value="{{ game_id }}"> 
+                      <input type=hidden name="remove" value=""> 
+                      <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
+                      <button type="submit" class="button button-wide button-wishlist" role="button"> <span class="material-symbols-rounded"> favorite </span>Wishlist</button>
+                    </form>
+                  {% else %}
+                    <form action="/wishlist" method="POST">
+                      <input type=hidden name="game_id" value="{{ game_id }}">
+                      <input type=hidden name="remove" value="remove">
+                      <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
+                      <button type="submit" class="button button-unwishlist" role="button"> <span class="material-symbols-rounded"> heart_broken </span> </button>
+                    </form>
+                  {% endif %}
+                {% else %}
+                  <span class="button button-disabled"> <span class="material-symbols-rounded"> heart_check </span> </span>
+                {% endif %}
+              {% endif %}
+            </div>
+          </div>
+          <div class="addcart">
+            <div id="pricesection">
+              {% if price.percentage != 0 %}
+                <div id="pricesection_discount">
+                  {{ price.percentage }}%
+                </div>
+                <div id="pricesection_price">
+                  <div id="pricesection_og">
+                    {{ price.price }}€
+                  </div>
+                  <div id="pricesection_discountprice">
+                    {{ price.discountprice }}€
+                  </div>
+                </div>
+              {% else %}
+                {{ game.price }}€
+              {% endif %}
+            </div>
+            <div id="cartbutton">
+              {% if session.user_id %}
+                {% if owned %} 
+                  <span class="button button-wide button-disabled"> <span class="material-symbols-rounded"> check </span> already owned </span>
+                {% else %}
+                  {% if released %}
+                    {% if game.title not in cart %}
+                      <form action="/cart" method="POST"> 
+                        <input type=hidden name="game_id" value="{{ game_id }}"> 
+                        <input type=hidden name="remove" value=""> 
+                        <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
+                        <button type="submit" class="button button-cart" role="button"> <span class="material-symbols-rounded"> shopping_cart_checkout </span> Add to cart
+                      </form>
+                    {% else %}
+                      <span class="button button-wide button-disabled"> <span class="material-symbols-rounded"> production_quantity_limits </span> In cart already </span>
+                    {% endif %}
+                  {% else %}
+                    <span class="button button-wide button-disabled"> <span class="material-symbols-rounded"> schedule </span> Not released </span>
+                  {% endif %}
+                {% endif %}
+              {% else %}
+                <span class="button button-wide button-disabled"> Log in to buy games </span>
+              {% endif %}
+            </div>
+          </div>
+          {% if editpermission %}
+            <div class="discount">
+              <form action="/game/{{ game_id }}" method="POST">  
+                Discount game (% off): <input type="number" class="textfield" name="discount" min="0" max="100" step="1" placeholder="0">
                 <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
-                <input type="submit" value="Add to cart">
-            </form> <br>
-    {% else %}
-        {{ releasing_in }} <br>
-    {% endif %}
-Wishlist game: 
-          <form action="/wishlist" method="POST"> 
-              <input type=hidden name="game_id" value="{{ game_id }}"> 
-              <input type=hidden name="remove" value=""> 
-              <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
-              <input type="submit" value="Add to wishlist">
-          </form>
-{% else %}
-            You already own this game <br>
-{% endif %}
-{% endif %}
-<hr>
-{% for id, name, data in imagelist %}
-    <img src="data:image/png;base64,{{ data }}" alt="{{ name }}" height="500">
-{% endfor %}
-<hr>
-{% if session.user_id %}
-    {% if not owned %}
-        You must buy the game to write a review
-    {% else %}
-        {% if your_review != None %}
-            <img src="data:image/png;base64,{{ your_image }}" alt="profilepicture" height="50"> <br>
-            your review: {{ your_review.username }} {{ your_review.date }} {{ your_review.rating }} {{ your_review.review }} {% if your_review.edited != None %} (edited on: {{ your_review.edited }}) {% endif %}<br>
-            <a href="" onclick="document.getElementById('edit').style.display = 'block'; return false;">edit your review</a>  <p>
-            <form id="edit" action="/game/{{ game_id }}" method="POST" style="display: none;">
-                <input type="hidden" name="edited" value="True">
-                <input type="radio" name="rating" value="positive" {% if your_review.rating == 'positive' %}checked{% endif %}> Positive <br>
-                <input type="radio" name="rating" value="negative" {% if your_review.rating == 'negative' %}checked{% endif %}> Negative <br>
-                <textarea name="review" rows="5" cols="40" maxlength="200">{{ your_review.review }}</textarea> <br>
-                <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
-                <input type="submit" value="submit">
-            </form>
-
-            <a href="/game/{{ game_id }}/deletereview">Delete</a>
-
-        {% else %}
-            write a new review: <form action="/game/{{ game_id }}" method="POST">
-                                    <input type="hidden" name="edited" value="False">
-                                    <input type="radio" name="rating" value="positive" checked> Positive <br>
-                                    <input type="radio" name="rating" value="negative"> Negative <br>
-                                    <textarea name="review" rows="5" cols="40" maxlength="200" placeholder="Write your review here"></textarea> <br>
-                                    <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
-                                    <input type="submit" value="submit">
-                                </form>
+                <button type="submit" class="button button-wide-small-colors" role="button"> submit </button>
+              </form>
+            </div>
+          {% endif %}
+          <div class="categories">
+            <h3> Categories: </h3>
+            {% for category in categories %}
+              {{ category.category }} 
+            {% endfor %}
+          </div>
+          <div class="description">
+            <h2> About {{ game.title }}: </h2>
+            {{ game.description }}
+          </div>
+        </div>
+      </div>
+      <div class="reviewarea">
+        <h2 class="title"> Browse user reviews</h2> <br>
+        {% if session.user_id %}
+          <div class="ownreview">
+            {% if owned %} 
+              <h3> {{ 'Edit your review:' if your_review != None else 'Write a new review:' }} </h3>
+              <div class="ownreviewlayout">
+                <form action="/game/{{ game_id }}" method="POST">
+                  <input type="hidden" name="edited" value="{{ 'True' if your_review != None else 'False' }}">
+                  <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
+                  <div class="rating">
+                    <input type="radio" id="positive" name="rating" value="positive" {% if your_review == None or your_review.rating == 'positive' %}checked{% endif %}> 
+                    <label for="positive" class="button-positive">Positive</label>
+                    <input type="radio" id="negative" name="rating" value="negative" {% if your_review != None and your_review.rating == 'negative' %}checked{% endif %}>
+                    <label for="negative" class="button-negative">Negative</label>
+                  </div>
+                  <div class="reviewtext">
+                    <textarea name="review" id="textbox" maxlength="200" placeholder="(Optional) Write review">{{ your_review.review if your_review != None else '' }}</textarea> <br>
+                  </div>
+                  <div class="submitbutton">
+                    {% if your_review != None %}
+                      <a href="/game/{{ game_id }}/deletereview">
+                        <div class="button button-removecart">Delete</div>
+                      </a>
+                    {% endif %}
+                    <button type="submit" class="button button-cart" role="button"> Submit </button>
+                  </div>
+                </form>
+              </div>
+            {% else %}
+              <h3> Buy the game to review it </h3>
+            {% endif %}
+          </div>
         {% endif %}
-    {% endif %}
-{% else %}
-    please log in to write a review
-{% endif %}
-
-<hr>
-
-{% for id, username, date, edited, rating, review, picturedata in reviews %}
-    <img src="data:image/png;base64,{{ picturedata }}" alt="profilepicture" height="50">
-    <a href="/profile/{{ id }}"> {{ username }} </a>
-    {{ date }} {{ rating }} {{ review }} {% if edited != None %} (edited on: {{ edited }}) {% endif %} 
-    {% if moderator %} <a href="/game/{{ game_id }}/deletereview?username={{ username }}">Delete</a> {% endif %} <br>
-{% endfor %}
+        {% for id, username, date, edited, rating, review, picturedata in reviews %}
+          {% set review_class = 'positivereview' if rating == 'positive' else 'negativereview' %}
+          <div class="{{ review_class }}">
+            <div class="review_user">
+              <img src="data:image/png;base64,{{ picturedata }}" class="images" alt="profilepicture" height="50">
+              <h3> <a href="/profile/{{ id }}" id="link"> {{ username }} </a> </h3>
+            </div>
+            <div class="reviewlayout">
+              <div class="rating">
+                Rating: {{ rating }} <br>
+                Date: {{ date }} <br> 
+                {% if edited %}Edited: {{ edited }} {% endif %}
+              </div>
+              <div class="reviewtext">
+                {{ review }}
+              </div>
+              <div class="submitbutton">
+                {% if moderator %}
+                  <a href="/game/{{ game_id }}/deletereview?id={{ id }}">
+                    <div class="button button-removecart">Delete</div>
+                  </a>
+                {% endif %}
+              </div>
+            </div>
+          </div>
+        {% endfor %}
+      </div>
+    {% endblock %}
+  </body>
+</html>

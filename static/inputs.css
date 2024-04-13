@@ -97,6 +97,14 @@ input[type="radio"]:active + label {
     transform: translateY(0);
 }
 
+input[type="radio"]:checked + .button-positive {
+    background-color: rgba(0, 255, 0, 0.2);
+}
+
+input[type="radio"]:checked + .button-negative {
+    background-color: rgba(255, 0, 0, 0.2);
+}
+
 /* */
 
 .button {
@@ -133,6 +141,10 @@ input[type="radio"]:active + label {
    box-shadow: rgba(0, 0, 0, 0.25) 0 8px 15px;
    transform: translateY(-2px);
 }
+
+.button-wishlist {
+    color: white;
+ }
 
 .button-wishlist:hover {
    background-color: #0066ff;

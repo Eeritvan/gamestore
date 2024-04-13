@@ -18,9 +18,6 @@
           {% if session.user_id %}
             <a href="/balance" class="select"> <span class="material-symbols-rounded"> payments </span> Balance </a>
           {% endif %}
-          {% if creator or moderator %}
-            <a href="/newgame">Create new game</a> <br>
-          {% endif %}
         </div>
         <div class="navbar_oikea">
           {% if session.user_id %}
