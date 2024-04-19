@@ -30,8 +30,9 @@
           <div class="content">
             <div class="content_upper">
               <form action="/login" method="POST">
-                Username: <input type="text" class="textfield" name="username" size="20" required> <br>
+                Username: <input type="text" class="textfield" name="username" size="20" value="{% if username %}{{ username }}{% endif %}" required> <br>
                 Password: <input type="password" class="textfield" name="password" size="20" required> <br>
+                {% if errormessage != False %} <br> {{ errormessage }} {% endif %}
                 <div id="submitbutton">
                   <button type="submit" class="button button-cart" role="button"> <span class="material-symbols-rounded"> login </span>  Login </button>
                 </div>

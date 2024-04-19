@@ -7,18 +7,20 @@ from Modules import users, balance, games, images, validation, reviews, library,
 
 @app.route("/", methods=["GET"])
 def frontpage():
-    return render_template("frontpage.html", balance=balance.get_balance(users.user_id()),
-                                             user = users.get_username(),
+    return render_template("frontpage.html", user = users.get_username(),
                                              user_id = users.user_id())
 
 @app.route("/login", methods=["GET", "POST"])
 def login():
+    error = None
+    username = request.values.get("username")
     if request.method == "POST":
-        username = request.form["username"]
         password = request.form["password"]
         if users.login(username, password):
             return redirect("/")
-    return render_template("login.html", balance=balance.get_balance(users.user_id()))
+        error = "Username and password didn't match"
+    return render_template("login.html", errormessage = error if error != None else False,
+                                         username = username)
 
 @app.route("/logout", methods=["GET"])
 def logout():
@@ -27,18 +29,21 @@ def logout():
 
 @app.route("/register", methods=["GET", "POST"])
 def register():
-    if request.method == "GET":
-        return render_template("register.html", balance=balance.get_balance(users.user_id()))
-    username = request.form["username"]
-    password1 = request.form["password1"]
-    password2 = request.form["password2"]
-    if not validation.validate_username(username):
-        return render_template("error.html", message="Invalid username. Try something else.")
-    if password1 != password2:
-        return render_template("error.html", message="Passwords didn't match.")
-    if users.register(username, password1):
-        return redirect("/")
-    return render_template("error.html", message="This username is already in use.")
+    error = None
+    username = request.values.get("username")
+    if request.method == "POST":
+        password1 = request.form["password1"]
+        password2 = request.form["password2"]
+        if not validation.validate_username(username):
+            error = "Invalid username. Try something else"
+        elif password1 != password2:
+            error = "Passwords didn't match"
+        elif users.register(username, password1):
+            return redirect("/")
+        else: 
+            error = "This username is already in use"
+    return render_template("register.html", errormessage = error if error != None else False,
+                                            username = username)
 
 @app.route("/balance", methods=["GET", "POST"])
 def balance_page():

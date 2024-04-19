@@ -30,9 +30,10 @@
             <div class="content">
               <div class="content_upper">
                 <form action="/register" method="POST">
-                  Create username: <input type="text" class="textfield" name="username" size="20" minlength="3" maxlength="25" required> <br>
+                  Create username: <input type="text" class="textfield" name="username" size="20" minlength="3" maxlength="25" value="{% if username %}{{ username }}{% endif %}" required> <br>
                   Create password: <input type="password" class="textfield" name="password1" size="20" required> <br>
                   Password again: <input type="password" class="textfield" name="password2" size="20" required> <br>
+                  {% if errormessage != False %} <br> {{ errormessage }} {% endif %}
                   <div id="submitbutton">
                     <button type="submit" class="button button-cart" role="button"> <span class="material-symbols-rounded"> login </span>  Register </button>
                   </div>
