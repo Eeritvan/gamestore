@@ -1,6 +1,5 @@
 .content {
-    width: 100%;
-    height: 99vh;
+    height: 100vh;
     display: flex;
     justify-content: space-between;
 }
@@ -10,19 +9,13 @@
     backdrop-filter: blur(100px);
     display: flex;
     flex-direction: column;
-    overflow-x: hidden;
     overflow-y: auto;
     padding: 5px;
-}
-
-.images {
-    margin: 4px;
 }
 
 .infoarea {
     width: 44%;
     backdrop-filter: blur(100px);
-    box-sizing: border-box;
     padding: 20px;
 }
 
@@ -32,24 +25,14 @@
     margin-bottom: -20px;
 }
 
-.gametitle {
-    margin: 30px;
-}
-
 .info {
-    height: 60px;
     display: flex;
     justify-content: space-between;
 }
 
-.gameinformation {
-    flex: 1;
-}
-
-.addwishlist {
+.addwishlist, .discount {
     justify-content: flex-end;
     display: flex;
-    flex: 1;
 }
 
 .addcart {
@@ -61,32 +44,25 @@
     justify-content: flex-end;
     display: flex;
     align-items: center;
-    flex-direction: row;
     width: calc(160px + 100%);
-    height: 100%;
-    margin-right: 20px;
+    margin-right: 10px;
 }
 
-#pricesection_price {
+.pricesection_price {
     width: 80px;
-    height: 100%;
-    margin-right: -10px;
+    height: 70%;
+}
+
+.common-price-section {
+    align-items: center;
+    justify-content: center;
+    display: flex;
+    height: 50%;
 }
 
 #pricesection_og {
-    align-items: center;
-    justify-content: center;
     text-decoration: line-through;
     color: #3B3B3B;
-    display: flex;
-    height: 50%;
-}
-
-#pricesection_discountprice {
-    align-items: center;
-    justify-content: center;
-    display: flex;
-    height: 50%;
 }
 
 #pricesection_discount {
@@ -98,18 +74,9 @@
     background: linear-gradient(to right, rgba(138, 31, 226, 0.5), #0066ff); 
 }
 
-#cartbutton {
-    justify-content: flex-end;
+#cartbutton, .review_user {
     align-items: center;
     display: flex;
-    width: 150px;
-    height: 100%;
-}
-
-.discount {
-    height: 70px;
-    justify-content: flex-end;
-    display: flex;    
 }
 
 .discount form {
@@ -117,48 +84,28 @@
     width: 70%;
     justify-content: space-between;
     align-items: center;
-    flex-wrap: nowrap;
-}
-
-.categories {
-    height: 70px;
-}
-
-.description {
-    word-wrap: break-word;
-    line-height: 1.5;
 }
 
 .reviewarea {
     margin-top: 3vh;
     padding: 20px;
-    box-sizing: border-box;
     backdrop-filter: blur(100px);
     min-height: 70vh;
 }
 
 .ownreview {
     background-color: rgba(122, 122, 122, 0.15);
-    margin-left: auto;
-    margin-right: auto;
+    margin: auto;
     width: 70%;
     height: 200px;
     padding: 15px;
-    box-sizing: border-box;
-    display: flex;
-    flex-direction: column;
 }
 
 .ownreviewlayout form, .reviewlayout {
     display: flex;
-    width: 100%;
 }
 
-.rating {
-    flex: 1;
-}
-
-.reviewtext {
+.rating, .reviewtext {
     flex: 1;
 }
 
@@ -182,36 +129,28 @@
     align-items: flex-end;
 }
 
-.positivereview {
-    background-color: rgba(0, 145, 12, 0.35);
-    margin-left: auto;
-    margin-right: auto;
-    margin-top: 10px;
-    margin-bottom: 10px;
+.review {
+    margin: 10px auto;
     width: 70%;
     height: 200px;
     padding: 15px;
+}
+
+.positivereview {
+    background-color: rgba(0, 145, 12, 0.35);
 }
 
 .negativereview {
     background-color: rgba(126, 0, 0, 0.35);
-    margin-left: auto;
-    margin-right: auto;
-    margin-top: 10px;
-    margin-bottom: 10px;
-    width: 70%;
-    height: 200px;
-    padding: 15px;
 }
 
-#indent {
+.indent {
     margin-left: 5px;
 }
 
-#creator {
+.creator {
     display: flex;
-    margin-bottom: 5px;
-    margin-left: 5px;
+    margin: 5px;
 }
 
 .textfield {
@@ -219,9 +158,4 @@
     box-shadow: 0 0 7px #4d4d4d;
     margin-top: 4px;
     margin-bottom: 4px;
-}
-
-.review_user {
-    display: flex;
-    align-items: center;
 }

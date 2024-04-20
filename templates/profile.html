@@ -9,27 +9,25 @@
   <body>
     {% block content %}
       <div class="profile">
-        <div class="profile-pic">
-          <img id="profilepic" src="data:image/png;base64,{{ picturedata }}" height="225">
-        </div>
-        <div class="profile-info">
+        <img id="profilepic" src="data:image/png;base64,{{ picturedata }}" height="225">
+        <div class="profileinfo">
           <div class="profile-tophalf">
             <div class="profile-name">
               <h1 class="user-detail">{{ user.username }}</h1> {% if user.role != "user" %} <span class="user-detail">({{ user.role }})</span> {% endif %} <br>
             </div>
             <div class="profile-actions">
               {% if permission %}
-                <div id="delete">
+                <div id="action">
                   <a href="/profile/{{ userid }}/delete" class="button button-wide-small-remove" role="button">
                     <span class="material-symbols-rounded"> delete </span> Delete
                   </a>
                 </div>
-                <div id="history">
+                <div id="action">
                   <a href="/profile/{{ userid }}/history" class="button button-wide-small-colors" role="button">
                     <span class="material-symbols-rounded"> history </span> history
                   </a>
                 </div>
-                <div id="edit">
+                <div id="action">
                   <a href="/profile/{{ userid }}/edit" class="button button-wide-small-colors" role="button">
                     <span class="material-symbols-rounded"> edit </span> edit
                   </a>
@@ -46,7 +44,7 @@
       <div class="bottomsection">
         {% if games|length > 0 %}
           <div class="library">
-            <h1 class="title">{{ user.username }}'s library: </h1>
+            <h2 class="title">{{ user.username }}'s library: </h2>
             {% for game in games %}
               <div class="game">
                 <a href="/game/{{ game.id }}"> {{ game.title }} </a> <br>
@@ -56,7 +54,7 @@
         {% endif %}
         {% if gamesmade|length > 0 %}
           <div class="gamesmade">
-            <h1 class="title">Games made by {{ user.username }} </h1>
+            <h2 class="title">Games made by {{ user.username }} </h2>
               {% for id, title in gamesmade %}
               <div class="game">
                 <a href="/game/{{ id }}"> {{ title }} </a> <br>

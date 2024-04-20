@@ -14,31 +14,31 @@
       <div class="content">
         <div class="imagearea">
           {% for id, name, data in imagelist %}
-            <img class="images" src="data:image/png;base64,{{ data }}" alt="{{ name }}">
+            <img style="margin: 4px;" src="data:image/png;base64,{{ data }}" alt="{{ name }}">
           {% endfor %}
         </div>
         <div class="infoarea">
           {% if editpermission %}
             <div class="actions">
-              <a href="/game/{{ game_id }}/deletegame" id="indent" class="button button-wide-small-remove" role="button">
+              <a href="/game/{{ game_id }}/deletegame" class="indent button button-wide-small-remove" role="button">
                 <span class="material-symbols-rounded"> delete </span> delete
               </a>
-              <a href="/game/{{ game_id }}/edit" id="indent" class="button button-wide-small-colors" role="button">
+              <a href="/game/{{ game_id }}/edit" class="indent button button-wide-small-colors" role="button">
                 <span class="material-symbols-rounded"> edit </span> edit
               </a>
             </div>
           {% endif %}
-          <div class="gametitle">
+          <div style="margin: 30px; overflow:hidden;">
             <h1> {{ game.title }} </h1>
           </div>
           <div class="info">
-            <div class="gameinformation">
-              <div id="creator">
+            <div>
+              <div class="creator">
                 Creator: <a id="link" href="/profile/{{ game.id }}"> {{ game.username }} </a>
               </div>
-              <div id="indent">Release date:  {{ game.release_date }} </div>
+              <div class="indent">Release date:  {{ game.release_date }} </div>
               {% if not released %}
-                <div id="indent">{{ releasing_in }} </div>
+                <div class="indent">{{ releasing_in }} </div>
               {% endif %}
             </div>
             <div class="addwishlist">
@@ -71,16 +71,16 @@
                 <div id="pricesection_discount">
                   {{ price.percentage }}%
                 </div>
-                <div id="pricesection_price">
-                  <div id="pricesection_og">
+                <div class="pricesection_price">
+                  <div id="pricesection_og" class="common-price-section">
                     {{ price.price }}€
                   </div>
-                  <div id="pricesection_discountprice">
+                  <div class="common-price-section">
                     {{ price.discountprice }}€
                   </div>
                 </div>
               {% else %}
-                {{ game.price }}€
+                {{ price.price }}€
               {% endif %}
             </div>
             <div id="cartbutton">
@@ -117,20 +117,20 @@
               </form>
             </div>
           {% endif %}
-          <div class="categories">
+          <div style="height: 70px;">
             <h3> Categories: </h3>
             {% for category in categories %}
               {{ category.category }} 
             {% endfor %}
           </div>
-          <div class="description">
+          <div style="line-height: 1.5; overflow:hidden;">
             <h2> About {{ game.title }}: </h2>
             {{ game.description }}
           </div>
         </div>
       </div>
       <div class="reviewarea">
-        <h2 class="title"> Browse user reviews</h2> <br>
+        <h2 class="title"> Browse user reviews </h2> <br>
         {% if session.user_id %}
           <div class="ownreview">
             {% if owned %} 
@@ -165,7 +165,7 @@
         {% endif %}
         {% for id, username, date, edited, rating, review, picturedata in reviews %}
           {% set review_class = 'positivereview' if rating == 'positive' else 'negativereview' %}
-          <div class="{{ review_class }}">
+          <div class=" review {{ review_class }}">
             <div class="review_user">
               <img src="data:image/png;base64,{{ picturedata }}" class="images" alt="profilepicture" height="50">
               <h3> <a href="/profile/{{ id }}" id="link"> {{ username }} </a> </h3>

@@ -1,8 +1,7 @@
 .layout {
     backdrop-filter: blur(100px);
+    margin: auto;
     margin-top: 18vh;
-    margin-left: auto;
-    margin-right: auto;
     width: 25vw;
     min-width: 200px;
     padding: 10px;
@@ -14,26 +13,6 @@
 
 .content {
     margin: 10px;
-}
-
-.textfield {
-    border-radius: 6px;
-    box-shadow: 0 0 7px #4d4d4d;
-    margin-top: 4px;
-    margin-bottom: 4px;
-    margin-right: -20px;
-}
-
-.textbox {
-    border-radius: 6px;
-    box-shadow: 0 0 7px #4d4d4d;
-    margin-top: 4px;
-    margin-bottom: 4px;
-    margin-right: -40px;
-    margin-left: 10px;
-    width: calc(100% - 20px);
-    height: 10vh;
-    resize: none;
 }
 
 .filearea {

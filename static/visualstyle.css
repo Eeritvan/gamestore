@@ -185,3 +185,18 @@ a {
 #link {
     text-decoration: underline;
 }
+
+.textfield {
+    border-radius: 6px;
+    box-shadow: 0 0 7px #4d4d4d;
+    margin: 4px -20px 4px 0;
+}
+
+.textbox {
+    border-radius: 6px;
+    box-shadow: 0 0 7px #4d4d4d;
+    margin: 4px -40px 4px 10px;
+    width: calc(100% - 20px);
+    height: 12vh;
+    resize: none;
+}

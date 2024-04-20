@@ -1,8 +1,7 @@
 .layout {
     backdrop-filter: blur(100px);
+    margin: auto;
     margin-top: 10vh;
-    margin-left: auto;
-    margin-right: auto;
     width: 60%;
     padding: 10px;
     flex-direction: column;

@@ -1,8 +1,7 @@
 .layout {
     backdrop-filter: blur(100px);
+    margin: auto;
     margin-top: 18vh;
-    margin-left: auto;
-    margin-right: auto;
     width: 20vw;
     min-width: 200px;
     min-height: 40vh;
@@ -26,18 +25,6 @@
 
 .content_lower {
     text-align: center;
-}
-
-input[type="number"]#own_number {
-    border: None;
-}
-
-.textfield {
-    border-radius: 6px;
-    box-shadow: 0 0 7px #4d4d4d;
-    margin-top: 4px;
-    margin-bottom: 4px;
-    margin-right: -20px;
 }
 
 #submitbutton {
