@@ -1,22 +1,18 @@
 .layout {
-    background-color: transparent;
     backdrop-filter: blur(100px);
     margin-top: 18vh;
     margin-left: auto;
     margin-right: auto;
     width: 25vw;
     min-width: 200px;
-    border-radius: 15px;
     padding: 10px;
 }
 
 .boxtitle {
-    background: transparent;
     margin-left: 20px;
 }
 
 .content {
-    background: transparent;
     margin: 10px;
 }
 
@@ -41,7 +37,6 @@
 }
 
 .filearea {
-    background-color: transparent;
     margin-top: 10px;
     margin-bottom: 10px;
 }
@@ -60,7 +55,6 @@ input[type="radio"]:checked + label {
 }
 
 #submit {
-    background-color: transparent;
     display: flex;
     justify-content: center;
 }

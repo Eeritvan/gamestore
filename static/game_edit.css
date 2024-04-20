@@ -1,9 +1,4 @@
-p { 
-    background-color: transparent;
-}
-
 .layout {
-    background: transparent;
     backdrop-filter: blur(100px);
     margin-top: 6vh;
     margin-left: auto;
@@ -49,7 +44,6 @@ p {
 }
 
 .previewbutton {
-    background: transparent;
     justify-content: center;
     display: flex;
 }
@@ -75,13 +69,11 @@ p {
 }
 
 .filearea {
-    background-color: transparent;
     margin-top: 10px;
     margin-bottom: 10px;
 }
 
 .imagearea {
-    background-color: transparent;
     justify-content: center;
     display: flex;
 }

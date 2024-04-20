@@ -2,7 +2,6 @@
     background: linear-gradient(to left, rgba(0, 89, 172, 0.219), transparent);
     backdrop-filter: blur(100px);
     height: 50px;
-    border-radius: 15px;
     margin-bottom: 1vh;
     position:relative;
     padding-left: 45%;
@@ -17,16 +16,13 @@
 }
 
 .filters {
-    background-color: transparent;
     backdrop-filter: blur(100px);
     box-sizing: border-box;
     width: 25%;
     padding: 10px;
-    border-radius: 15px;
 }
 
 .categorylist {
-    background-color: transparent;
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
@@ -37,18 +33,16 @@
 }
 
 .game {
-    background-color: transparent;
     backdrop-filter: blur(100px);
     box-sizing: border-box;
-    padding: 7px 20px; /* Added padding-right and padding-left from .gameinformation */
+    padding: 7px 20px;
     margin-bottom: 5px;
-    border-radius: 15px;
     height: 130px;
     display: flex;
-    flex-direction: column; /* Added from .gameinformation */
+    flex-direction: column;
     justify-content: space-between;
     border: 2px solid transparent;
-    width: 100%; /* Added from .gameinformation */
+    width: 100%;
 }
 
 .game:hover {
@@ -57,7 +51,6 @@
 }
 
 .tophalf {
-    background-color: transparent;
     width: 100%;
     height: 50%;
     display: flex;
@@ -65,7 +58,6 @@
 }
 
 .bottomhalf {
-    background-color: transparent;
     width: 100%;
     height: 50%;
     display: flex;
@@ -73,7 +65,6 @@
 }
 
 #title {
-    background-color: transparent;
     text-decoration: None;
     flex: 1;
     height: 100%;
@@ -83,7 +74,6 @@
 }
 
 #wishlist {
-    background-color: transparent;
     justify-content: flex-end;
     display: flex;
     width: 60px;
@@ -91,13 +81,11 @@
 }
 
 #info {
-    background-color: transparent;
     flex: 1;
     height: 100%;
 }
 
 #purchase {
-    background-color: transparent;
     width: 50%;
     height: 100%;
     display: flex;
@@ -105,7 +93,6 @@
 }
 
 #pricesection {
-    background-color: transparent;
     justify-content: flex-end;
     display: flex;
     align-items: center;
@@ -116,7 +103,6 @@
 }
 
 #pricesection_price {
-    background-color: transparent;
     width: 80px;
     height: 100%;
 }
@@ -128,7 +114,6 @@
     color: #3B3B3B;
     display: flex;
     height: 50%;
-    background-color: transparent;
 }
 
 #pricesection_discountprice {
@@ -136,7 +121,6 @@
     justify-content: center;
     display: flex;
     height: 50%;
-    background-color: transparent;
 }
 
 
@@ -147,11 +131,9 @@
     width: 80px;
     height: 60%;
     background: linear-gradient(to right, rgba(138, 31, 226, 0.5), #0066ff); 
-    border-radius: 12px;
 }
 
 #cartbutton {
-    background-color: transparent;
     justify-content: flex-end;
     display: flex;
     width: 160px;

@@ -48,7 +48,7 @@ def load_images(images):
             selected = get_gameimages(None, i)
             imagename = secure_filename(selected[0][1])
             imagedata = b64encode(selected[0][2]).decode("utf-8")
-            if validation.validate_imagesize(b64decode(imagedata)) is False:
+            if validation.validate_imagesize(b64decode(imagedata), 3*1024*1024) is False:
                 return False
             if (imagename, imagedata) != ('', ''):
                 imagelist.append((imagename, imagedata))
@@ -58,7 +58,7 @@ def load_images(images):
         for i in images:
             imagename = secure_filename(i.filename)
             imagedata = b64encode(i.read()).decode("utf-8")
-            if validation.validate_imagesize(b64decode(imagedata)) is False:
+            if validation.validate_imagesize(b64decode(imagedata), 3*1024*1024) is False:
                 return False
             if (imagename, imagedata) != ('', ''):
                 imagelist.append((imagename, imagedata))
@@ -113,6 +113,3 @@ def encode_reviewpictures(allreviews):
         review_list[-1] = encoded_image
         encoded_reviews.append(review_list)
     return encoded_reviews
-
-def encode_image(image):
-    return b64encode(image).decode('utf-8')

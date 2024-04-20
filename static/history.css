@@ -1,29 +1,19 @@
 .layout {
-    background: transparent;
     backdrop-filter: blur(100px);
     margin-top: 10vh;
     margin-left: auto;
     margin-right: auto;
     width: 60%;
-    border-radius: 15px;
     padding: 10px;
     flex-direction: column;
     display: flex;
 }
 
-.boxtitle {
-    background: transparent;
-    margin-left: 20px;
-}
-
 .table {
-    background: transparent;
     margin: 10px;
-    justify-content: center;
 }
 
 .table th {
-    background: transparent;
     border-radius: 7px;
     color: white;
     padding: 5px;
@@ -32,11 +22,9 @@
 
 .table tr:hover {
     background: #41414141;
-
 }
 
 .table td {
-    background: transparent;
     border-radius: 7px;
     padding: 8px;
 }

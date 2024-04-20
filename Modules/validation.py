@@ -45,8 +45,8 @@ def validate_gameinfo(title, description, price, date, time):
 
     return title, description, price, date, time
 
-def validate_imagesize(imagedata):
-    if len(imagedata) > 3*1024*1024:
+def validate_imagesize(imagedata, size):
+    if len(imagedata) > size:
         return False
     return True
 

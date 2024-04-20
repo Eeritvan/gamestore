@@ -37,13 +37,13 @@
               {% endif %}
             </div>
           </div>
-          <div class="profile-bottom">
+          <div>
             Joined: {{ user.joined }} <br>
             About {{ user.username }}: {{ user.bio }} <br>
           </div>
         </div>
       </div>
-      <div class="shrink">
+      <div class="bottomsection">
         {% if games|length > 0 %}
           <div class="library">
             <h1 class="title">{{ user.username }}'s library: </h1>

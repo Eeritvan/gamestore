@@ -11,7 +11,7 @@
       {% if session.user_id %}
         <div class="layout">
           <div class="boxtitle">
-            <h1> add balance </h1>
+            <h1> Add balance </h1>
           </div>
           <div class="content">
             <div class="content_upper">
@@ -31,7 +31,7 @@
                     <input type="number" id="own_number" name="amount" onclick="document.getElementById('own').checked = true" min="1" max="999" step="1" placeholder="Own">
                 </label><br>
                 <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
-                <div id="deposit">
+                <div id="submitbutton">
                   <button type="submit" class="button button-cart" role="button"> <span class="material-symbols-rounded"> wallet </span> Deposit </button>
                 </div>
               </form>

@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <link rel="stylesheet" href="/static/inputs.css">
     <link rel="stylesheet" href="/static/profile_edit.css">
+    <link rel="stylesheet" href="/static/inputs.css">
     {% extends "navbar.html" %}
     {% block title %}Edit profile{% endblock %}
   </head>
@@ -17,7 +17,7 @@
             <form action="/profile/{{ user.id }}/edit" method="POST" enctype="multipart/form-data">
                 Username: <input type="text" class="textfield" name="username" size="20" minlength="3" maxlength="25" value="{{ user.username }}" required> <br>
                 About yourself: <br> <textarea name="bio" class="textbox" maxlength="500">{{ user.bio }}</textarea> <br>
-                Profile picture: <input type="file" class="filearea" name="profpicture"> <br>
+                Profile picture (max 500x500): <input type="file" class="filearea" name="profpicture"> <br>
                 Visibility:
                   <input type="radio" id="radiopublic" name="visibility" value="public" {% if user.visible %} checked {% endif %}> 
                   <label for="radiopublic">Public</label>

@@ -19,7 +19,6 @@ input[type="checkbox"]:not(.no-style) + label {
     appearance: none;
     background-color: rgba(0, 0, 0, 0.2);
     border: 2px solid #1A1A1A;
-    border-radius: 15px;
     box-sizing: border-box;
     color: #3B3B3B;
     cursor: pointer;
@@ -52,7 +51,7 @@ input[type="checkbox"]:not(.no-style):active + label {
     transform: translateY(0);
 }
 
-/* */
+
 
 input[type="radio"] {
     display: none;
@@ -65,7 +64,6 @@ input[type="radio"] + label {
     appearance: none;
     background-color: rgba(0, 0, 0, 0.2);
     border: 2px solid #1A1A1A;
-    border-radius: 15px;
     box-sizing: border-box;
     color: #3B3B3B;
     cursor: pointer;
@@ -105,7 +103,7 @@ input[type="radio"]:checked + .button-negative {
     background-color: rgba(255, 0, 0, 0.2);
 }
 
-/* */
+
 
 .button {
     display: flex;
