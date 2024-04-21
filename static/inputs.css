@@ -1,6 +1,7 @@
 input[type="search"] {
     width: 100%;
     height: 30px;
+    background-color: rgba(0, 0, 0, 0.7);
     padding: 5px;
     border: none;
     border-radius: 5px;
@@ -21,7 +22,7 @@ input[type="checkbox"]:not(.no-style) + label {
     justify-content: center;
     align-items: center;
     appearance: none;
-    background-color: rgba(0, 0, 0, 0.2);
+    background-color: rgba(0, 0, 0, 0.4);
     border: 2px solid #1A1A1A;
     color: #3B3B3B;
     cursor: pointer;
@@ -108,7 +109,7 @@ input[type="radio"]:checked + .button-negative {
     justify-content: center;
     align-items: center;
     appearance: none;
-    background-color: rgba(0, 0, 0, 0.2);
+    background-color: rgba(0, 0, 0, 0.4);
     border: 2px solid #1A1A1A;
     color: #3B3B3B;
     cursor: pointer;
