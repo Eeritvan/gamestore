@@ -10,12 +10,11 @@
   <body>
     {% block content %}
       <div>
+        <h1 class="title">Cart</h1>
+      </div>
         {% if not session.user_id %}
             please log in to buy games.
         {% else %}
-          <div>
-            <h1 class="title">Cart</h1>
-          </div>
           <div class="content">
             <div class="filters">
               <h2 class="title"> Checkout </h2>
@@ -39,7 +38,7 @@
                 <div class="game">
                   <div class="tophalf">
                     <div id="title">
-                        <h2 class="select"> <a href="/game/{{ game.id }}"> {{ game.title }} </a> </h2>
+                      <h2 class="select"> <a href="/game/{{ game.id }}"> {{ game.title }} </a> </h2>
                     </div>
                   </div>
                   <div class="bottomhalf">
@@ -75,8 +74,8 @@
                 </div>
               {% endfor %}
             </div>
+          </div>
         {% endif %}
-      </div>
     {% endblock %}
   </body>
 </html>

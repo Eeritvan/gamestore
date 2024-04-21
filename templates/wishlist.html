@@ -9,84 +9,82 @@
   <body>
     {% block content %}
       <div>
-        {% if not session.user_id %}
-          please log in to wishlist games.
-        {% else %}
-          <div>
-            <h1 class="title">Wishlist</h1>
+        <h1 class="title">Wishlist</h1>
+      </div>
+      {% if not session.user_id %}
+        please log in to wishlist games.
+      {% else %}
+        <div class="content">
+          <div class="filters">
+            <h2 class="title"> Filters </h2>
+            <form action="/wishlist" method="GET">
+              <input type="search" name="query" placeholder="Search" value="{% if searchtext != True %}{{ searchtext }}{% endif %}">
+              <input type="checkbox" name="onsale" id="sale" value="True" {% if pressed == "True" %} checked {% endif %}>
+              <label for="sale">Games on sale</label>
+              <button type="submit" class="button button-wide" role="button"> <span class="material-symbols-rounded"> search </span> search </button>
+            </form>
           </div>
-          <div class="content">
-            <div class="filters">
-              <h2 class="title"> Filters </h2>
-              <form action="/wishlist" method="GET">
-                <input type="search" name="query" placeholder="Search" value="{% if searchtext != True %}{{ searchtext }}{% endif %}">
-                <input type="checkbox" name="onsale" id="sale" value="True" {% if pressed == "True" %} checked {% endif %}>
-                <label for="sale">Games on sale</label>
-                <button type="submit" class="button button-wide" role="button"> <span class="material-symbols-rounded"> search </span> search </button>
-              </form>
-            </div>
-            <div class="gamelist">
-              {% for game in games %}
-                <div class="game">
-                  <div class="tophalf">
-                    <div id="title">
-                      <h2 class="select"> <a href="/game/{{ game.id }}"> {{ game.title }} </a> </h2>
-                    </div>
-                    <div id="wishlist">
-                      <form action="/wishlist" method="POST">
-                          <input type=hidden name="game_id" value="{{ game.id }}">
-                          <input type=hidden name="remove" value="remove">
-                          <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
-                          <button type="submit" class="button button-unwishlist" role="button"> <span class="material-symbols-rounded"> heart_broken </span> </button>
-                      </form>
-                    </div>
+          <div class="gamelist">
+            {% for game in games %}
+              <div class="game">
+                <div class="tophalf">
+                  <div id="title">
+                    <h2 class="select"> <a href="/game/{{ game.id }}"> {{ game.title }} </a> </h2>
                   </div>
-                  <div class="bottomhalf">
-                    <div id="info">
-                      Added to wishlist: {{ game.date }}
+                  <div id="wishlist">
+                    <form action="/wishlist" method="POST">
+                        <input type=hidden name="game_id" value="{{ game.id }}">
+                        <input type=hidden name="remove" value="remove">
+                        <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
+                        <button type="submit" class="button button-unwishlist" role="button"> <span class="material-symbols-rounded"> heart_broken </span> </button>
+                    </form>
+                  </div>
+                </div>
+                <div class="bottomhalf">
+                  <div id="info">
+                    Added to wishlist: {{ game.date }}
+                  </div>
+                  <div id="purchase">
+                    <div id="pricesection">
+                      {% if game.percentage != 0 %}
+                        <div id="pricesection_discount">
+                            {{ game.percentage }}%
+                        </div>
+                        <div id="pricesection_price">
+                            <div id="pricesection_og">
+                              {{ game.price }}€
+                            </div>
+                            <div id="pricesection_discountprice">
+                              {{ game.discountprice }}€
+                            </div>
+                        </div>
+                      {% else %}
+                        {{ game.price }}€
+                      {% endif %}
                     </div>
-                    <div id="purchase">
-                      <div id="pricesection">
-                        {% if game.percentage != 0 %}
-                          <div id="pricesection_discount">
-                              {{ game.percentage }}%
-                          </div>
-                          <div id="pricesection_price">
-                              <div id="pricesection_og">
-                                {{ game.price }}€
-                              </div>
-                              <div id="pricesection_discountprice">
-                                {{ game.discountprice }}€
-                              </div>
-                          </div>
-                        {% else %}
-                          {{ game.price }}€
-                        {% endif %}
-                      </div>
-                      <div id="cartbutton">
-                          {% if game in released %}
-                            {% if game.title not in cart %}
-                              <form action="/cart" method="POST"> 
-                                <input type=hidden name="game_id" value="{{ game.id }}"> 
-                                <input type=hidden name="remove" value=""> 
-                                <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
-                                <button type="submit" class="button button-cart" role="button"> <span class="material-symbols-rounded"> shopping_cart_checkout </span> Add to cart </button>
-                              </form>
-                            {% else %}
-                              <span class="button button-wide button-disabled"> <span class="material-symbols-rounded"> production_quantity_limits </span> In cart already </span>
-                            {% endif %}
+                    <div id="cartbutton">
+                        {% if game in released %}
+                          {% if game.title not in cart %}
+                            <form action="/cart" method="POST"> 
+                              <input type=hidden name="game_id" value="{{ game.id }}"> 
+                              <input type=hidden name="remove" value=""> 
+                              <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
+                              <button type="submit" class="button button-cart" role="button"> <span class="material-symbols-rounded"> shopping_cart_checkout </span> Add to cart </button>
+                            </form>
                           {% else %}
-                            <span class="button button-wide button-disabled"> <span class="material-symbols-rounded"> schedule </span> Not released </span>
+                            <span class="button button-wide button-disabled"> <span class="material-symbols-rounded"> production_quantity_limits </span> In cart already </span>
                           {% endif %}
-                      </div>
+                        {% else %}
+                          <span class="button button-wide button-disabled"> <span class="material-symbols-rounded"> schedule </span> Not released </span>
+                        {% endif %}
                     </div>
                   </div>
                 </div>
-              {% endfor %}
-            </div>
-        {% endif %}
+              </div>
+            {% endfor %}
           </div>
-      </div>
+        </div>
+      {% endif %}
     {% endblock %}
   </body>
 </html>

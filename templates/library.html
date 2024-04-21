@@ -11,28 +11,26 @@
       <div>
         <h1 class="title">Library</h1>
       </div>
-      <div class="error">
-        {% if not session.user_id %}
-          please log in to see your collection.
-        {% else %}
-      </div>
-      <div class="content">
-        <div class="filters">
-          <h2 class="title"> Filters </h2>
-          <form action="/library" method="GET">
-            <input type="search" name="query" placeholder="Search" value="{% if searchtext != True %}{{ searchtext }}{% endif %}">
-            <button type="submit" class="button button-wide" role="button"> <span class="material-symbols-rounded"> search </span> search </button>
-          </form>
-        </div>
-        <div class="gamelist">
-          {% for game in ownedgames %}
-          <div class="game">
-            <a href="/game/{{ game.id }}" id="title" class="select"> <h2> {{ game.title }} </h2> </a>
+      {% if not session.user_id %}
+        please log in to see your collection.
+      {% else %}
+        <div class="content">
+          <div class="filters">
+            <h2 class="title"> Filters </h2>
+            <form action="/library" method="GET">
+              <input type="search" name="query" placeholder="Search" value="{% if searchtext != True %}{{ searchtext }}{% endif %}">
+              <button type="submit" class="button button-wide" role="button"> <span class="material-symbols-rounded"> search </span> search </button>
+            </form>
           </div>
-          {% endfor %}
-        {% endif %}
+          <div class="gamelist">
+            {% for game in ownedgames %}
+            <div class="game">
+              <a href="/game/{{ game.id }}" id="title" class="select"> <h2> {{ game.title }} </h2> </a>
+            </div>
+            {% endfor %}
+          </div>
         </div>
-      </div>
+      {% endif %}
     {% endblock %}
   </body>
 </html>
