@@ -35,117 +35,64 @@ a {
     vertical-align: middle;
 }
 
-@keyframes rotate {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
+@keyframes move {
+    0% { top: var(--top); left: var(--left); }
+    100% { top: calc(var(--top) + 160%);
+           left: calc(var(--left) - 20%); }
 }
 
-.background1 {
-    --easing: cubic-bezier(0.8, 0.2, 0.2, 0.8);
-
+.anim1, .anim2, .anim3, .anim4, .anim5 {
+    --top: -30%;
     position: fixed;
-    top: 2000%;
-    left: 2000%;
     z-index: 0;
     transform: translate(-50%, -50%);
-
-    width: 300px;
-    height: 300px;
     filter: blur(65px);
-    background-image: linear-gradient(rgba(42, 232, 153, 0.85), rgba(78, 81, 232, 1));
     border-radius: 30% 70% 70% 30% / 30% 30% 70% 70%;
 }
 
-.swing11 {
-    position: fixed;
-    top: 60%;
-    left: 75%;
-    height: 10px;
-    width: 10px;
-    animation: rotate 100s infinite;
-}
-
-.swing12 {
-    position: fixed;
-    top: 500%;
-    left: 500%;
-    height: 10px;
-    width: 10px;
-    animation: rotate 50s infinite;
-    animation-timing-function: linear;
-}
-
-.background2 {
-    --easing: cubic-bezier(0.8, 0.2, 0.2, 0.8);
-
-    position: fixed;
-    top: 2000%;
-    left: 2000%;
-    z-index: 0;
-    transform: translate(-50%, -50%);
-
+.anim1 {
     width: 200px;
     height: 200px;
-    filter: blur(65px);
-    background-image: linear-gradient(rgba(210, 42, 232, 0.788), rgb(106, 78, 232));
-    border-radius: 30% 70% 70% 30% / 30% 30% 70% 70%;
+    --left: 15%;
+    animation: move 50s infinite alternate;
+    animation-timing-function: cubic-bezier(0.8, 0.2, 0.2, 0.8);
+    background-image: linear-gradient(rgba(42, 232, 153, 0.85), rgba(78, 81, 232, 1));
 }
 
-.swing21 {
-    position: fixed;
-    top: 70%;
-    left: 45%;
-    height: 10px;
-    width: 10px;
-    animation: rotate 50s infinite;
+.anim2 {
+    width: 210px;
+    height: 220px;
+    --left: 40%;
+    animation: move 20s infinite;
+    background-image: linear-gradient(to right, #fbd3e9, #bb377d);
 }
 
-.swing22 {
-    position: fixed;
-    top: 1000%;
-    left: 1000%;
-    height: 10px;
-    width: 10px;
-    animation: rotate 20s infinite;
-    animation-timing-function: linear;
+.anim3 {
+    width: 250px;
+    height: 250px;
+    --left: 63%;
+    animation: move 30s infinite alternate;
+    animation-timing-function: cubic-bezier(0.4, 0.7, 0.3, 0.2);
+    background-image: linear-gradient(rgba(187, 108, 233, 0.75), rgb(79, 82, 221));
 }
 
-.background3 {
-    --easing: cubic-bezier(0.8, 0.2, 0.2, 0.8);
-
-    position: fixed;
-    top: 2000%;
-    left: 2000%;
-    z-index: 0;
-    transform: translate(-50%, -50%);
-
+.anim4 {
     width: 150px;
     height: 150px;
-    filter: blur(65px);
-    background-image: linear-gradient(rgba(232, 42, 175, 0.85), rgb(232, 114, 78));
-    border-radius: 30% 70% 70% 30% / 30% 30% 70% 70%;
+    --left: 85%;
+    animation: move 15s infinite;
+    animation-timing-function: cubic-bezier(0.2, 0.6, 0.6, 0.1);
+    background-image: linear-gradient(to right, #4b6cb7, #182848);
 }
 
-.swing31 {
-    position: fixed;
-    top: 25%;
-    left: 25%;
-    height: 10px;
-    width: 10px;
-    animation: rotate 90s infinite;
-    animation-timing-function: cubic-bezier(0.8, 0.2, 0.2, 0.8);
+.anim5 {
+    width: 250px;
+    height: 250px;
+    --left: 110%;
+    animation: move 40s infinite alternate;
+    background-image: linear-gradient(to right, #fbd3e9, #bb377d);
 }
 
-.swing32 {
-    position: fixed;
-    top: 800%;
-    left: 800%;
-    height: 10px;
-    width: 10px;
-    animation: rotate 40s infinite;
-    animation-timing-function: linear;
-}
-  
 .backdrop {
     position: sticky;
     top: 0px;
