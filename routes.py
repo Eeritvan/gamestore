@@ -1,6 +1,6 @@
 from datetime import datetime
 from random import shuffle
-from flask import redirect, render_template, request, session, abort
+from flask import redirect, render_template, request, session, abort, flash
 from app import app
 from Modules import users, balance, games, images, validation, reviews, library, \
                     wishlist, cart, history, temporaryimages, categories

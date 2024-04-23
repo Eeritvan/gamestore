@@ -8,16 +8,22 @@ window.onload = function() {
         'linear-gradient(to right, #fbd3e9, #bb377d)'
     ];
 
-    // Shuffle colors array
     for (let i = colors.length - 1; i > 0; i--) {
         let j = Math.floor(Math.random() * (i + 1));
         [colors[i], colors[j]] = [colors[j], colors[i]];
     }
 
     animElements.forEach(function(element, index) {
-        var randomDelay = Math.random() * -60; // random value between -60 and 0
+        var randomDelay = Math.random() * -60;
 
         element.style.animationDelay = randomDelay + 's';
         element.style.backgroundImage = colors[index];
     });
 }
+
+window.onload = function () {
+    mediumZoom('img[alt="gameimage"]', {
+        margin: 100,
+        background: "rgba(0, 0, 0, 0.8)",
+    });
+};
