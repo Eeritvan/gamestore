@@ -19,9 +19,7 @@ window.onload = function() {
         element.style.animationDelay = randomDelay + 's';
         element.style.backgroundImage = colors[index];
     });
-}
 
-window.onload = function () {
     mediumZoom('img[alt="gameimage"]', {
         margin: 100,
         background: "rgba(0, 0, 0, 0.8)",

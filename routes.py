@@ -8,7 +8,8 @@ from Modules import users, balance, games, images, validation, reviews, library,
 @app.route("/", methods=["GET"])
 def frontpage():
     return render_template("frontpage.html", user = users.get_username(),
-                                             user_id = users.user_id())
+                                             user_id = users.user_id(),
+                                             games = games.get_randomgames())
 
 @app.route("/login", methods=["GET", "POST"])
 def login():
@@ -35,13 +36,16 @@ def register():
         password1 = request.form["password1"]
         password2 = request.form["password2"]
         if not validation.validate_username(username):
-            error = "Invalid username. Try something else"
+            error = "Username must be between 3 and 25 characters long"
         elif password1 != password2:
             error = "Passwords didn't match"
+        elif password1 == "":
+            error = "Password must be at least 1 character long"
         elif users.register(username, password1):
             return redirect("/")
         else: 
             error = "This username is already in use"
+    flash(error)
     return render_template("register.html", errormessage = error if error != None else False,
                                             username = username)
 

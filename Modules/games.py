@@ -73,6 +73,25 @@ def search_games(query=None, categorylist=None, selectedsort = None):
     result = db.session.execute(text(sql), parameters).fetchall()
     return result
 
+def get_randomgames():
+    sql = """
+          SELECT G.title, G.price, G.discount, I.imagename
+          FROM games G
+          JOIN (
+              SELECT imagename, game_id
+              FROM (
+                  SELECT imagename, game_id, ROW_NUMBER() OVER(PARTITION BY game_id ORDER BY RANDOM()) as C
+                  FROM images
+                  WHERE imagename <> ''
+              ) B
+              WHERE C = 1
+          ) I ON G.id = I.game_id
+          ORDER BY RANDOM()
+          LIMIT 3
+          """
+    result = db.session.execute(text(sql))
+    return result.fetchall()
+
 def update_game(game_id, title, description, price, date, time, user_id):
     ogcreator = get_game(game_id)[6]
     if user_id != ogcreator and not users.is_moderator():
