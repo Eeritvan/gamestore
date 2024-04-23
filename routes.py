@@ -45,7 +45,6 @@ def register():
             return redirect("/")
         else: 
             error = "This username is already in use"
-    flash(error)
     return render_template("register.html", errormessage = error if error != None else False,
                                             username = username)
 
