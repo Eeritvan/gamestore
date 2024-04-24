@@ -1,4 +1,4 @@
-window.onload = function() {
+window.addEventListener('load', function() {
     var animElements = document.querySelectorAll('.anim1, .anim2, .anim3, .anim4, .anim5');
     var colors = [
         'linear-gradient(rgba(42, 232, 153, 0.85), rgba(78, 81, 232, 1))',
@@ -24,4 +24,4 @@ window.onload = function() {
         margin: 100,
         background: "rgba(0, 0, 0, 0.8)",
     });
-};
+});

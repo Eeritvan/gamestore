@@ -1,0 +1,9 @@
+.gamecontent{
+    position: relative;
+    display: flex;
+    margin-top: 2vh;
+}
+
+.selectbar{
+    display: none;
+}

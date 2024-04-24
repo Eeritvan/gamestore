@@ -113,3 +113,6 @@ def encode_reviewpictures(allreviews):
         review_list[-1] = encoded_image
         encoded_reviews.append(review_list)
     return encoded_reviews
+
+def decode_image(image_data):
+    return b64encode(image_data).decode('utf-8')

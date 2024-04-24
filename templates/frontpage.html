@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
+    <link rel="stylesheet" href="/static/frontpage.css">
     {% extends "navbar.html" %}
     {% block title %}Frontpage{% endblock %}
   </head>
@@ -10,6 +11,32 @@
     <form action="/allgames" method="GET">
       <input type="search" name="query" placeholder="search for games"> <input type="submit" value="Search">
     </form>
+    <div class="content">
+      {% for title, price, discount, creator, imagedata in games %}
+        <div class="gamecontent">
+          <div class="gameimage">
+            <div class="zoom">
+              <img src="data:image/png;base64,{{ imagedata }}" alt="gameimage">
+            </div>
+          </div>
+          <div class="gameinfo">
+            <h2> {{ title }} </h2>
+            {{ price }} {{ discount }} <br>
+            {{ creator }}
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+    <div class="selectbar">
+      {% for title, price, discount, creator, imagedata in games %}
+        <div class="singleselection">
+          <div class="progressbar"></div>
+          {{ title }}
+        </div>
+      {% endfor %}
+    </div>
+  <noscript> <link rel="stylesheet" href="/static/frontpage-nojs.css"> </noscript>
+  <script src="/static/carousel.js"></script>
   {% endblock %}
   </body>
 </html>

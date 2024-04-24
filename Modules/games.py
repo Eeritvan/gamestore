@@ -1,7 +1,7 @@
 from sqlalchemy import text
 from sqlalchemy.exc import SQLAlchemyError
 from db import db
-from Modules import users
+from Modules import users, images
 
 def add_newgame(title, description, price, date, time, creator):
     try:
@@ -75,22 +75,23 @@ def search_games(query=None, categorylist=None, selectedsort = None):
 
 def get_randomgames():
     sql = """
-          SELECT G.title, G.price, G.discount, I.imagename
-          FROM games G
-          JOIN (
-              SELECT imagename, game_id
-              FROM (
-                  SELECT imagename, game_id, ROW_NUMBER() OVER(PARTITION BY game_id ORDER BY RANDOM()) as C
-                  FROM images
-                  WHERE imagename <> ''
-              ) B
-              WHERE C = 1
-          ) I ON G.id = I.game_id
-          ORDER BY RANDOM()
-          LIMIT 3
+            SELECT G.title, G.price, G.discount, U.username AS creator_name, I.imagedata
+            FROM games G
+            JOIN users U ON G.creator_id = U.id
+            JOIN (
+                SELECT imagedata, game_id
+                FROM (
+                    SELECT imagedata, game_id, ROW_NUMBER() OVER(PARTITION BY game_id ORDER BY RANDOM()) as C
+                    FROM images
+                    WHERE imagename <> ''
+                ) B
+                WHERE C = 1
+            ) I ON G.id = I.game_id
+            ORDER BY RANDOM()
+            LIMIT 3
           """
-    result = db.session.execute(text(sql))
-    return result.fetchall()
+    result = db.session.execute(text(sql)).fetchall()
+    return [(i[0], i[1], i[2], i[3], images.decode_image(i[4])) for i in result]
 
 def update_game(game_id, title, description, price, date, time, user_id):
     ogcreator = get_game(game_id)[6]
