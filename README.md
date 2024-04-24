@@ -25,7 +25,7 @@ This repository is for a project made for a University of Helsinki course. The a
 - I might redo some of the error messages to show up on the same page error occurred for better user experience.
 - The frontpage is still empty. I'll probably add a few random games to the frontpage to make it more appealing.
 
-## Testing app on fly.io
+## Testing app on fly.io (last update: 21.4)
 The application can be tested at https://tsoha-pelikauppa.fly.dev/. The fly.io version of the application also includes some games and reviews already instead of being completely empty. Please note that loading might sometimes be a bit slow, especially if site happens to contain images. Also the timezone is a few hours behind on fly.io.
 
 ##  Running locally
