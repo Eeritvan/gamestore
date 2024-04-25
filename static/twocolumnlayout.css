@@ -4,9 +4,14 @@
     height: 50px;
     margin-bottom: 1vh;
     position:relative;
+    border: 1px solid grey;
     display: flex;
     align-items: center;
     justify-content: center;
+}
+
+.publishpermission:hover {
+    border-color: lightgrey;
 }
 
 .content {
@@ -18,6 +23,14 @@
     backdrop-filter: blur(100px);
     width: 25%;
     padding: 10px;
+    background-color: rgba(128, 128, 128, 0.05);
+    border: 2px solid grey;
+    transition: 0.2s ease;
+}
+
+.filters:hover, .game:hover {
+    border-color: lightgrey;
+    background-color: rgba(70, 70, 70, 0.2);
 }
 
 .categorylist {
@@ -35,12 +48,9 @@
     padding: 7px 20px;
     margin-bottom: 5px;
     height: 130px;
-    border: 2px solid transparent;
-}
-
-.game:hover {
-    border: 2px solid lightgrey;
-    box-shadow: 0 0 10px black;
+    background-color: rgba(128, 128, 128, 0.05);
+    border: 2px solid grey;
+    transition: 0.2s ease;
 }
 
 .tophalf, .bottomhalf {

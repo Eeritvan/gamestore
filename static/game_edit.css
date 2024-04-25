@@ -5,12 +5,20 @@
     width: 60%;
     padding: 10px;
     flex-direction: column;
+    background-color: rgba(128, 128, 128, 0.05);
 }
 
 .info, .images, .categories {
     background: rgba(77, 77, 77, 0.2);
     margin: 12px;
     padding: 1px 10px 10px;
+    border: 2px solid grey;
+    transition: 0.2s ease;
+}
+
+.info:hover, .images:hover, .categories:hover {
+    background: rgba(117, 117, 117, 0.2);
+    border-color: lightgrey;
 }
 
 .previewbutton, .imagearea {

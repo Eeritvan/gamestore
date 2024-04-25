@@ -85,11 +85,15 @@ input.searchbar {
 .gameinfo {
     margin: 10px;
     padding: 2%;
-    background-color: rgba(128, 128, 128, 0.05);
-    border-style: solid;
-    border-width: 1px;
-    border-color: grey;
     flex: 1;
+    background-color: rgba(128, 128, 128, 0.05);
+    border: 2px solid grey;
+    transition: 0.2s ease;
+}
+
+.gameinfo:hover, .singleselection:hover {
+    background-color: rgba(70, 70, 70, 0.2);
+    border-color: lightgrey;
 }
 
 .creator {
@@ -146,20 +150,14 @@ input.searchbar {
     position: relative;
     margin: 0.3em;
     background-color: rgba(128, 128, 128, 0.05);
-    border-style: solid;
-    border-width: 1px;
-    border-color: grey;
+    border: 2px solid grey;
     flex:1;
     justify-content: center;
     align-items: center;
     display:flex;
     overflow: hidden;
     cursor: pointer;
-    transition: 0.2s ease-in-out;
-}
-
-.singleselection:hover {
-    background-color: rgba(128, 128, 128, 0.15);
+    transition: 0.2s ease;
 }
 
 .progressbar {

@@ -1,13 +1,11 @@
-.bottomsection {
-    width: 50vw;
-    margin: auto;
-}
-
 .profile {
     backdrop-filter: blur(100px);
     padding: 10px;
     display: flex;
     align-items: start;
+    background-color: rgba(128, 128, 128, 0.05);
+    border: 2px solid grey;
+    transition: 0.2s ease;
 }
 
 .profileinfo {
@@ -36,12 +34,6 @@
     display: inline-block;
 }
 
-.game {
-    backdrop-filter: blur(100px);
-    padding: 15px;
-    margin-bottom: 5px;
-}
-
 #action {
     width: 115px;
 }
@@ -49,4 +41,34 @@
 #profilepic {
     margin-right: 20px;
     border-radius: 25px;
+}
+
+.bottomsection {
+    width: 50vw;
+    margin: auto;
+}
+
+.library {
+    margin-top: 2%;
+    background-color: rgba(128, 128, 128, 0.05);
+    border: 2px solid grey;
+    transition: 0.2s ease;
+}
+
+.gamesmade {
+    margin-top: 2%;
+    background-color: rgba(128, 128, 128, 0.05);
+    border: 2px solid grey;
+    transition: 0.2s ease;
+}
+
+.library:hover, .gamesmade:hover, .profile:hover {
+    background-color: rgba(70, 70, 70, 0.2);
+    border-color: lightgrey;
+}
+
+.game {
+    margin-left:25px;
+    margin-bottom: 5px;
+    text-decoration: underline;
 }

@@ -46,9 +46,7 @@
           <div class="library">
             <h2 class="title">{{ user.username }}'s library: </h2>
             {% for game in games %}
-              <div class="game">
-                <a href="/game/{{ game.id }}"> {{ game.title }} </a> <br>
-              </div>
+              <a class="game" href="/game/{{ game.id }}"> {{ game.title }} </a> <br>
             {% endfor %}
           </div>
         {% endif %}
@@ -56,9 +54,7 @@
           <div class="gamesmade">
             <h2 class="title">Games made by {{ user.username }} </h2>
               {% for id, title in gamesmade %}
-              <div class="game">
-                <a href="/game/{{ id }}"> {{ title }} </a> <br>
-              </div>
+                <a class="game" href="/game/{{ id }}"> {{ title }} </a> <br>
               {% endfor %}
           </div>
         {% endif %}

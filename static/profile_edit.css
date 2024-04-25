@@ -5,6 +5,14 @@
     width: 25vw;
     min-width: 200px;
     padding: 10px;
+    background-color: rgba(128, 128, 128, 0.05);
+    border: 2px solid grey;
+    transition: 0.2s ease;
+}
+
+.layout:hover {
+    background-color: rgba(70, 70, 70, 0.2);
+    border-color: lightgrey;
 }
 
 .boxtitle {

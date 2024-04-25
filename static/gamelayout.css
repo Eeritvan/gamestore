@@ -17,6 +17,14 @@
     width: 44%;
     backdrop-filter: blur(100px);
     padding: 20px;
+    background-color: rgba(128, 128, 128, 0.05);
+    border: 2px solid grey;
+    transition: 0.2s ease;
+}
+
+.infoarea:hover {
+    background-color: rgba(70, 70, 70, 0.2);
+    border-color: lightgrey;
 }
 
 .actions {
@@ -91,6 +99,14 @@
     padding: 20px;
     backdrop-filter: blur(100px);
     min-height: 70vh;
+    background-color: rgba(128, 128, 128, 0.05);
+    border: 2px solid grey;
+    transition: 0.2s ease;
+}
+
+.reviewarea:hover {
+    background-color: rgba(55, 55, 55, 0.20);
+    border-color: lightgrey;
 }
 
 .ownreview {
@@ -99,6 +115,14 @@
     width: 70%;
     height: 200px;
     padding: 15px;
+    background-color: rgba(128, 128, 128, 0.05);
+    border: 2px solid grey;
+    transition: 0.2s ease;
+}
+
+.ownreview:hover {
+    background-color: rgba(70, 70, 70, 0.2);
+    border-color: lightgrey;
 }
 
 .ownreviewlayout form, .reviewlayout {
@@ -134,14 +158,27 @@
     width: 70%;
     height: 200px;
     padding: 15px;
+    background-color: rgba(128, 128, 128, 0.05);
+    border: 2px solid grey;
+    transition: 0.2s ease;
 }
 
 .positivereview {
-    background-color: rgba(0, 145, 12, 0.35);
+    background-color: rgba(0, 145, 10, 0.35);
+}
+
+.positivereview:hover {
+    background-color: rgba(0, 145, 10, 0.45);
+    border-color: lightgrey;
 }
 
 .negativereview {
-    background-color: rgba(126, 0, 0, 0.35);
+    background-color: rgba(125, 0, 0, 0.35);
+}
+
+.negativereview:hover {
+    background-color: rgba(125, 0, 0, 0.50);
+    border-color: lightgrey;
 }
 
 .indent {
