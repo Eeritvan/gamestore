@@ -30,7 +30,11 @@
                   <label for="{{ category.id }}">{{ category.category }}</label>
               {% endfor %}
             </div>
-            <button type="submit" class="button button-wide" role="button"> <span class="material-symbols-rounded"> search </span> search </button>
+            <button type="submit" class="button button-wide" role="button"> <span class="material-symbols-rounded"> search </span> Search </button>
+            <!-- clear filters-->
+            <a href="/allgames">
+              <div class="button button-wide"> <span class="material-symbols-rounded"> close </span> Clear filters </div>
+            </a>
           </form>
         </div>
         <div class="gamelist">
