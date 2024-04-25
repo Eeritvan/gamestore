@@ -7,6 +7,8 @@ from db import db
 
 def add_gameimage(game_id, imagename, imagedata):
     try:
+        if not imagename.lower().endswith((".png", ".jpg", ".jpeg")):
+                return False
         sql = """
                 INSERT INTO
                   images(game_id, imagename, imagedata)

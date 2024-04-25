@@ -40,7 +40,7 @@ def register():
         elif password1 != password2:
             error = "Passwords didn't match"
         elif password1 == "":
-            error = "Password must be at least 1 character long"
+            error = "Password can't be empty"
         elif users.register(username, password1):
             return redirect("/")
         else: 
@@ -250,8 +250,9 @@ def publish():
     if not temporaryimages.empty_temporary_images(user_id):
         return render_template("error.html", message="An error occured loading images.")
     if imagelist and not all(images.add_gameimage(game_id, img[0], img[1]) for img in imagelist):
-        return render_template("error.html", message="Uploading images failed. Try again.")
-
+        return render_template("error.html", message="Uploading some images failed. Make sure the \
+                                                      images are in .png, .jpg or .jpeg format. \
+                                                      Edit the game to missing add images.")
     for category in gamescategories:
         category_id = categories.get_categoryid(category)
         if category_id is None or not categories.add_game_to_category(game_id, category_id):
@@ -304,6 +305,10 @@ def game_page(game_id):
                 if not reviews.edit_review(user_id, game_id, date, rating, review):
                     return render_template("error.html", message="Editing review failed. Try again")
     return redirect(str(game_id))
+
+@app.route("/game/None", methods=["GET"])
+def game_page_deleted():
+    return render_template("error.html", message="This game is no longer available.")
 
 @app.route("/game/<int:game_id>/edit", methods=["GET"])
 def editgame(game_id):
