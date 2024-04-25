@@ -13,10 +13,10 @@
         <div class="navbar_vasen">
           <a href="/" class="select"> <span class="material-symbols-rounded"> home </span> Frontpage</a>
           <a href="/allgames" class="select"> <span class="material-symbols-rounded"> search </span> All games</a>
-          <a href="/library" class="select"> <span class="material-symbols-rounded"> joystick </span> Library</a>
-          <a href="/wishlist" class="select"> <span class="material-symbols-rounded"> favorite </span> Wishlist</a>
-          <a href="/cart" class="select"> <span class="material-symbols-rounded"> shopping_cart </span> Cart</a>
           {% if session.user_id %}
+            <a href="/library" class="select"> <span class="material-symbols-rounded"> joystick </span> Library</a>
+            <a href="/wishlist" class="select"> <span class="material-symbols-rounded"> favorite </span> Wishlist</a>
+            <a href="/cart" class="select"> <span class="material-symbols-rounded"> shopping_cart </span> Cart</a>
             <a href="/balance" class="select"> <span class="material-symbols-rounded"> payments </span> Balance </a>
           {% endif %}
         </div>
@@ -30,21 +30,11 @@
         </div>
       </div>
     </nav>
-    <div class="anim1">
-      <div class="background1"> </div>
-    </div>
-    <div class="anim2">
-      <div class="background1"> </div>
-    </div>
-    <div class="anim3">
-      <div class="background1"> </div>
-    </div>
-    <div class="anim4">
-      <div class="background1"> </div>
-    </div>
-    <div class="anim5">
-      <div class="background1"> </div>
-    </div>
+    <div class="anim1"> </div>
+    <div class="anim2"> </div>
+    <div class="anim3"> </div>
+    <div class="anim4"> </div>
+    <div class="anim5"> </div>
     {% block content %}{% endblock %}
   </body>
 </html>
