@@ -25,10 +25,13 @@
                 <input type="hidden" name="time" value="{{release_time}}">
               {% endif %}
               Description: <br>
-              <textarea name="desc" class="textbox" maxlength="1000">{{game.description}}</textarea>
+              <textarea name="desc" class="textbox" maxlength="1000" placeholder="(optional)">{{game.description}}</textarea>
             </div>
             <div class="images">
-              <h2 class="title"> Images (max 5) </h2> 
+              <div class="inline">
+                <h2 class="title"> Images </h2>
+                <p class="extratitle"> (max 5) </p>
+              </div>
               Upload images: <input type="file" class="filearea" name="loadedimages" multiple> <br>
               <p>Unselect images to delete:</p>
               {% for id, name, data in imagelist %}
@@ -39,7 +42,10 @@
               {% endfor %}
             </div>
             <div class="categories">
-              <h2 class="title"> Categories </h2> 
+              <div class="inline">
+                <h2 class="title"> Categories </h2>
+                <p class="extratitle"> (optional) </p>
+              </div>
               {% for category in categorieslist %}
                 <input type="checkbox" id="{{ category.id }}" name="categories" value="{{ category.category }}" {% if category.category in selectedcategories %} checked {% endif %}>
                 <label for="{{ category.id }}">{{ category.category }}</label>

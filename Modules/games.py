@@ -66,8 +66,9 @@ def search_games(query=None, categorylist=None, selectedsort = None):
     if selectedsort:
         values = {"random":"RANDOM()",
                   "name":"LOWER(G.title)",
-                  "release":"G.release_date",
-                  "price":"discountprice"}
+                  "price":"discountprice",
+                  "latest":"G.release_date DESC, G.release_time DESC",
+                  "oldest":"G.release_date ASC, G.release_time ASC"}
         sql += f" ORDER BY {values[selectedsort]}"
 
     result = db.session.execute(text(sql), parameters).fetchall()

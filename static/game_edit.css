@@ -27,3 +27,12 @@
     border-radius: 10px;
     margin: 5px;
 }
+
+.inline {
+    display: flex;
+    align-items: center;
+}
+
+.extratitle {
+    margin-left: 10px;
+}

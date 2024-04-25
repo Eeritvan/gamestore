@@ -20,8 +20,9 @@
             <select name="sort">
               <option value="random" {% if selectedsort == "random" %} selected {% endif %}>Random</option>
               <option value="name" {% if selectedsort == "name" %} selected {% endif %}>Name</option>
-              <option value="release" {% if selectedsort == "release" %} selected {% endif %}>Release date</option>
               <option value="price" {% if selectedsort == "price" %} selected {% endif %}>Price</option>
+              <option value="latest" {% if selectedsort == "latest" %} selected {% endif %}>Latest first</option>
+              <option value="oldest" {% if selectedsort == "oldest" %} selected {% endif %}>Oldest first</option>
             </select>
             <div class="categorylist">
               {% for category in categories %} 

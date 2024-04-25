@@ -104,6 +104,11 @@ input[type="radio"]:checked + .button-negative {
     background-color: rgba(255, 0, 0, 0.2);
 }
 
+select {
+    background-color: black;
+    color: white; /* Change the text color to white for better visibility */
+}
+
 .button {
     display: flex;
     justify-content: center;
