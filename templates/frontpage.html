@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
+    <link rel="stylesheet" href="/static/inputs.css">
     <link rel="stylesheet" href="/static/frontpage.css">
     {% extends "navbar.html" %}
     {% block title %}Frontpage{% endblock %}
@@ -8,27 +9,53 @@
   <body>
   {% block content %}
     <h1 class="title">Welcome to the store</h1>
-    <form action="/allgames" method="GET">
-      <input type="search" name="query" placeholder="search for games"> <input type="submit" value="Search">
+    <form class="search" action="/allgames" method="GET">
+      <input type="search" name="query" placeholder="search for games" class="searchbar">
+      <button type="submit" class="button button-wide btn" role="button"> <span class="material-symbols-rounded"> search </span>search</button>
     </form>
+    <br> <br>
     <div class="content">
-      {% for title, price, discount, creator, imagedata in games %}
+      {% for id, title, price, percentage, discountprice, creator, imagedata in games %}
         <div class="gamecontent">
           <div class="gameimage">
             <div class="zoom">
-              <img src="data:image/png;base64,{{ imagedata }}" alt="gameimage">
+              <a href="/game/{{ id }}"> <img src="data:image/png;base64,{{ imagedata }}" alt="gameimage"> </a>
             </div>
           </div>
           <div class="gameinfo">
-            <h2> {{ title }} </h2>
-            {{ price }} {{ discount }} <br>
-            {{ creator }}
+            <h2 class="select"> <a href="/game/{{ id }}"> {{ title }} </a> </h2>
+            <div class="creator">
+              Made by: {{ creator }}
+            </div>
+            <div class="pricesection">
+              Price: 
+              {% if percentage != 0 %}
+                <div class="pricesection_price">
+                  <div id="pricesection_og" class="common-price-section">
+                    {{ price }}€
+                  </div>
+                  <div class="common-price-section">
+                    {{ discountprice }}€
+                  </div>
+                </div>
+                <div id="pricesection_discount">
+                  {{ percentage }}%
+                </div>
+              {% else %}
+                {{ price }}€
+              {% endif %}
+            </div>
+            <div class="storepagebtn">
+              <a href="/game/{{ id }}">
+                <div class="button button-wide"> <span class="material-symbols-rounded"> chevron_right </span> Visit store page </div>
+              </a>
+            </div>
           </div>
         </div>
       {% endfor %}
     </div>
     <div class="selectbar">
-      {% for title, price, discount, creator, imagedata in games %}
+      {% for id, title, price, percentage, discountprice, creator, imagedata in games %}
         <div class="singleselection">
           <div class="progressbar"></div>
           {{ title }}

@@ -1,3 +1,29 @@
+.search {
+    display: flex;
+    justify-content: space-between;
+    width: 50%;
+    margin: auto;
+}
+
+input.searchbar {
+    background-color: rgba(80, 80, 80, 0.25);
+    height:35px;
+    margin: 5px;
+    z-index: 10;
+    border-radius: 10px;
+}
+
+.btn {
+    color: white;
+    background-color: rgba(80, 80, 80, 0.25);
+    height:35px;
+    margin: 5px;
+}
+
+.btn:hover {
+    background: linear-gradient(to right, rgba(42, 232, 153, 0.85), rgba(78, 81, 232, 1));
+}
+
 .content {
     position:relative;
     width: 100%;
@@ -16,6 +42,7 @@
 .gamecontent.active {
     animation: fadeIn 1s forwards;
 }
+
 
 @keyframes fadeIn {
     0% { opacity: 0; 
@@ -63,6 +90,47 @@
     border-width: 1px;
     border-color: grey;
     flex: 1;
+}
+
+.creator {
+    margin: 10px;
+}
+
+.pricesection {
+    display: flex;
+    align-items: center;
+    margin: 10px;
+}
+
+.pricesection_price {
+    width: 80px;
+}
+
+.common-price-section {
+    align-items: center;
+    justify-content: center;
+    display: flex;
+    height: 50%;
+}
+
+#pricesection_og {
+    text-decoration: line-through;
+    color: #3B3B3B;
+}
+
+#pricesection_discount {
+    align-items: center;
+    justify-content: center;
+    display: flex;
+    width: 55px;
+    height: 30px;
+    background: linear-gradient(to right, rgba(138, 31, 226, 0.5), #0066ff); 
+}
+
+.storepagebtn {
+    display: flex;
+    margin-top: 10%;
+    justify-content: center;
 }
 
 .selectbar {

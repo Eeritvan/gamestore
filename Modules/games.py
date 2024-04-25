@@ -38,7 +38,7 @@ def search_games(query=None, categorylist=None, selectedsort = None):
     sql = """
             SELECT
               G.title, G.description, G.price, G.release_date, COALESCE(U.username, 'None') AS username,
-              G.id, -ROUND((1-G.discount)*100) as percentage, ROUND(FLOOR(G.price * G.discount * 100) / 100, 2) AS discountprice
+              G.id, -ROUND((1-G.discount)*100) AS percentage, ROUND(FLOOR(G.price * G.discount * 100) / 100, 2) AS discountprice
             FROM
               games G
             LEFT JOIN users U ON G.creator_id = U.id
@@ -75,7 +75,8 @@ def search_games(query=None, categorylist=None, selectedsort = None):
 
 def get_randomgames():
     sql = """
-            SELECT G.title, G.price, G.discount, U.username AS creator_name, I.imagedata
+            SELECT G.id, G.title, G.price, -ROUND((1-G.discount)*100) AS percentage,
+                   ROUND(FLOOR(G.price * G.discount * 100) / 100, 2) AS discountprice, U.username, I.imagedata
             FROM games G
             JOIN users U ON G.creator_id = U.id
             JOIN (
@@ -91,7 +92,7 @@ def get_randomgames():
             LIMIT 3
           """
     result = db.session.execute(text(sql)).fetchall()
-    return [(i[0], i[1], i[2], i[3], images.decode_image(i[4])) for i in result]
+    return [(i[0], i[1], i[2], i[3], i[4], i[5], images.decode_image(i[6])) for i in result]
 
 def update_game(game_id, title, description, price, date, time, user_id):
     ogcreator = get_game(game_id)[6]

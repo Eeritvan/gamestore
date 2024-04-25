@@ -44,7 +44,7 @@
               {% endif %}
             </div>
             <div class="addwishlist">
-              {% if session.user_id%}
+              {% if session.user_id %}
                 {% if not owned %} 
                   {% if game.title not in wishlist %}
                     <form action="/wishlist" method="POST"> 
