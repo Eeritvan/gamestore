@@ -20,12 +20,11 @@ This repository is for a project made for a University of Helsinki course. The a
    - Everyone can set their profile picture (if not set there are few default ones)
    - Everyone can edit their profiles and set it private/public
 
-## Progress (21.4)
+## Progress (26.4)
 - The layout is mostly done but still might need some tweaking. I'll especially try to improve the website's accessibility by tweaking some colors and adding borders to some of the elements for better visibility. Also the buttons might be a bit hard to see sometimes and should be improved. Currently the website also works fairly well on older browsers but there's an issue with some of the icons showing up as text. I'll try to investigate a way to only render such elements on modern browsers.
 - I might redo some of the error messages to show up on the same page error occurred for better user experience.
-- The frontpage is still empty. I'll probably add a few random games to the frontpage to make it more appealing.
 
-## Testing app on fly.io (last update: 21.4)
+## Testing app on fly.io (Updated: 26.4)
 The application can be tested at https://tsoha-pelikauppa.fly.dev/. The fly.io version of the application also includes some games and reviews already instead of being completely empty. Please note that loading might sometimes be a bit slow, especially if site happens to contain images. Also the timezone is a few hours behind on fly.io.
 
 ##  Running locally
