@@ -30,7 +30,7 @@ function nextSlide() {
 
 function resetTimer() {
   clearInterval(slideInterval);
-  slideInterval = setInterval(nextSlide, 15000);
+  slideInterval = setInterval(nextSlide, 12000);
   progressBars[currentSlide].style.width = '0';
 }
 
