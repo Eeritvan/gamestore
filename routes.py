@@ -152,7 +152,7 @@ def allgames():
     user_id = users.user_id()
     query = request.args.get("query")
     categorieslist = request.args.getlist("categories")
-    selectedsort = request.args.get("sort", "random")
+    selectedsort = request.args.get("sort", "name")
 
     gamelist = games.search_games(query, categorieslist, selectedsort)
     wished = [game for game in gamelist if not wishlist.already_in_wishlist(user_id, game[5])]

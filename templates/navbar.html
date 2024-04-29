@@ -12,7 +12,7 @@
       <div class="navbar">
         <div class="navbar_vasen">
           <a href="/" class="select"> <span class="material-symbols-rounded"> home </span> Frontpage</a>
-          <a href="/allgames" class="select"> <span class="material-symbols-rounded"> search </span> All games</a>
+          <a href="/allgames" class="select" style="white-space: nowrap;"><span class="material-symbols-rounded"> search </span> All games</a>
           {% if session.user_id %}
             <a href="/library" class="select"> <span class="material-symbols-rounded"> joystick </span> Library</a>
             <a href="/wishlist" class="select"> <span class="material-symbols-rounded"> favorite </span> Wishlist</a>
@@ -23,7 +23,7 @@
         <div class="navbar_oikea">
           {% if session.user_id %}
             <a href="/logout">logout</a>
-            <a href="/profile/{{session.user_id}}"> your profile </a>
+            <a href="/profile/{{session.user_id}}" style="white-space: nowrap;">your profile</a>
           {% else %}
             <a href="/login">login</a>
           {% endif %}

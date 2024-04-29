@@ -30,10 +30,10 @@
                   <label for="{{ category.id }}">{{ category.category }}</label>
               {% endfor %}
             </div>
-            <button type="submit" class="button button-wide" role="button"> <span class="material-symbols-rounded"> search </span> Search </button>
+            <button type="submit" class="btn btn-colors" role="button"> <span class="material-symbols-rounded"> search </span> Search </button>
             <!-- clear filters-->
             <a href="/allgames">
-              <div class="button button-wide"> <span class="material-symbols-rounded"> close </span> Clear filters </div>
+              <div class="btn btn-remove"> <span class="material-symbols-rounded"> close </span> Clear filters </div>
             </a>
           </form>
         </div>
@@ -55,18 +55,18 @@
                       <input type=hidden name="game_id" value="{{ game.id }}">
                       <input type=hidden name="remove" value="remove">
                       <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
-                      <button type="submit" class="button button-unwishlist" role="button"> <span class="material-symbols-rounded"> heart_broken </span> </button>
+                      <button type="submit" class="btn btn-remove" role="button"> <span class="material-symbols-rounded"> heart_broken </span> Unwish </button>
                     </form>
                   {% else %}
                     {% if session.user_id %}
                       {% if game not in owned %}
-                        <span class="button button-disabled"> <span class="material-symbols-rounded"> heart_check </span> </span>
+                        <span class="btn btn-disabled"> <span class="material-symbols-rounded"> heart_check </span> </span>
                       {% else %}
                         <form action="/wishlist" method="POST">
                           <input type=hidden name="game_id" value="{{ game.id }}"> 
                           <input type=hidden name="remove" value=""> 
                           <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
-                          <button type="submit" class="button button-wishlist" role="button"> <span class="material-symbols-rounded"> favorite </span> </button>
+                          <button type="submit" class="btn btn-colors" role="button"> <span class="material-symbols-rounded"> favorite </span> Add to wishlist </button>
                         </form>
                       {% endif %}
                     {% endif %}
@@ -103,7 +103,7 @@
                   <div id="cartbutton">
                     {% if session.user_id %}
                       {% if game not in owned %}
-                          <span class="button button-wide button-disabled"> <span class="material-symbols-rounded"> check </span> already owned </span>
+                          <span class="btn btn-disabled"> <span class="material-symbols-rounded"> check </span> already owned </span>
                       {% else %}
                         {% if game in released %}
                           {% if game.title not in cart %}
@@ -111,17 +111,17 @@
                               <input type=hidden name="game_id" value="{{ game.id }}"> 
                               <input type=hidden name="remove" value=""> 
                               <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
-                              <button type="submit" class="button button-cart" role="button"> <span class="material-symbols-rounded"> shopping_cart_checkout </span> Add to cart </button>
+                              <button type="submit" class="btn btn-colors" role="button"> <span class="material-symbols-rounded"> shopping_cart_checkout </span> Add to cart </button>
                             </form>
                           {% else %}
-                            <span class="button button-wide button-disabled"> <span class="material-symbols-rounded"> production_quantity_limits </span> In cart already </span>
+                            <span class="btn btn-disabled"> <span class="material-symbols-rounded"> production_quantity_limits </span> In cart already </span>
                           {% endif %}
                         {% else %}
-                          <span class="button button-wide button-disabled"> <span class="material-symbols-rounded"> schedule </span> Not released </span>
+                          <span class="btn btn-disabled"> <span class="material-symbols-rounded"> schedule </span> Not released </span>
                         {% endif %}
                       {% endif %}
                     {% else %}
-                      <span class="button button-wide button-disabled"> Log in to buy games </span>
+                      <span class="btn btn-disabled"> Log in to buy games </span>
                     {% endif %}
                   </div>
                 </div>

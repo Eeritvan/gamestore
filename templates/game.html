@@ -22,10 +22,10 @@
         <div class="infoarea">
           {% if editpermission %}
             <div class="actions">
-              <a href="/game/{{ game_id }}/deletegame" class="indent button button-wide-small-remove" role="button">
+              <a href="/game/{{ game_id }}/deletegame" class="indent btn btn-wide-small btn-remove" role="button">
                 <span class="material-symbols-rounded"> delete </span> delete
               </a>
-              <a href="/game/{{ game_id }}/edit" class="indent button button-wide-small-colors" role="button">
+              <a href="/game/{{ game_id }}/edit" class="indent btn btn-wide-small btn-colors" role="button">
                 <span class="material-symbols-rounded"> edit </span> edit
               </a>
             </div>
@@ -51,18 +51,18 @@
                       <input type=hidden name="game_id" value="{{ game_id }}"> 
                       <input type=hidden name="remove" value=""> 
                       <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
-                      <button type="submit" class="button button-wide button-wishlist" role="button"> <span class="material-symbols-rounded"> favorite </span>Wishlist</button>
+                      <button type="submit" class="btn btn-colors" role="button"> <span class="material-symbols-rounded"> favorite </span>Wishlist</button>
                     </form>
                   {% else %}
                     <form action="/wishlist" method="POST">
                       <input type=hidden name="game_id" value="{{ game_id }}">
                       <input type=hidden name="remove" value="remove">
                       <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
-                      <button type="submit" class="button button-unwishlist" role="button"> <span class="material-symbols-rounded"> heart_broken </span> </button>
+                      <button type="submit" class="btn btn-remove" role="button"> <span class="material-symbols-rounded"> heart_broken </span> </button>
                     </form>
                   {% endif %}
                 {% else %}
-                  <span class="button button-disabled"> <span class="material-symbols-rounded"> heart_check </span> </span>
+                  <span class="btn btn-disabled"> <span class="material-symbols-rounded"> heart_check </span> </span>
                 {% endif %}
               {% endif %}
             </div>
@@ -88,7 +88,7 @@
             <div id="cartbutton">
               {% if session.user_id %}
                 {% if owned %} 
-                  <span class="button button-wide button-disabled"> <span class="material-symbols-rounded"> check </span> already owned </span>
+                  <span class="btn btn-disabled"> <span class="material-symbols-rounded"> check </span> already owned </span>
                 {% else %}
                   {% if released %}
                     {% if game.title not in cart %}
@@ -96,17 +96,17 @@
                         <input type=hidden name="game_id" value="{{ game_id }}"> 
                         <input type=hidden name="remove" value=""> 
                         <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
-                        <button type="submit" class="button button-cart" role="button"> <span class="material-symbols-rounded"> shopping_cart_checkout </span> Add to cart </button>
+                        <button type="submit" class="btn btn-colors" role="button"> <span class="material-symbols-rounded"> shopping_cart_checkout </span> Add to cart </button>
                       </form>
                     {% else %}
-                      <span class="button button-wide button-disabled"> <span class="material-symbols-rounded"> production_quantity_limits </span> In cart already </span>
+                      <span class="btn btn-disabled"> <span class="material-symbols-rounded"> production_quantity_limits </span> In cart already </span>
                     {% endif %}
                   {% else %}
-                    <span class="button button-wide button-disabled"> <span class="material-symbols-rounded"> schedule </span> Not released </span>
+                    <span class="btn btn-disabled"> <span class="material-symbols-rounded"> schedule </span> Not released </span>
                   {% endif %}
                 {% endif %}
               {% else %}
-                <span class="button button-wide button-disabled"> Log in to buy games </span>
+                <span class="btn btn-disabled"> Log in to buy games </span>
               {% endif %}
             </div>
           </div>
@@ -115,7 +115,7 @@
               <form action="/game/{{ game_id }}" method="POST">  
                 Discount game (% off): <input type="number" class="textfield" name="discount" min="0" max="100" step="1" placeholder="0">
                 <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
-                <button type="submit" class="button button-wide-small-colors" role="button"> submit </button>
+                <button type="submit" class="btn btn-wide-small btn-colors" role="button"> submit </button>
               </form>
             </div>
           {% endif %}
@@ -153,10 +153,10 @@
                   <div class="submitbutton">
                     {% if your_review != None %}
                       <a href="/game/{{ game_id }}/deletereview">
-                        <div class="button button-removecart">Delete</div>
+                        <div class="btn btn-remove">Delete</div>
                       </a>
                     {% endif %}
-                    <button type="submit" class="button button-cart" role="button"> Submit </button>
+                    <button type="submit" class="btn btn-colors" role="button"> Submit </button>
                   </div>
                 </form>
               </div>
@@ -184,7 +184,7 @@
               <div class="submitbutton">
                 {% if moderator %}
                   <a href="/game/{{ game_id }}/deletereview?id={{ id }}">
-                    <div class="button button-removecart">Delete</div>
+                    <div class="btn btn-remove">Delete</div>
                   </a>
                 {% endif %}
               </div>

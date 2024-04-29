@@ -109,66 +109,47 @@ select {
     color: white; /* Change the text color to white for better visibility */
 }
 
-.button {
+.btn {
     display: flex;
     justify-content: center;
     align-items: center;
-    appearance: none;
     background-color: rgba(0, 0, 0, 0.4);
     border: 2px solid #1A1A1A;
-    color: #3B3B3B;
+    color: white;
     cursor: pointer;
     font-size: 16px;
     padding: 16px 24px;
     text-align: center;
     transition: all 300ms cubic-bezier(.23, 1, 0.32, 1);
-    width: 50px;
+    width: 150px;
     height: 50px;
 }
 
-.button-wide {
-    width: 150px;
+.btn-box {
+    width: 50px;
 }
 
-.button-disabled {
+.btn-disabled {
     color: rgb(180, 180, 180);
     pointer-events: none;
     cursor: not-allowed;
     opacity: 0.6;
 }
 
-.button:hover {
+.btn:hover {
    box-shadow: rgba(0, 0, 0, 0.25) 0 8px 15px;
    transform: translateY(-2px);
 }
 
-.button-wishlist {
-    color: white;
- }
-
-.button-wishlist:hover {
-   background-color: #0066ff;
-}
-
-.button-unwishlist {
-    background-color: #1A1A1A;
-}
-
-.button-cart, .button-removecart {
-   width: 150px;
-   color: white;
-}
-
-.button-wide-small-colors, .button-wide-small-remove {
-    color: white;
+.btn-wide-small {
     width: 110px;
     height: 45px;
 }
 
-.button-cart:hover, .button-wide-small-colors:hover {
+.btn-colors:hover {
     background: linear-gradient(to right, rgba(42, 232, 153, 0.85), rgba(78, 81, 232, 1));
  }
 
-.button-wide-small-remove:hover, .button-unwishlist:hover, .button-removecart:hover {
+.btn-remove:hover {
     background-color: red;
 }

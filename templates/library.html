@@ -19,15 +19,21 @@
             <h2 class="title"> Filters </h2>
             <form action="/library" method="GET">
               <input type="search" name="query" placeholder="Search" value="{% if searchtext != True %}{{ searchtext }}{% endif %}">
-              <button type="submit" class="button button-wide" role="button"> <span class="material-symbols-rounded"> search </span> search </button>
+              <button type="submit" class="btn btn-colors" role="button"> <span class="material-symbols-rounded"> search </span> search </button>
             </form>
           </div>
           <div class="gamelist">
-            {% for game in ownedgames %}
-            <div class="game">
-              <a href="/game/{{ game.id }}" id="title" class="select"> <h2> {{ game.title }} </h2> </a>
-            </div>
-            {% endfor %}
+            {% if ownedgames|length > 0 %}
+              {% for game in ownedgames %}
+              <div class="game">
+                <a href="/game/{{ game.id }}" id="title" class="select"> <h2> {{ game.title }} </h2> </a>
+              </div>
+              {% endfor %}
+            {% else %}
+              <div class="game">
+                <h3> No games here yet </h3>
+              </div>
+            {% endif %}
           </div>
         </div>
       {% endif %}
