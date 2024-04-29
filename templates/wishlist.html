@@ -19,9 +19,13 @@
             <h2 class="title"> Filters </h2>
             <form action="/wishlist" method="GET">
               <input type="search" name="query" placeholder="Search" value="{% if searchtext != True %}{{ searchtext }}{% endif %}">
-              <input type="checkbox" name="onsale" id="sale" value="True" {% if pressed == "True" %} checked {% endif %}>
-              <label for="sale">Games on sale</label>
-              <button type="submit" class="btn btn-colors" role="button"> <span class="material-symbols-rounded"> search </span> search </button>
+              <div class="center">
+                <input type="checkbox" name="onsale" id="sale" value="True" {% if pressed == "True" %} checked {% endif %}>
+                <label for="sale">Games on sale</label>
+              </div>
+              <div class="center">
+                <button type="submit" class="btn btn-colors" role="button"> <span class="material-symbols-rounded"> search </span> search </button>
+              </div>
             </form>
           </div>
           <div class="gamelist">
@@ -37,7 +41,7 @@
                           <input type=hidden name="game_id" value="{{ game.id }}">
                           <input type=hidden name="remove" value="remove">
                           <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
-                          <button type="submit" class="btn btn-remove" role="button"> <span class="material-symbols-rounded"> heart_broken </span> </button>
+                          <button type="submit" class="btn btn-remove" role="button"> <span class="material-symbols-rounded"> heart_broken </span> Unwish </button>
                       </form>
                     </div>
                   </div>

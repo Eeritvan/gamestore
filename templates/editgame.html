@@ -48,7 +48,7 @@
               </div>
               {% for category in categorieslist %}
                 <input type="checkbox" id="{{ category.id }}" name="categories" value="{{ category.category }}" {% if category.category in selectedcategories %} checked {% endif %}>
-                <label for="{{ category.id }}">{{ category.category }}</label>
+                <label for="{{ category.id }}" style="white-space: nowrap;">{{ category.category }}</label>
               {% endfor %}
             </div>
             <div class="previewbutton">

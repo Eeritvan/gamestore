@@ -34,7 +34,7 @@
               </div>
               {% for category in categories %}
                 <input type="checkbox" id="{{ category.id }}" name="categories" value="{{ category.category }}">
-                <label for="{{ category.id }}">{{ category.category }}</label>
+                <label for="{{ category.id }}" style="white-space: nowrap;">{{ category.category }}</label>
               {% endfor %}
             </div>
             <div class="previewbutton">

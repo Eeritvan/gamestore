@@ -21,16 +21,18 @@
               {% if cartgames|length > 0 %}
                 Balance: {{ balance }} € <br>
                 Total: {{ total }} €
-                <form action="/cart/checkout" method="POST" >
-                  <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
-                  {% if not enough_balance %}
-                    <button type="submit" class="btn button-disabled" role="button" >Not enought balance</button>
-                  {% else %}
-                    <button type="submit" class="btn btn-colors" role="button">
-                      <span class="material-symbols-rounded"> account_balance_wallet </span> Pay
-                    </button>
-                  {% endif %}
-                </form>
+                <div class="center">
+                  <form action="/cart/checkout" method="POST" >
+                    <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
+                    {% if not enough_balance %}
+                      <button type="submit" class="btn button-disabled" role="button" >Not enought balance</button>
+                    {% else %}
+                      <button type="submit" class="btn btn-colors" role="button">
+                        <span class="material-symbols-rounded"> account_balance_wallet </span> Pay
+                      </button>
+                    {% endif %}
+                  </form>
+                </div>
               {% endif %}
             </div>
             <div class="gamelist">
