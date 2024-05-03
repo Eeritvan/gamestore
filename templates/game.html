@@ -4,7 +4,7 @@
     <link rel="stylesheet" href="/static/css/gamelayout.css">
     <link rel="stylesheet" href="/static/css/inputs.css">
     <script src="https://cdn.jsdelivr.net/npm/medium-zoom@1.1.0/dist/medium-zoom.min.js"></script>
-    {% extends "navbar.html" %}
+    {% extends "base.html" %}
     {% block title %}{{ game.title }}{% endblock %}
   </head>
   <body>
@@ -111,7 +111,7 @@
               <form action="/game/{{ game_id }}" method="POST">  
                 Discount game (% off): <input type="number" class="textfield" name="discount" min="0" max="100" step="1" placeholder="0">
                 <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
-                <button type="submit" class="btn btn-wide-small btn-colors" role="button"> submit </button>
+                <button type="submit" class="btn btn-wide-small btn-colors mar" role="button"> submit </button>
               </form>
             </div>
           {% endif %}
