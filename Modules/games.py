@@ -168,3 +168,12 @@ def games_by_creator(user_id):
           """
     result = db.session.execute(text(sql), {"userid":user_id})
     return result.fetchall()
+
+def check_title(title):
+    sql = """
+            SELECT id
+            FROM games
+            WHERE title =:title
+          """
+    result = db.session.execute(text(sql), {"title":title})
+    return result.fetchone()

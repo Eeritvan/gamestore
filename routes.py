@@ -1,6 +1,6 @@
 from datetime import datetime
 from random import shuffle
-from flask import redirect, render_template, request, session, abort, flash
+from flask import redirect, render_template, request, session, abort
 from app import app
 from Modules import users, balance, games, images, validation, reviews, library, \
                     wishlist, cart, history, temporaryimages, categories
@@ -20,7 +20,7 @@ def login():
         if users.login(username, password):
             return redirect("/")
         error = "Username and password didn't match"
-    return render_template("login.html", errormessage = error if error != None else False,
+    return render_template("login.html", errormessage = error if error is not None else False,
                                          username = username)
 
 @app.route("/logout", methods=["GET"])
@@ -43,9 +43,9 @@ def register():
             error = "Password can't be empty"
         elif users.register(username, password1):
             return redirect("/")
-        else: 
+        else:
             error = "This username is already in use"
-    return render_template("register.html", errormessage = error if error != None else False,
+    return render_template("register.html", errormessage = error if error is not None else False,
                                             username = username)
 
 @app.route("/balance", methods=["GET", "POST"])
@@ -193,11 +193,16 @@ def preview():
                                                                              request.form["time"])
     except TypeError:
         return render_template("error.html", message="Invalid input")
+
     edit = request.form["editing"] == "True"
     gameid = request.form["gameid"] if edit else False
     imagelist = []
     if not temporaryimages.empty_temporary_images(users.user_id()):
         return render_template("error.html", message="An error occured handling images. Try again.")
+
+    if not edit:
+        if games.check_title(request.form["title"]):
+            return render_template("error.html", message="Title already exists.")
 
     if edit:
         selectedimages = request.form.getlist("image_ids")
@@ -207,7 +212,7 @@ def preview():
 
     loadedimages = request.files.getlist("loadedimages")
     imgs = images.load_images(loadedimages)
-    if imgs == False:
+    if imgs is False:
         return render_template("error.html", message="Image was too large. \
                                                       Maximum size is 1600x900")
     imagelist += imgs
@@ -297,7 +302,7 @@ def game_page(game_id):
         date = datetime.now().strftime("%Y-%m-%d")
         rating = request.form.get("rating")
         review = request.form.get("review")
-        if review != None and validation.validate_rating(rating, review):
+        if review is not None and validation.validate_rating(rating, review):
             if request.form.get("edited") == "False":
                 if not reviews.add_review(user_id, game_id, date, rating, review):
                     return render_template("error.html", message="Adding review failed. Try again.")
