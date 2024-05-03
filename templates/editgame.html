@@ -30,15 +30,17 @@
             <div class="images">
               <div class="inline">
                 <h2 class="title"> Images </h2>
-                <p class="extratitle"> (max 5) </p>
+                <p class="extratitle"> (limit 5) (max size: 1600x900) </p>
               </div>
               Upload images: <input type="file" class="filearea" name="loadedimages" multiple accept="image/png, image/jpg, image/jpeg"> <br>
               <p>Unselect images to delete:</p>
               {% for id, name, data in imagelist %}
-                  <div class="imagearea">
-                    <input type="checkbox" class="no-style" name="image_ids" value="{{ id }}" checked>
+                <div class="imagearea">
+                  <input type="checkbox" class="no-style" id="checkbox{{ id }}" name="image_ids" value="{{ id }}" checked>
+                  <label for="checkbox{{ id }}">
                     <img class="image" src="data:image/png;base64,{{ data }}" alt="{{ name }}" height="150">
-                  </div>
+                  </label>
+                </div>
               {% endfor %}
             </div>
             <div class="categories">
