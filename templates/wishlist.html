@@ -24,7 +24,7 @@
                 <label for="sale">Games on sale</label>
               </div>
               <div class="center">
-                <button type="submit" class="btn btn-colors" role="button"> <span class="material-symbols-rounded"> search </span> search </button>
+                <button type="submit" class="btn btn-colors search-icon" role="button"> search </button>
               </div>
             </form>
           </div>
@@ -41,7 +41,7 @@
                           <input type=hidden name="game_id" value="{{ game.id }}">
                           <input type=hidden name="remove" value="remove">
                           <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
-                          <button type="submit" class="btn btn-remove" role="button"> <span class="material-symbols-rounded"> heart_broken </span> Unwish </button>
+                          <button type="submit" class="btn btn-remove unwish-icon" role="button"> Unwish </button>
                       </form>
                     </div>
                   </div>
@@ -74,13 +74,13 @@
                                 <input type=hidden name="game_id" value="{{ game.id }}"> 
                                 <input type=hidden name="remove" value=""> 
                                 <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
-                                <button type="submit" class="btn btn-colors" role="button"> <span class="material-symbols-rounded"> shopping_cart_checkout </span> Add to cart </button>
+                                <button type="submit" class="btn btn-colors addcart-icon" role="button"> Add to cart </button>
                               </form>
                             {% else %}
-                              <span class="btn btn-disabled"> <span class="material-symbols-rounded"> production_quantity_limits </span> In cart already </span>
+                              <span class="btn btn-disabled incart-icon"> In cart already </span>
                             {% endif %}
                           {% else %}
-                            <span class="btn btn-disabled"> <span class="material-symbols-rounded"> schedule </span> Not released </span>
+                            <span class="btn btn-disabled schedule-icon"> Not released </span>
                           {% endif %}
                       </div>
                     </div>

@@ -27,9 +27,7 @@
                     {% if not enough_balance %}
                       <button type="submit" class="btn button-disabled" role="button" >Not enought balance</button>
                     {% else %}
-                      <button type="submit" class="btn btn-colors" role="button">
-                        <span class="material-symbols-rounded"> account_balance_wallet </span> Pay
-                      </button>
+                      <button type="submit" class="btn btn-colors pay-icon" role="button"> Pay </button>
                     {% endif %}
                   </form>
                 </div>
@@ -65,12 +63,12 @@
                           {% endif %}
                         </div>
                         <div id="cartbutton">
-                            <form action="/cart" method="POST">
-                              <input type=hidden name="game_id" value="{{ game.id }}">
-                              <input type=hidden name="remove" value="remove">
-                              <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
-                              <button type="submit" class="btn btn-remove" role="button"> <span class="material-symbols-rounded"> shopping_cart_off </span> Remove from cart </button>
-                            </form>
+                          <form action="/cart" method="POST">
+                            <input type=hidden name="game_id" value="{{ game.id }}">
+                            <input type=hidden name="remove" value="remove">
+                            <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
+                            <button type="submit" class="btn btn-remove cart_off-icon" role="button"> Remove from cart </button>
+                          </form>
                         </div>
                       </div>
                     </div>

@@ -32,12 +32,12 @@
               {% endfor %}
             </div>
             <div class="center">
-              <button type="submit" class="btn btn-colors" role="button"> <span class="material-symbols-rounded"> search </span> Search </button>
+              <button type="submit" class="btn btn-colors search-icon" role="button"> Search </button>
             </div>
             <!-- clear filters-->
             <div class="center">
               <a href="/allgames">
-                <div class="btn btn-remove"> <span class="material-symbols-rounded"> close </span> Clear filters </div>
+                <div class="btn btn-remove clear-icon"> Clear filters </div>
               </a>
             </div>
           </form>
@@ -60,18 +60,18 @@
                       <input type=hidden name="game_id" value="{{ game.id }}">
                       <input type=hidden name="remove" value="remove">
                       <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
-                      <button type="submit" class="btn btn-remove" role="button"> <span class="material-symbols-rounded"> heart_broken </span> Unwish </button>
+                      <button type="submit" class="btn btn-remove unwish-icon" role="button"> Unwish </button>
                     </form>
                   {% else %}
                     {% if session.user_id %}
                       {% if game not in owned %}
-                        <span class="btn btn-disabled btn-box"> <span class="material-symbols-rounded"> heart_check </span> </span>
+                        <span class="btn btn-disabled btn-box alreadywished-icon"> </span>
                       {% else %}
                         <form action="/wishlist" method="POST">
                           <input type=hidden name="game_id" value="{{ game.id }}"> 
                           <input type=hidden name="remove" value=""> 
                           <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
-                          <button type="submit" class="btn btn-colors" role="button"> <span class="material-symbols-rounded"> favorite </span> Add to wishlist </button>
+                          <button type="submit" class="btn btn-colors heart-icon" role="button"> Add to wishlist </button>
                         </form>
                       {% endif %}
                     {% endif %}
@@ -108,7 +108,7 @@
                   <div id="cartbutton">
                     {% if session.user_id %}
                       {% if game not in owned %}
-                          <span class="btn btn-disabled"> <span class="material-symbols-rounded"> check </span> already owned </span>
+                          <span class="btn btn-disabled check-icon"> already owned </span>
                       {% else %}
                         {% if game in released %}
                           {% if game.title not in cart %}
@@ -116,13 +116,13 @@
                               <input type=hidden name="game_id" value="{{ game.id }}"> 
                               <input type=hidden name="remove" value=""> 
                               <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
-                              <button type="submit" class="btn btn-colors" role="button"> <span class="material-symbols-rounded"> shopping_cart_checkout </span> Add to cart </button>
+                              <button type="submit" class="btn btn-colors addcart-icon" role="button"> Add to cart </button>
                             </form>
                           {% else %}
-                            <span class="btn btn-disabled"> <span class="material-symbols-rounded"> production_quantity_limits </span> In cart already </span>
+                            <span class="btn btn-disabled incart-icon"> In cart already </span>
                           {% endif %}
                         {% else %}
-                          <span class="btn btn-disabled"> <span class="material-symbols-rounded"> schedule </span> Not released </span>
+                          <span class="btn btn-disabled schedule-icon"> Not released </span>
                         {% endif %}
                       {% endif %}
                     {% else %}

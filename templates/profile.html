@@ -18,19 +18,13 @@
             <div class="profile-actions">
               {% if permission %}
                 <div id="action">
-                  <a href="/profile/{{ userid }}/delete" class="btn btn-remove btn-wide-small" role="button">
-                    <span class="material-symbols-rounded"> delete </span> Delete
-                  </a>
+                  <a href="/profile/{{ userid }}/delete" class="btn btn-remove btn-wide-small delete-icon" role="button"> Delete </a>
                 </div>
                 <div id="action">
-                  <a href="/profile/{{ userid }}/history" class="btn btn-colors btn-wide-small" role="button">
-                    <span class="material-symbols-rounded"> history </span> history
-                  </a>
+                  <a href="/profile/{{ userid }}/history" class="btn btn-colors btn-wide-small history-icon" role="button"> history </a>
                 </div>
                 <div id="action">
-                  <a href="/profile/{{ userid }}/edit" class="btn btn-colors btn-wide-small" role="button">
-                    <span class="material-symbols-rounded"> edit </span> edit
-                  </a>
+                  <a href="/profile/{{ userid }}/edit" class="btn btn-colors btn-wide-small edit-icon" role="button"> edit </a>
                 </div>
               {% endif %}
             </div>
