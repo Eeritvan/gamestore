@@ -202,7 +202,7 @@ def preview():
 
     if not edit:
         if games.check_title(request.form["title"]):
-            return render_template("error.html", message="Title already exists.")
+            return render_template("error.html", message="Game title already exists.")
 
     if edit:
         selectedimages = request.form.getlist("image_ids")
@@ -217,7 +217,7 @@ def preview():
                                                       Maximum size is 1600x900")
     imagelist += imgs
     if len(imagelist) > 5:
-        return render_template("error.html", message="too many images")
+        return render_template("error.html", message="Too many images. Limit is 5")
 
     return render_template("preview.html", gameid = gameid,
                                            title = title,
@@ -257,7 +257,7 @@ def publish():
     if imagelist and not all(images.add_gameimage(game_id, img[0], img[1]) for img in imagelist):
         return render_template("error.html", message="Uploading some images failed. Make sure the \
                                                       images are in .png, .jpg or .jpeg format. \
-                                                      Edit the game to missing add images.")
+                                                      Edit the game to add missing images.")
     for category in gamescategories:
         category_id = categories.get_categoryid(category)
         if category_id is None or not categories.add_game_to_category(game_id, category_id):
@@ -335,7 +335,7 @@ def deletereview(game_id):
     user_id = request.args.get("id") or users.user_id()
     if (users.is_moderator() or user_id == users.user_id()) and reviews.delete_review(user_id, game_id):
         return redirect(f"/game/{game_id}")
-    return render_template("error.html", message="Deleting review failed.")
+    return render_template("error.html", message="Deleting review failed. Try again.")
 
 @app.route("/game/<int:game_id>/deletegame", methods=["GET", "POST"])
 def deletegame(game_id):
