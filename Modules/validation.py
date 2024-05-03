@@ -15,7 +15,7 @@ def validate_gameinfo(title, description, price, date, time):
         return True
     def checkdate(date):
         try:
-            datetime.strptime(date, '%Y-%m-%d')
+            datetime.strptime(date, "%Y-%m-%d")
             return True
         except ValueError:
             return False

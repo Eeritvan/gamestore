@@ -5,7 +5,7 @@ from flask import session
 from werkzeug.security import check_password_hash, generate_password_hash
 from werkzeug.utils import secure_filename
 from sqlalchemy import text
-from Modules import balance, validation
+from Modules import balance, validation, images
 from db import db
 
 def login(username, password):
@@ -65,7 +65,7 @@ def link_profile(userid):
     try:
         randomname = choice(os.listdir("static/default_profilepic/"))
         image_path = os.path.join("static/default_profilepic/", randomname)
-        with open(image_path, 'rb') as f:
+        with open(image_path, "rb") as f:
             image_data = f.read()
 
         sql = """INSERT INTO profile_picture(picturename, picturedata)
@@ -103,6 +103,7 @@ def update_profile(userid, username, bio, visibility, role, image = None):
             imagedata = image.read()
             if not validation.validate_profilepic(imagedata):
                 return False
+            compressed_imagedata = images.compress_image(imagedata)
 
             sql = "SELECT picture_id FROM profile WHERE user_id =:userid"
             picture_id = db.session.execute(text(sql), {"userid":userid}).fetchone()[0]
@@ -113,7 +114,7 @@ def update_profile(userid, username, bio, visibility, role, image = None):
                   """
             db.session.execute(text(sql), {"id":picture_id,
                                            "picturename":imagename,
-                                           "picturedata":imagedata})
+                                           "picturedata":compressed_imagedata})
 
         sql = "SELECT id FROM roles WHERE role=:role"
         roleid = db.session.execute(text(sql), {"role":role}).fetchone()[0]

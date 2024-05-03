@@ -4,6 +4,15 @@ from sqlalchemy.exc import SQLAlchemyError
 from werkzeug.utils import secure_filename
 from Modules import validation, temporaryimages, users
 from db import db
+from PIL import Image
+import io
+
+def compress_image(imagedata, quality=70):
+    image = Image.open(io.BytesIO(imagedata))
+    byte_stream = io.BytesIO()
+    image.save(byte_stream, format='JPEG', quality=quality)
+    compressed_imagedata = byte_stream.getvalue()
+    return compressed_imagedata
 
 def add_gameimage(game_id, imagename, imagedata):
     try:
@@ -51,7 +60,7 @@ def load_images(images):
         for i in images:
             selected = get_gameimages(None, i)
             imagename = secure_filename(selected[0][1])
-            imagedata = b64encode(selected[0][2]).decode("utf-8")
+            imagedata = b64encode(compress_image(selected[0][2])).decode("utf-8")
             if validation.validate_imagesize(b64decode(imagedata), 3*1024*1024) is False:
                 return False
             if (imagename, imagedata) != ('', ''):
@@ -60,8 +69,11 @@ def load_images(images):
                 return False
     else:
         for i in images:
+            data = i.read()
+            if data == b'':
+                continue
             imagename = secure_filename(i.filename)
-            imagedata = b64encode(i.read()).decode("utf-8")
+            imagedata = b64encode(compress_image(data)).decode("utf-8")
             if validation.validate_imagesize(b64decode(imagedata), 3*1024*1024) is False:
                 return False
             if (imagename, imagedata) != ('', ''):
@@ -113,10 +125,10 @@ def encode_reviewpictures(allreviews):
     for review in allreviews:
         review_list = list(review)
         image_data = review_list[-1]
-        encoded_image = b64encode(image_data).decode('utf-8')
+        encoded_image = b64encode(image_data).decode("utf-8")
         review_list[-1] = encoded_image
         encoded_reviews.append(review_list)
     return encoded_reviews
 
 def decode_image(image_data):
-    return b64encode(image_data).decode('utf-8')
+    return b64encode(image_data).decode("utf-8")

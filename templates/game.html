@@ -132,15 +132,15 @@
         {% if session.user_id %}
           <div class="ownreview">
             {% if owned %} 
-              <h3> {{ 'Edit your review:' if your_review != None else 'Write a new review:' }} </h3>
+              <h3> {{ "Edit your review:" if your_review != None else "Write a new review:" }} </h3>
               <div class="ownreviewlayout">
                 <form action="/game/{{ game_id }}" method="POST">
                   <input type="hidden" name="edited" value="{{ 'True' if your_review != None else 'False' }}">
                   <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
                   <div class="rating">
-                    <input type="radio" id="positive" name="rating" value="positive" {% if your_review == None or your_review.rating == 'positive' %}checked{% endif %}> 
+                    <input type="radio" id="positive" name="rating" value="positive" {% if your_review == None or your_review.rating == "positive" %}checked{% endif %}> 
                     <label for="positive" class="button-positive">Positive</label>
-                    <input type="radio" id="negative" name="rating" value="negative" {% if your_review != None and your_review.rating == 'negative' %}checked{% endif %}>
+                    <input type="radio" id="negative" name="rating" value="negative" {% if your_review != None and your_review.rating == "negative" %}checked{% endif %}>
                     <label for="negative" class="button-negative">Negative</label>
                   </div>
                   <div class="reviewtext">
@@ -162,7 +162,7 @@
           </div>
         {% endif %}
         {% for id, username, date, edited, rating, review, picturedata in reviews %}
-          {% set review_class = 'positivereview' if rating == 'positive' else 'negativereview' %}
+          {% set review_class = "positivereview" if rating == "positive" else "negativereview" %}
           <div class=" review {{ review_class }}">
             <div class="review_user">
               <img src="data:image/png;base64,{{ picturedata }}" class="images" alt="profilepicture" height="50">
