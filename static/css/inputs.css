@@ -24,7 +24,7 @@ input[type="checkbox"]:not(.no-style) + label {
     appearance: none;
     background-color: rgba(0, 0, 0, 0.4);
     border: 2px solid #1A1A1A;
-    color: #3B3B3B;
+    color: #777777;
     cursor: pointer;
     font-size: 16px;
     min-height: 60px;
@@ -66,7 +66,7 @@ input[type="radio"] + label {
     appearance: none;
     background-color: rgba(0, 0, 0, 0.2);
     border: 2px solid #1A1A1A;
-    color: #3B3B3B;
+    color: #777777;
     cursor: pointer;
     font-size: 16px;
     padding: 16px 24px;
@@ -106,7 +106,7 @@ input[type="radio"]:checked + .button-negative {
 
 select {
     background-color: black;
-    color: white; /* Change the text color to white for better visibility */
+    color: white;
 }
 
 .btn {
@@ -147,7 +147,7 @@ select {
 }
 
 .btn-colors:hover {
-    background: linear-gradient(to right, rgba(42, 232, 153, 0.85), rgba(78, 81, 232, 1));
+    background: linear-gradient(to right, rgba(42, 232, 153, 0.80), rgba(78, 81, 232, 0.90));
  }
 
 .btn-remove:hover {

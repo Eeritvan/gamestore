@@ -16,7 +16,12 @@
     transition: 0.2s ease;
 }
 
-.info:hover, .images:hover, .categories:hover {
+.categories:hover {
+    background: rgba(117, 117, 117, 0.15);
+    border-color: lightgrey;
+}
+
+.info:hover, .images:hover {
     background: rgba(117, 117, 117, 0.2);
     border-color: lightgrey;
 }
