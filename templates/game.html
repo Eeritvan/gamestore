@@ -36,7 +36,13 @@
               </div>
               <div class="indent">Release date:  {{ game.release_date }} </div>
               {% if not released %}
-                <div class="indent">{{ releasing_in }} </div>
+                <div class="indent"> 
+                  {% if releasing_in | length == 3 %}
+                    {{ releasing_in | join(" ") }}
+                  {% else %}
+                    {{ releasing_in }}
+                  {% endif %}
+                </div>
               {% endif %}
             </div>
             <div class="addwishlist">
