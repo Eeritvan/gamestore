@@ -25,7 +25,7 @@
                   <form action="/cart/checkout" method="POST" >
                     <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
                     {% if not enough_balance %}
-                      <button type="submit" class="btn button-disabled" role="button" >Not enought balance</button>
+                      <button type="submit" class="btn btn-disabled" role="button" disabled>Not enought balance</button>
                     {% else %}
                       <button type="submit" class="btn btn-colors pay-icon" role="button"> Pay </button>
                     {% endif %}

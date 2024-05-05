@@ -24,7 +24,8 @@ def add_newgame(title, description, price, date, time, creator):
 def get_game(game_id):
     sql = """
             SELECT
-              G.title, G.description, G.price, G.release_date, G.release_time, COALESCE(U.username, 'None') AS username, U.id, G.discount
+              G.title, G.description, G.price, G.release_date, G.release_time,
+              COALESCE(U.username, 'None') AS username, U.id, G.discount
             FROM
               games G
             LEFT JOIN users U ON G.creator_id = U.id
@@ -107,7 +108,7 @@ def update_game(game_id, title, description, price, date, time, user_id):
                 title=:title, description=:description, price=:price, release_date=:date, release_time=:time
               WHERE
                 id=:gameid
-             """
+              """
         db.session.execute(text(sql), {"title":title,
                                        "description":description,
                                        "price":price,

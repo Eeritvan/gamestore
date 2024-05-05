@@ -71,7 +71,8 @@ def already_reviewed(user_id, game_id):
             FROM
               reviews R, users U, profile_picture P, profile Pr
             WHERE
-              game_id = :game_id AND R.user_id = U.id AND R.user_id = :user_id AND Pr.user_id = U.id AND Pr.picture_id = P.id
+              game_id = :game_id AND R.user_id = U.id AND R.user_id = :user_id
+              AND Pr.user_id = U.id AND Pr.picture_id = P.id
           """
     result = db.session.execute(text(sql), {"user_id":user_id, "game_id":game_id})
     return result.fetchone()
