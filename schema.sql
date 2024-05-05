@@ -3,11 +3,6 @@ CREATE TABLE roles (
     role TEXT NOT NULL
 );
 
-INSERT INTO roles(role) VALUES 
-                            ('user'),
-                            ('creator'),
-                            ('moderator');
-
 CREATE TABLE users (
     id SERIAL PRIMARY KEY,
     username TEXT UNIQUE NOT NULL CHECK (LENGTH(username) >= 3 AND LENGTH(username) <= 25),
@@ -44,20 +39,6 @@ CREATE TABLE categories (
     id SERIAL PRIMARY KEY,
     category TEXT NOT NULL
 );
-
-INSERT INTO categories(category) VALUES 
-                                    ('Action'),
-                                    ('Adventure'),
-                                    ('Horror'),
-                                    ('Multiplayer'),
-                                    ('Open World'),
-                                    ('Platformer'),
-                                    ('Puzzle'),
-                                    ('Racing'),
-                                    ('Shooting'),
-                                    ('Sports'),
-                                    ('Strategy'),
-                                    ('Survival');
 
 CREATE TABLE game_categories (
     game_id INTEGER REFERENCES games(id) ON DELETE CASCADE,
