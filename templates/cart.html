@@ -25,9 +25,9 @@
                   <form action="/cart/checkout" method="POST" >
                     <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
                     {% if not enough_balance %}
-                      <button type="submit" class="btn btn-disabled" role="button" disabled>Not enought balance</button>
+                      <span class="btn btn-disabled" role="button">Not enough balance</span>
                     {% else %}
-                      <button type="submit" class="btn btn-colors pay-icon" role="button"> Pay </button>
+                      <button type="submit" class="btn btn-colors pay-icon"> Pay </button>
                     {% endif %}
                   </form>
                 </div>
@@ -67,7 +67,7 @@
                             <input type=hidden name="game_id" value="{{ game.id }}">
                             <input type=hidden name="remove" value="remove">
                             <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
-                            <button type="submit" class="btn btn-remove cart_off-icon" role="button"> Remove from cart </button>
+                            <button type="submit" class="btn btn-remove cart_off-icon"> Remove from cart </button>
                           </form>
                         </div>
                       </div>

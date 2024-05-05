@@ -32,12 +32,12 @@
               {% endfor %}
             </div>
             <div class="center">
-              <button type="submit" class="btn btn-colors search-icon" role="button"> Search </button>
+              <button type="submit" class="btn btn-colors search-icon"> Search </button>
             </div>
             <!-- clear filters-->
             <div class="center">
               <a href="/allgames">
-                <div class="btn btn-remove clear-icon"> Clear filters </div>
+                <div class="btn btn-remove clear-icon" role="button"> Clear filters </div>
               </a>
             </div>
           </form>
@@ -60,18 +60,18 @@
                       <input type=hidden name="game_id" value="{{ game.id }}">
                       <input type=hidden name="remove" value="remove">
                       <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
-                      <button type="submit" class="btn btn-remove unwish-icon" role="button"> Unwish </button>
+                      <button type="submit" class="btn btn-remove unwish-icon"> Unwish </button>
                     </form>
                   {% else %}
                     {% if session.user_id %}
                       {% if game not in owned %}
-                        <span class="btn btn-disabled btn-box alreadywished-icon"> </span>
+                        <span class="btn btn-disabled btn-box alreadywished-icon" role="button"> </span>
                       {% else %}
                         <form action="/wishlist" method="POST">
                           <input type=hidden name="game_id" value="{{ game.id }}"> 
                           <input type=hidden name="remove" value=""> 
                           <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
-                          <button type="submit" class="btn btn-colors heart-icon" role="button"> Add to wishlist </button>
+                          <button type="submit" class="btn btn-colors heart-icon"> Add to wishlist </button>
                         </form>
                       {% endif %}
                     {% endif %}
@@ -108,7 +108,7 @@
                   <div id="cartbutton">
                     {% if session.user_id %}
                       {% if game not in owned %}
-                          <span class="btn btn-disabled check-icon"> already owned </span>
+                          <span class="btn btn-disabled check-icon" role="button"> already owned </span>
                       {% else %}
                         {% if game in released %}
                           {% if game.title not in cart %}
@@ -116,17 +116,17 @@
                               <input type=hidden name="game_id" value="{{ game.id }}"> 
                               <input type=hidden name="remove" value=""> 
                               <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
-                              <button type="submit" class="btn btn-colors addcart-icon" role="button"> Add to cart </button>
+                              <button type="submit" class="btn btn-colors addcart-icon"> Add to cart </button>
                             </form>
                           {% else %}
-                            <span class="btn btn-disabled incart-icon"> In cart already </span>
+                            <span class="btn btn-disabled incart-icon" role="button"> In cart already </span>
                           {% endif %}
                         {% else %}
-                          <span class="btn btn-disabled schedule-icon"> Not released </span>
+                          <span class="btn btn-disabled schedule-icon" role="button"> Not released </span>
                         {% endif %}
                       {% endif %}
                     {% else %}
-                      <span class="btn btn-disabled"> Log in to buy games </span>
+                      <span class="btn btn-disabled" role="button"> Log in to buy games </span>
                     {% endif %}
                   </div>
                 </div>

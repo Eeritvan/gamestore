@@ -61,10 +61,10 @@ def balance_page():
     date = datetime.now().strftime("%Y-%m-%d")
 
     if not (amount and validation.validate_balance_amount(int(amount))):
-        return render_template("error.html", message="Incorrect amount")
+        return render_template("error.html", message="Incorrect amount. Try again.")
     if balance.update_balance(user_id, amount) and history.add_balance_to_history(user_id, date, amount):
         return redirect("/")
-    return render_template("error.html", message="Adding balance failed")
+    return render_template("error.html", message="Adding balance failed. Try again.")
 
 @app.route("/library", methods=["GET"])
 def library_page():
@@ -386,7 +386,9 @@ def editprofile(profile_id):
     if not (validation.validate_username(username) and validation.validate_bio(bio)):
         return render_template("error.html", message="Invalid username / bio. Try something else.")
     if not users.update_profile(profile_id, username, bio, visibility, role, image):
-        return render_template("error.html", message="Updating profile failed. Try again.")
+        return render_template("error.html", message="Updating profile failed. If you tried to " \
+                                                     "upload image please note maximum size" \
+                                                     "of 600x600.")
     return redirect(f"/profile/{profile_id}")
 
 @app.route("/profile/<int:profile_id>/history", methods=["GET"])
