@@ -5,13 +5,13 @@ This repository is for a project made for a University of Helsinki course. The a
 - Users can:
    - Login, logout and register
    - Browse games, add games to their wishlist, and add games to their cart
-   - search for games by name or categories
+   - Search for games by name or categories
    - Add balance to their account (does not include real payment system)
    - View their game libraries, cart and wishlist
    - Review games
    - Visit other users profiles (if set public)
-   - view their history
-   - delete their account
+   - View their history
+   - Delete their account
 - Other features:
    - User roles include:
       - User: Normal user
@@ -20,12 +20,20 @@ This repository is for a project made for a University of Helsinki course. The a
    - Everyone can set their profile picture (if not set there are few default ones)
    - Everyone can edit their profiles and set it private/public
 
-## Progress (26.4)
+## Progress
+### Loppupalautus (5.5)
+- The project is now finished. The website should also function quite well with older browsers. For instance, icons are now loaded only when JS is used, thereby improving accessibility on older browsers. Additionally, overall performance of the website has been significantly improved through implementation of image compression. Other improvements include: more distinct borders around elements, slightly more visible buttons and frontpage with game suggestions.
+
+### Välipalautus 3 (21.4)
 - The layout is mostly done but still might need some tweaking. I'll especially try to improve the website's accessibility by tweaking some colors and adding borders to some of the elements for better visibility. Also the buttons might be a bit hard to see sometimes and should be improved. Currently the website also works fairly well on older browsers but there's an issue with some of the icons showing up as text. I'll try to investigate a way to only render such elements on modern browsers.
 - I might redo some of the error messages to show up on the same page error occurred for better user experience.
+- The frontpage is still empty. I'll probably add a few random games to the frontpage to make it more appealing.
 
-## Testing app on fly.io (Updated: 26.4)
-The application can be tested at https://tsoha-pelikauppa.fly.dev/. The fly.io version of the application also includes some games and reviews already instead of being completely empty. Please note that loading might sometimes be a bit slow, especially if site happens to contain images. Also the timezone is a few hours behind on fly.io.
+### Välipalautus 2 (7.4)
+- Currently this project is well underway. Basically, all the features and functionality have been added and the final app probably won't see any new major functionality. In the coming weeks the primary focus is on enhancing the user interface and overall experience as well as properly coding and fixing the mess that all the HTML templates currently are.
+
+## Testing app on fly.io (Updated: 5.5)
+The application can be tested at https://tsoha-pelikauppa.fly.dev/. The fly.io version of the application includes some AI generated games, reviews and users instead of being completely empty.
 
 ##  Running locally
 Prerequisites:
@@ -46,10 +54,12 @@ Prerequisites:
      - `(venv) $ pip install -r requirements.txt`
 6. Create the database by running:
      - `(venv) $ psql < schema.sql`
+     - `(venv) $ psql < inserts.sql`
 7. Finally, run the application with the command `flask run` and navigate to the url `http://127.0.0.1:5000/`
 
 ## Additional notes 
 - You can change your role to "creator" or "moderator" by editing your profile. Once changed, a link to create new games should appear on "allgames" page.
-- If you decide to run the application locally the database will be empty. Instead, the fly.io application will include some games and reviews already.
-- All the images have been generated with Stable Diffusion XL 1.0 https://huggingface.co/stabilityai/stable-diffusion-xl-base-1.0
-    - The prompts used to generate these images can be found on each games description
+- If you decide to run the application locally the database will be empty. Instead, the fly.io application will include some AI generated games and reviews already.
+   - Most of the usernames / reviews / games were generated with OpenAI's ChatGPT-3.5.
+   - All the images used in this project have been generated with Stable Diffusion XL 1.0 https://huggingface.co/stabilityai/stable-diffusion-xl-base-1.0
+      - The prompts/keywords used to generate images can be found on each games description
