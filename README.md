@@ -1,5 +1,8 @@
 # Gamestore
-This repository is for a project made for a University of Helsinki course. The application is supposed to act like a digital gamestore. Users can browse, purchase and rate games. Each user also has their own profile, which they are free to edit.
+This repository is for a project made for a University of Helsinki [course](https://hy-tsoha.github.io/materiaali/). The application is supposed to act like a digital gamestore. Users can browse, purchase and rate games. Each user also has their own profile, which they are free to edit.
+
+## Edit 12.5
+I added a deployment pipeline to fly.io that triggers when a commit is pushed to this repository. This update didn't change anything in the main project and was only made for a [DevOps with Docker](https://devopswithdocker.com/) course assignment.
 
 ## Features
 - Users can:
@@ -32,7 +35,7 @@ This repository is for a project made for a University of Helsinki course. The a
 ### Välipalautus 2 (7.4)
 - Currently this project is well underway. Basically, all the features and functionality have been added and the final app probably won't see any new major functionality. In the coming weeks the primary focus is on enhancing the user interface and overall experience as well as properly coding and fixing the mess that all the HTML templates currently are.
 
-## Testing app on fly.io (Updated: 5.5)
+## Testing app on fly.io
 The application can be tested at https://tsoha-pelikauppa.fly.dev/. The fly.io version of the application includes some AI generated games, reviews and users instead of being completely empty.
 
 ##  Running locally
