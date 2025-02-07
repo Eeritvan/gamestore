@@ -24,7 +24,7 @@ The application is a digital gamestore. Users can browse, purchase and rate game
 > [!NOTE]
 > The app doesn't use https so please don't use real information if you decide to register or login for your safety.
 
-Available here: http://34.88.201.94/
+Available at: http://34.88.201.94/
 
 ##  Running locally
 Prerequisites:
