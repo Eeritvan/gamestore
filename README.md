@@ -45,8 +45,13 @@ Prerequisites:
 - Docker installed
 
 1. Clone this repository
-2. Run `$ docker compose up --build`
-6. Navigate to the url `http://127.0.0.1:5000/`
+2. Navigate to the gamestore directory and create a .env file:
+   ```
+   DB_PASSWORD = <YOUR PASSWORD>
+   SECRET_KEY = <YOUR SECRET KEY>
+   ```
+3. Run `$ docker compose up --build`
+4. Navigate to the url `http://127.0.0.1:5000/`
 
 ## Additional notes 
 - You can change your role to "creator" or "moderator" by editing your profile. Once changed, a link to create new games should appear on "allgames" page.
