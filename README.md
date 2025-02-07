@@ -24,6 +24,7 @@ The application is a digital gamestore. Users can browse, purchase and rate game
 Prerequisites:
 - Python3 installed
 - PostgreSQL installed
+- Poetry installed
 
 1. Clone this repository
 2. Start your PSQL database.
@@ -32,15 +33,20 @@ Prerequisites:
    DATABASE_URL = <YOUR URL>
    SECRET_KEY = <YOUR SECRET KEY>
    ```
-4. Inside the directory create virtual environment with following commands:
-     - `$ python3 -m venv venv`
-     - `$ source venv/bin/activate`
-5. Install all dependencies by running:
-     - `(venv) $ pip install -r requirements.txt`
-6. Create the database by running:
-     - `(venv) $ psql < schema.sql`
-     - `(venv) $ psql < inserts.sql`
-7. Finally, run the application with the command `flask run` and navigate to the url `http://127.0.0.1:5000/`
+4. Install all dependencies by running:
+     - `$ poetry install --no-root`
+5. Create the database by running:
+     - `$ psql < schema.sql`
+     - `$ psql < inserts.sql`
+6. Finally, run the application with the command `poetry run flask run` and navigate to the url `http://127.0.0.1:5000/`
+
+## Running with Docker compose
+Prerequisites:
+- Docker installed
+
+1. Clone this repository
+2. Run `$ docker compose up --build`
+6. Navigate to the url `http://127.0.0.1:5000/`
 
 ## Additional notes 
 - You can change your role to "creator" or "moderator" by editing your profile. Once changed, a link to create new games should appear on "allgames" page.
