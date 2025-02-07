@@ -20,6 +20,12 @@ The application is a digital gamestore. Users can browse, purchase and rate game
    - Everyone can set their profile picture (if not set there are few default ones)
    - Everyone can edit their profiles and set it private/public
 
+## Testing this app in Google Cloud
+> [!NOTE]
+> The app doesn't use https so please don't use real information if you decide to register or login for your safety.
+
+Available here: http://34.88.201.94/
+
 ##  Running locally
 Prerequisites:
 - Python3 installed
