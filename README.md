@@ -55,7 +55,4 @@ Prerequisites:
 
 ## Additional notes 
 - You can change your role to "creator" or "moderator" by editing your profile. Once changed, a link to create new games should appear on "allgames" page.
-- If you decide to run the application locally the database will be empty. Instead, the fly.io application will include some AI generated games and reviews already.
-   - Most of the usernames / reviews / games were generated with OpenAI's ChatGPT.
-   - All the images used in this project have been generated with Stable Diffusion XL 1.0 https://huggingface.co/stabilityai/stable-diffusion-xl-base-1.0
-      - The prompts/keywords used to generate images can be found on each games description
+- If you decide to run the application locally the database will be empty.
