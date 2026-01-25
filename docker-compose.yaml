@@ -10,8 +10,8 @@ services:
       - db
 
   db:
-    image: postgres:alpine
-    container_name: gamestoredb
+    image: postgres:17-alpine
+    container_name: db
     environment:
       - POSTGRES_PASSWORD=${DB_PASSWORD}
     volumes:
