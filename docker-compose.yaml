@@ -8,6 +8,8 @@ services:
       - SECRET_KEY=${SECRET_KEY}
     depends_on:
       - db
+    networks:
+      - gamestore-net
 
   db:
     image: postgres:17-alpine
@@ -18,6 +20,12 @@ services:
       - ./schema.sql:/docker-entrypoint-initdb.d/1-schema.sql
       - ./inserts.sql:/docker-entrypoint-initdb.d/2-inserts.sql
       - postgres_data:/var/lib/postgresql/data
+    networks:
+      - gamestore-net
 
 volumes:
   postgres_data:
+
+networks:
+  gamestore-net:
+    driver: bridge
